@@ -1,48 +1,66 @@
 package music2.util
 
-import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
+import java.util.concurrent.LinkedBlockingQueue
+import javax.sound.sampled._
 
 object Output {
 
-  private val format =
-    // TODO: Check the parameters
-    new AudioFormat(24000, 16, 1, true, false)
+  private val bufferAmount = 64
 
-  private val info =
-    new DataLine.Info(classOf[SourceDataLine], format)
+  private val byteQueue =
+    new LinkedBlockingQueue[Byte]()
 
-  private val line =
-    AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
+  private var running = false
 
-  def start() = {
+  private val thread = new Thread(new Runnable {
+    def run() = playFromQueue()
+  })
+
+  private def defaultLine = {
+    val format =
+      // TODO: Check the parameters
+      new AudioFormat(24000, 16, 1, true, false)
+
+    val info =
+      new DataLine.Info(classOf[SourceDataLine], format)
+
+    val line =
+      AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
+
     line.open(format, 4096)
     line.start()
+
+    line
   }
 
-  def stop() = {
+  private def destroy(line: SourceDataLine) = {
     line.drain()
     line.stop()
     line.close()
   }
 
-  def play(x: Double) = {
-    val amount = 64
-    val fullAng = Math.PI * 2
+  private def playFromQueue() = {
+    implicit val line = defaultLine
+    running = true
 
-    val buffer = (for {
-      ang <- fullAng to 0 by (-fullAng / amount)
-    } yield {
-      Math.round(ang * 32767)
-    }).map(_.asInstanceOf[Byte])
-      .toArray
+    while (running) {
+      playBytes(
+        for (_ <- 0 to bufferAmount)
+          yield byteQueue.take()
+      )
+    }
 
-    println((Math.PI * 2) to 0 by (-Math.PI / amount))
-    println(buffer.length)
-    println(buffer.mkString(","))
+    destroy(line)
+  }
 
-    println("Start")
-    for (_ <- 0 to 500)
-      line.write(buffer, 0, amount)
-    println("End")
+  private def playBytes(bytes: Traversable[Byte])(implicit line: SourceDataLine) =
+    line.write(bytes.toArray, 0, bytes.size - 1)
+
+  def start(): Unit = thread.start()
+
+  def play(x: Int) = byteQueue add x.toByte
+
+  def stop() = {
+    running = false
   }
 }
