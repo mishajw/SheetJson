@@ -10,8 +10,6 @@ object Output {
   private val byteQueue =
     new LinkedBlockingQueue[Byte]()
 
-  private var running = false
-
   private val thread = new Thread(new Runnable {
     def run() = playFromQueue()
   })
@@ -41,14 +39,22 @@ object Output {
 
   private def playFromQueue() = {
     implicit val line = defaultLine
-    running = true
+    var running = true
 
     while (running) {
-      playBytes(
-        for (_ <- 0 to bufferAmount)
-          yield byteQueue.take()
-      )
+      try {
+        playBytes({
+          for (_ <- 0 to bufferAmount) yield {
+            byteQueue.take()
+          }
+        })
+      } catch {
+        case e: InterruptedException =>
+          running = false
+      }
     }
+
+    println("Done")
 
     destroy(line)
   }
@@ -60,7 +66,8 @@ object Output {
 
   def play(x: Int) = byteQueue add x.toByte
 
-  def stop() = {
-    running = false
+  def stop() = thread.synchronized {
+    thread.interrupt()
+    thread.join()
   }
 }
