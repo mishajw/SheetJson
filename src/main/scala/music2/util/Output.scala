@@ -1,7 +1,7 @@
 package music2.util
 
 object Output {
-  def play(x: Int) = {
+  def play(x: Double) = {
     ???
   }
 }
