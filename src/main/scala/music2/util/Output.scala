@@ -5,6 +5,8 @@ import javax.sound.sampled._
 
 object Output {
 
+  val sampleRate = 24000
+
   private val bufferAmount = 64
 
   private val byteQueue =
@@ -17,7 +19,7 @@ object Output {
   private def defaultLine = {
     val format =
       // TODO: Check the parameters
-      new AudioFormat(24000, 16, 1, true, false)
+      new AudioFormat(sampleRate, 32, 1, true, false)
 
     val info =
       new DataLine.Info(classOf[SourceDataLine], format)
