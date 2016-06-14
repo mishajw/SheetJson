@@ -1,0 +1,45 @@
+{
+  "type": "collection",
+  "components": [
+    {
+      "type": "riff-duration",
+      "components": [
+        ["c", 0.5],
+        [{
+          "type": "tone",
+          "note": "e",
+          "volume": "0.5"
+        }, 1.0],
+        ["c", 0.5]
+      ]
+    },
+    {
+      "type": "riff-span",
+      "components": [
+        ["c", 0, 2],
+        ["e", 1, 3],
+        ["g", 2, 4]
+      ]
+    }
+  ]
+}
+
+/*
+
+Types:
+ - A-G(s|f)?: Plays a single tone
+ - collection: Plays multiple children
+ - riff-span: Plays children for certain times, sometimes overlapping
+ - riff-duration: Each child has a duration, and they're played sequentially
+ - tone: Plays a single tone
+
+TBA types:
+ - transformers: takes a child, transforms it in some way with given parameters
+   - distortion
+   - frequency changing
+
+Thoughts:
+ - Each `Player` should have `Some[LifeTime]`, where they possibly end at some point (in seconds)
+ - Different types for each riff-* which redirect to a Riff where represented as riff-span
+
+*/
