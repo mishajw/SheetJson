@@ -7,11 +7,6 @@ import music2.player.SimpleTone
 object Frequencies {
 
   /**
-    * The default octave
-    */
-  private val defaultOctave = 4
-
-  /**
     * A map of notes to frequencies, using the base octave
     */
   val frequencyMap = Map[RelativeNote, Frequency](

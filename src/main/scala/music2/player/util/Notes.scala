@@ -6,6 +6,11 @@ package music2.player.util
 object Notes {
 
   /**
+    * The default octave
+    */
+  val defaultOctave = 4
+
+  /**
     * Note types
     */
   sealed trait Note {
