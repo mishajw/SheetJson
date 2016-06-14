@@ -99,7 +99,7 @@ object Output {
     * Play a playable value
     */
   def play[T](x: T)(implicit p: Playable[T]) = {
-    val i = p toInt x
+    val i = p.to[Int](x)
     val bytes = Seq(i, i >> 8).map(_.asInstanceOf[Byte])
     byteQueue.addAll(bytes.asJava)
   }
