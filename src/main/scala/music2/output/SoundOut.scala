@@ -3,8 +3,8 @@ package music2.output
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 
-import music2.sampleRate
 import music2.player.PlayableImplicits.Playable
+import music2.sampleRate
 
 import scala.collection.JavaConverters._
 

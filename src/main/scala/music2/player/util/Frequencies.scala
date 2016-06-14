@@ -1,8 +1,8 @@
 package music2.player.util
 
-import Notes._
 import music2.Frequency
 import music2.player.SimpleTone
+import music2.player.util.Notes._
 
 object Frequencies {
 
