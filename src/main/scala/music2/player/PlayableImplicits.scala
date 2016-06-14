@@ -11,6 +11,9 @@ object PlayableImplicits {
     def to[V](x: T)(implicit p: Playable[V]): V = {
       p.fromScale(toScale(x))
     }
+
+    def toBytes(x: T): Seq[Byte] =
+      PlayableInt16.toBytes(to[Int](x))
   }
 
   implicit object PlayableInt16 extends Playable[Int] {
@@ -20,6 +23,10 @@ object PlayableImplicits {
     override def toScale(x: Int): Double = (x - min) / (max - min)
 
     override def fromScale(s: Double): Int = (((max - min) * s) + min).asInstanceOf[Int]
+
+    override def toBytes(x: Int): Seq[Byte] = {
+      Seq(x, x >> 8).map(_.asInstanceOf[Byte])
+    }
   }
 
   implicit object PlayableDouble extends Playable[Double] {
