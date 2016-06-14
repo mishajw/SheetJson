@@ -28,12 +28,11 @@ object Frequencies {
     * @param note the note to get
     * @return a SimpleTone object with the correct frequency
     */
-  def get(note: RelativeNote): SimpleTone = {
-    new SimpleTone(getFrequency(AbsoluteNote(note, defaultOctave)))
-  }
-
-  def get(on: AbsoluteNote): SimpleTone = {
-    new SimpleTone(getFrequency(on))
+  def get(note: Note): SimpleTone = note match {
+    case rn: RelativeNote =>
+      new SimpleTone(getFrequency(AbsoluteNote(rn, defaultOctave)))
+    case an: AbsoluteNote =>
+      new SimpleTone(getFrequency(an))
   }
 
   /**
