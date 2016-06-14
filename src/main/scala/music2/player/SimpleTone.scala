@@ -10,10 +10,10 @@ class SimpleTone(val frequency: Frequency) extends Player[Int] {
     */
   val fullAngle = Math.PI * 2
 
-  private lazy val wavelength = 1 / frequency
+  private lazy val waveLength = 1 / frequency
 
   protected def _play(implicit p: Playable[Int]): Int = {
-    val progress = (step % wavelength) / wavelength
+    val progress = (step % waveLength) / waveLength
     val angle = progress * fullAngle
 
     (Math.sin(angle) * 32767).asInstanceOf[Int]
