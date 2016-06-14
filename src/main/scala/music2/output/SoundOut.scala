@@ -49,8 +49,6 @@ object SoundOut extends Out {
 
   /**
     * Destroy a line
-    *
-    * @param line
     */
   private def destroy(line: SourceDataLine) = {
     line.drain()
