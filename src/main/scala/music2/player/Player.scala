@@ -21,6 +21,8 @@ abstract class Player[T](val lifeTime: Option[Double]) {
     * @return the next value played, and handle other transformations
     */
   def play(implicit p: Playable[T]): T = {
+    if (!alive) return p.default
+
     val played = _play
     absoluteStep += 1
     played
