@@ -25,4 +25,19 @@ object Notes {
   val Gf = Fs
   val Af = Gs
   val Bf = As
+
+  def successor(n: Note): Note = n match {
+    case C  => Cs
+    case Cs => D
+    case D  => Ds
+    case Ds => E
+    case E  => F
+    case F  => Fs
+    case Fs => G
+    case G  => Gs
+    case Gs => A
+    case A  => As
+    case As => B
+    case B  => C
+  }
 }
