@@ -5,12 +5,15 @@ import music2.player.PlayableImplicits.Playable
 
 class SimpleTone(val frequency: Frequency) extends Player[Int] {
 
+  /**
+    * Stores 2pi
+    */
   val fullAngle = Math.PI * 2
 
-  private lazy val secondsLong = 1 / frequency
+  private lazy val wavelength = 1 / frequency
 
   protected def _play(implicit p: Playable[Int]): Int = {
-    val progress = (step % secondsLong) / secondsLong
+    val progress = (step % wavelength) / wavelength
     val angle = progress * fullAngle
 
     (Math.sin(angle) * 32767).asInstanceOf[Int]
