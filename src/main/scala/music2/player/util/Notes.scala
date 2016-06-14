@@ -29,17 +29,17 @@ object Notes {
   val Bf = As
 
   def successor(n: Note): Note = n match {
-    case C  => Cs
-    case Cs => D
-    case D  => Ds
-    case Ds => E
+    case C  => Cs ; case Cs => D
+    case D  => Ds ; case Ds => E
     case E  => F
-    case F  => Fs
-    case Fs => G
-    case G  => Gs
-    case Gs => A
-    case A  => As
-    case As => B
+    case F  => Fs ; case Fs => G
+    case G  => Gs ; case Gs => A
+    case A  => As ; case As => B
     case B  => C
+  }
+
+  def successor(on: OctaveNote): OctaveNote = on match {
+    case OctaveNote(B, o) => OctaveNote(successor(B), o + 1)
+    case OctaveNote(n, o) => OctaveNote(successor(n), o)
   }
 }
