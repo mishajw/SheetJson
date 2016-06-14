@@ -16,5 +16,5 @@ abstract class Player[T](implicit out: Out) {
 
   protected def _play(implicit p: Playable[T]): T
 
-  protected def step = (relativeStep * speed) / out.sampleRate
+  protected def step = (relativeStep * speed) / music2.sampleRate
 }

@@ -3,13 +3,12 @@ package music2.output
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 
+import music2.sampleRate
 import music2.player.PlayableImplicits.Playable
 
 import scala.collection.JavaConverters._
 
 object SoundOut extends Out {
-
-  val sampleRate = 24000
 
   /**
     * Input audio is read in these size chunks

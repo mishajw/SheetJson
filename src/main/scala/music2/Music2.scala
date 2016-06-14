@@ -10,7 +10,7 @@ object Music2 {
 
     val st = new SimpleTone(261.63)
 
-    val played = for (_ <- 0 until SoundOut.sampleRate * 3)
+    val played = for (_ <- 0 until sampleRate * 3)
       yield st.play
 
     played.foreach(SoundOut.play(_))

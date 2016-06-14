@@ -5,8 +5,6 @@ class SoundAndFileOut(val path: String) extends Out {
 
   val fileOut = new FileOut(path)
 
-  override val sampleRate: Int = 24000
-
   override def play[T](x: T)(implicit p: Playable[T]): Unit = {
     fileOut.play(x)
     SoundOut.play(x)
