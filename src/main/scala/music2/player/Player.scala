@@ -1,9 +1,9 @@
 package music2.player
 
+import music2.output.Out
 import music2.player.PlayableImplicits.Playable
-import music2.util.Output
 
-trait Player[T] {
+abstract class Player[T](implicit out: Out) {
 
   private var relativeStep: Double = 0
   var speed: Double = 1
@@ -16,5 +16,5 @@ trait Player[T] {
 
   protected def _play(implicit p: Playable[T]): T
 
-  protected def step = (relativeStep * speed) / Output.sampleRate
+  protected def step = (relativeStep * speed) / out.sampleRate
 }
