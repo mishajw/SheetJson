@@ -3,9 +3,13 @@ import music2.player.PlayableImplicits.Playable
 
 /**
   * Plays a sequence of notes for certain durations
+  * @param notes the notes and their durations
   */
 class Riff[T](notes: (Player[T], Double)*) extends Player[T] {
 
+  /**
+    * The total duration of the riffs
+    */
   private lazy val riffDuration = notes.map(_._2).sum
 
   override protected def _play(implicit p: Playable[T]): T = {
