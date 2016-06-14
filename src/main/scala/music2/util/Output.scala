@@ -3,6 +3,10 @@ package music2.util
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled._
 
+import music2.player.PlayableImplicits.Playable
+
+import scala.collection.JavaConverters._
+
 object Output {
 
   val sampleRate = 24000
@@ -85,8 +89,9 @@ object Output {
     * @param bytes the bytes to play
     * @param line the line to play them from
     */
-  private def playBytes(bytes: Traversable[Byte])(implicit line: SourceDataLine) =
-    line.write(bytes.toArray, 0, bytes.size - 1)
+  private def playBytes(bytes: Traversable[Byte])(implicit line: SourceDataLine) = {
+    line.write(bytes.toArray, 0, bytes.size)
+  }
 
   /**
     * Start the playing
