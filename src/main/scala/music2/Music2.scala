@@ -1,22 +1,18 @@
 package music2
 
-import music2.output.{Out, SoundOut}
-import music2.player.SimpleTone
+import music2.management.Composer
+import music2.player.Notes._
+import music2.player.{Combiner, Notes}
 
 object Music2 {
   def main(args: Array[String]) {
 
-    implicit val out: Out = SoundOut
+    val st1 = Notes get C
+    val st2 = Notes get E
+    val st3 = Notes get G
 
-    val st = new SimpleTone(261.63)
+    val comb = new Combiner(st1, st2, st3)
 
-    val played = for (_ <- 0 until sampleRate * 3)
-      yield st.play
-
-    played.foreach(SoundOut.play(_))
-
-    SoundOut start()
-    Thread.sleep(5000)
-    SoundOut stop()
+    Composer play (comb, 3)
   }
 }
