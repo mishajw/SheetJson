@@ -6,17 +6,16 @@ import music2.player.util.Notes._
   * Holds the scales for notes
   */
 object Scales {
+
   /**
     * Scales
     */
-  def major(n: Note): Seq[Note] =
-    translate(n, Seq(C, D, E, Fs, A, B))
+  sealed abstract class Scale(val ns: Note*)
+  case object Major extends Scale(C, D, E, Fs, A, B)
+  case object Blues extends Scale(C, Ds, F, G, As)
+  case object BluesExt extends Scale(C, Ds, F, Fs, G, As)
 
-  def blues(n: Note): Seq[Note] =
-    translate(n, Seq(C, Ds, F, G, As))
-
-  def bluesExt(n: Note): Seq[Note] =
-    translate(n, Seq(C, Ds, F, Fs, G, As))
+  def get(n: Note, s: Scale) = translate(n, s.ns)
 
   /**
     * Translate a scale to start at a note
