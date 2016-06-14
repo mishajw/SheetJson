@@ -1,6 +1,7 @@
-package music2.player
+package music2.player.util
 
-import music2.Frequency
+import music2._
+import music2.player.SimpleTone
 
 /**
   * Represents the notes and frequencies
