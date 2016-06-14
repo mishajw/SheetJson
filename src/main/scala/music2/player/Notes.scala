@@ -2,6 +2,9 @@ package music2.player
 
 import music2.Frequency
 
+/**
+  * Represents the notes and frequencies
+  */
 object Notes {
 
   /**

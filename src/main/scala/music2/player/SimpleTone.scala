@@ -3,6 +3,10 @@ package music2.player
 import music2.Frequency
 import music2.player.PlayableImplicits.Playable
 
+/**
+  * Plays a single tone
+  * @param frequency the frequency of the tone
+  */
 class SimpleTone(val frequency: Frequency) extends Player[Int] {
 
   /**
