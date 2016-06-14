@@ -5,22 +5,29 @@ object PlayableImplicits {
     val max: T
     val min: T
 
-    def toInt(x: T): Int
+    def toScale(x: T): Double
+    def fromScale(s: Double): T
 
-    def scale(x: T): Int = (toInt(x) - toInt(min)) / (toInt(max) - toInt(min))
+    def to[V](x: T)(implicit p: Playable[V]): V = {
+      p.fromScale(toScale(x))
+    }
   }
 
-  implicit object PlayableInt extends Playable[Int] {
-    override val max: Int = Int.MaxValue
-    override val min: Int = Int.MinValue
+  implicit object PlayableInt16 extends Playable[Int] {
+    override val max: Int = 2 ^ 15 - 1
+    override val min: Int = -2 ^ 15
 
-    override def toInt(x: Int): Int = x
+    override def toScale(x: Int): Double = (x - min) / (max - min)
+
+    override def fromScale(s: Double): Int = (((max - min) * s) + min).asInstanceOf[Int]
   }
 
   implicit object PlayableDouble extends Playable[Double] {
-    override val max: Double = Double.MaxValue
-    override val min: Double = Double.MinValue
+    override val max: Double = 1
+    override val min: Double = -1
 
-    override def toInt(x: Double): Int = x.toInt
+    override def toScale(x: Double): Double = (x + 1) / 2
+
+    override def fromScale(s: Double): Double = (s * 2) - 1
   }
 }
