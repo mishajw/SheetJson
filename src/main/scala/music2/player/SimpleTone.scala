@@ -1,10 +1,9 @@
 package music2.player
 
 import music2.Frequency
-import music2.output.Out
 import music2.player.PlayableImplicits.Playable
 
-class SimpleTone(val frequency: Frequency)(implicit out: Out) extends Player[Int] {
+class SimpleTone(val frequency: Frequency) extends Player[Int] {
 
   val fullAngle = Math.PI * 2
 

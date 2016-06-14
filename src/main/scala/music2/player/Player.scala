@@ -1,9 +1,8 @@
 package music2.player
 
-import music2.output.Out
 import music2.player.PlayableImplicits.Playable
 
-abstract class Player[T](implicit out: Out) {
+abstract class Player[T] {
 
   private var relativeStep: Double = 0
   var speed: Double = 1
