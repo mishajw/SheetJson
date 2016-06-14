@@ -35,4 +35,9 @@ abstract class Player[T](val lifeTime: Option[Double]) {
     * @return the relative step, scaled by speed and sample rate
     */
   def step = (absoluteStep * speed) / music2.sampleRate
+
+  def alive: Boolean = lifeTime match {
+    case Some(lt) => step <= lt
+    case None => false
+  }
 }
