@@ -38,6 +38,9 @@ abstract class Player[T](val lifeTime: Option[Double]) {
     */
   def step = (absoluteStep * speed) / music2.sampleRate
 
+  /**
+    * @return whether the `Player` is alive
+    */
   def alive: Boolean = lifeTime match {
     case Some(lt) => step <= lt
     case None => false
