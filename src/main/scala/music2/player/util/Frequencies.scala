@@ -14,7 +14,7 @@ object Frequencies {
   /**
     * A map of notes to frequencies, using the base octave
     */
-  val frequencyMap = Map[Note, Frequency](
+  val frequencyMap = Map[RelativeNote, Frequency](
     C -> 261.626, Cs -> 277.183,
     D -> 293.665, Ds -> 311.127,
     E -> 329.628,
@@ -28,11 +28,11 @@ object Frequencies {
     * @param note the note to get
     * @return a SimpleTone object with the correct frequency
     */
-  def get(note: Note): SimpleTone = {
-    new SimpleTone(getFrequency(OctaveNote(note, defaultOctave)))
+  def get(note: RelativeNote): SimpleTone = {
+    new SimpleTone(getFrequency(AbsoluteNote(note, defaultOctave)))
   }
 
-  def get(on: OctaveNote): SimpleTone = {
+  def get(on: AbsoluteNote): SimpleTone = {
     new SimpleTone(getFrequency(on))
   }
 
@@ -40,7 +40,7 @@ object Frequencies {
     * @param on the octave note to get
     * @return the frequency of this note and octave
     */
-  def getFrequency(on: OctaveNote): Frequency = {
+  def getFrequency(on: AbsoluteNote): Frequency = {
     frequencyMap get on.note match {
       case None =>
         throw new IllegalArgumentException(s"Couldn't find frequency for $on")

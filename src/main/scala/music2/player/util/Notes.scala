@@ -9,15 +9,19 @@ object Notes {
     * Note types
     */
   sealed trait Note
-  case object C extends Note ; case object Cs extends Note
-  case object D extends Note ; case object Ds extends Note
-  case object E extends Note
-  case object F extends Note ; case object Fs extends Note
-  case object G extends Note ; case object Gs extends Note
-  case object A extends Note ; case object As extends Note
-  case object B extends Note
 
-  case class OctaveNote(note: Note, octave: Int)
+  sealed trait RelativeNote extends Note
+  case object C extends RelativeNote ; case object Cs extends RelativeNote
+  case object D extends RelativeNote ; case object Ds extends RelativeNote
+  case object E extends RelativeNote
+  case object F extends RelativeNote ; case object Fs extends RelativeNote
+  case object G extends RelativeNote ; case object Gs extends RelativeNote
+  case object A extends RelativeNote ; case object As extends RelativeNote
+  case object B extends RelativeNote
+
+  case class AbsoluteNote(note: RelativeNote, octave: Int) extends Note {
+    def this(note: RelativeNote) = this(note, 4)
+  }
 
   /**
     * Alias flat notes to existing sharp notes
@@ -28,18 +32,18 @@ object Notes {
   val Af = Gs
   val Bf = As
 
-  def successor(n: Note): Note = n match {
-    case C  => Cs ; case Cs => D
-    case D  => Ds ; case Ds => E
-    case E  => F
-    case F  => Fs ; case Fs => G
-    case G  => Gs ; case Gs => A
-    case A  => As ; case As => B
-    case B  => C
+  def successor(n: RelativeNote): RelativeNote = n match {
+    case C => Cs ; case Cs => D
+    case D => Ds ; case Ds => E
+    case E => F
+    case F => Fs ; case Fs => G
+    case G => Gs ; case Gs => A
+    case A => As ; case As => B
+    case B => C
   }
 
-  def successor(on: OctaveNote): OctaveNote = on match {
-    case OctaveNote(B, o) => OctaveNote(successor(B), o + 1)
-    case OctaveNote(n, o) => OctaveNote(successor(n), o)
+  def successor(on: AbsoluteNote): AbsoluteNote = on match {
+    case AbsoluteNote(B, o) => AbsoluteNote(successor(B), o + 1)
+    case AbsoluteNote(n, o) => AbsoluteNote(successor(n), o)
   }
 }
