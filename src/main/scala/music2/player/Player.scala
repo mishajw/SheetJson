@@ -43,6 +43,6 @@ abstract class Player[T](val lifeTime: Option[Double]) {
     */
   def alive: Boolean = lifeTime match {
     case Some(lt) => step <= lt
-    case None => false
+    case None => true
   }
 }
