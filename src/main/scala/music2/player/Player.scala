@@ -5,7 +5,7 @@ import music2.player.PlayableImplicits.Playable
 /**
   * Represents something that "plays" music
   */
-abstract class Player[T] {
+abstract class Player[T](val lifeTime: Option[Double]) {
 
   /**
     * How many times play has been called on this `Player`
@@ -34,5 +34,5 @@ abstract class Player[T] {
   /**
     * @return the relative step, scaled by speed and sample rate
     */
-  protected def step = (absoluteStep * speed) / music2.sampleRate
+  def step = (absoluteStep * speed) / music2.sampleRate
 }

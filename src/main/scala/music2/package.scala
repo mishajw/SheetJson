@@ -4,6 +4,7 @@
 package object music2 {
   type SampleRate = Int
   type Frequency = Double
+  type LifeTime = Option[Double]
 
   val sampleRate: SampleRate = 24000
 }

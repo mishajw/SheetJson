@@ -1,11 +1,12 @@
 package music2.player
+import music2.LifeTime
 import music2.player.PlayableImplicits.Playable
 
 /**
   * Plays a sequence of notes for certain durations
   * @param notes the notes and their durations
   */
-class Riff[T](notes: (Player[T], Double)*) extends Player[T] {
+class Riff[T](notes: Seq[(Player[T], Double)], _lifeTime: LifeTime = None) extends Player[T](_lifeTime) {
 
   /**
     * The total duration of the riffs
