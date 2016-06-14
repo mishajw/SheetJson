@@ -16,7 +16,7 @@ object Scales {
   case object Blues extends Scale(C, Ds, F, G, As)
   case object BluesExt extends Scale(C, Ds, F, Fs, G, As)
 
-  def get(n: RelativeNote, s: Scale) = translate(n, s.ns)
+  def get(n: RelativeNote, s: Scale): Seq[RelativeNote] = translate(n, s.ns)
 
   /**
     * Translate a scale to start at a note
@@ -25,11 +25,11 @@ object Scales {
     * @param ns the existing scale
     * @return the translated scale
     */
-  private def translate(n: RelativeNote, ns: Seq[RelativeNote]): Seq[RelativeNote] = {
+  private def translate[T](n: RelativeNote, ns: Seq[RelativeNote]): Seq[RelativeNote] = {
     val incr = findIncrement(C, n)
 
     // Call successor `incr` times on `ns`
-    (0 until incr).foldRight(ns)((_, xs) => xs.map(successor))
+    (0 until incr).foldRight(ns)((_, xs) => xs.map(successors))
   }
 
   /**
@@ -41,6 +41,6 @@ object Scales {
     */
   private def findIncrement(n1: RelativeNote, n2: RelativeNote): Int = n1 == n2 match {
     case true => 0
-    case false => 1 + findIncrement(successor(n1), n2)
+    case false => 1 + findIncrement(successors(n1), n2)
   }
 }

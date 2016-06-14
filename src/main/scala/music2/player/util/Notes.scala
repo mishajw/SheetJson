@@ -8,19 +8,31 @@ object Notes {
   /**
     * Note types
     */
-  sealed trait Note
+  sealed trait Note {
+    def ~==(n: Note): Boolean
+  }
 
-  sealed trait RelativeNote extends Note
-  case object C extends RelativeNote ; case object Cs extends RelativeNote
-  case object D extends RelativeNote ; case object Ds extends RelativeNote
-  case object E extends RelativeNote
-  case object F extends RelativeNote ; case object Fs extends RelativeNote
-  case object G extends RelativeNote ; case object Gs extends RelativeNote
-  case object A extends RelativeNote ; case object As extends RelativeNote
-  case object B extends RelativeNote
+  sealed case class RelativeNote(str: String) extends Note {
+    def ~==(n: Note) = n match {
+      case rn: RelativeNote => equals(rn)
+      case an: AbsoluteNote => equals(an.note)
+    }
+  }
+
+  val C = RelativeNote("C") ; val Cs = RelativeNote("Cs")
+  val D = RelativeNote("D") ; val Ds = RelativeNote("Ds")
+  val E = RelativeNote("E")
+  val F = RelativeNote("F") ; val Fs = RelativeNote("Fs")
+  val G = RelativeNote("G") ; val Gs = RelativeNote("Gs")
+  val A = RelativeNote("A") ; val As = RelativeNote("As")
+  val B = RelativeNote("B")
 
   case class AbsoluteNote(note: RelativeNote, octave: Int) extends Note {
     def this(note: RelativeNote) = this(note, 4)
+    def ~==(n: Note) = n match {
+      case rn: RelativeNote => rn == note
+      case an: AbsoluteNote => an.note == note
+    }
   }
 
   /**
@@ -32,18 +44,25 @@ object Notes {
   val Af = Gs
   val Bf = As
 
-  def successor(n: RelativeNote): RelativeNote = n match {
-    case C => Cs ; case Cs => D
-    case D => Ds ; case Ds => E
-    case E => F
-    case F => Fs ; case Fs => G
-    case G => Gs ; case Gs => A
-    case A => As ; case As => B
-    case B => C
+  val successors = Map(
+    C -> Cs, Cs -> D,
+    D -> Ds, Ds -> E,
+    E -> F,
+    F -> Fs, Fs -> G,
+    G -> Gs, Gs -> A,
+    A -> As, As -> B,
+    B -> C
+  )
+
+  val precessors = successors.map({ case (k, v) => (v, k)})
+
+  def absoluteSuccessors(n: AbsoluteNote): AbsoluteNote = n match {
+    case AbsoluteNote(B, o) => AbsoluteNote(successors(B), o + 1)
+    case AbsoluteNote(n, o) => AbsoluteNote(successors(n), o)
   }
 
-  def successor(on: AbsoluteNote): AbsoluteNote = on match {
-    case AbsoluteNote(B, o) => AbsoluteNote(successor(B), o + 1)
-    case AbsoluteNote(n, o) => AbsoluteNote(successor(n), o)
+  def absolutePrecessors(n: AbsoluteNote): AbsoluteNote = n match {
+    case AbsoluteNote(B, o) => AbsoluteNote(precessors(B), o - 1)
+    case AbsoluteNote(n, o) => AbsoluteNote(precessors(n), o)
   }
 }
