@@ -26,24 +26,26 @@ object Frequencies {
 
   /**
     * @param note the note to get
-    * @param octave the octave of the note (default is 4)
     * @return a SimpleTone object with the correct frequency
     */
-  def get(note: Note, octave: Int = defaultOctave): SimpleTone = {
-    new SimpleTone(getFrequency(note, octave))
+  def get(note: Note): SimpleTone = {
+    new SimpleTone(getFrequency(OctaveNote(note, defaultOctave)))
+  }
+
+  def get(on: OctaveNote): SimpleTone = {
+    new SimpleTone(getFrequency(on))
   }
 
   /**
-    * @param note the note to get
-    * @param octave the octave of the note (default is 4)
+    * @param on the octave note to get
     * @return the frequency of this note and octave
     */
-  def getFrequency(note: Note, octave: Int = defaultOctave): Frequency = {
-    frequencyMap get note match {
+  def getFrequency(on: OctaveNote): Frequency = {
+    frequencyMap get on.note match {
       case None =>
-        throw new IllegalArgumentException(s"Couldn't find frequency for $note")
+        throw new IllegalArgumentException(s"Couldn't find frequency for $on")
       case Some(f) =>
-        val relativeOctave = octave - defaultOctave
+        val relativeOctave = on.octave - defaultOctave
         f * (2 ^ relativeOctave)
     }
   }
