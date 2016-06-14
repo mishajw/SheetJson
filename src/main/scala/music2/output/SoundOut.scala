@@ -8,6 +8,9 @@ import music2.player.PlayableImplicits.Playable
 
 import scala.collection.JavaConverters._
 
+/**
+  * Takes sound data and plays them through an audio device
+  */
 object SoundOut extends Out {
 
   /**

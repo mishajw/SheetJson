@@ -3,6 +3,10 @@ import java.io.{BufferedOutputStream, FileOutputStream}
 
 import music2.player.PlayableImplicits.Playable
 
+/**
+  * Writes played data to a file
+  * @param path the file to write to
+  */
 class FileOut(val path: String) extends Out {
 
   /**
