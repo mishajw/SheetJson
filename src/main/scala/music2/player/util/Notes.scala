@@ -17,6 +17,8 @@ object Notes {
   case object A extends Note ; case object As extends Note
   case object B extends Note
 
+  case class OctaveNote(note: Note, octave: Int)
+
   /**
     * Alias flat notes to existing sharp notes
     */
