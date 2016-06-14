@@ -34,8 +34,7 @@ object Output {
     */
   private def defaultLine = {
     val format =
-      // TODO: Check the parameters
-      new AudioFormat(sampleRate, 32, 1, true, false)
+      new AudioFormat(sampleRate, 16, 1, true, false)
 
     val info =
       new DataLine.Info(classOf[SourceDataLine], format)
@@ -69,7 +68,7 @@ object Output {
     while (running) {
       try {
         playBytes({
-          for (_ <- 0 to bufferAmount) yield {
+          for (_ <- 0 until bufferAmount) yield {
             byteQueue.take()
           }
         })
@@ -78,8 +77,6 @@ object Output {
           running = false
       }
     }
-
-    println("Done")
 
     destroy(line)
   }
@@ -99,9 +96,13 @@ object Output {
   def start(): Unit = thread.start()
 
   /**
-    * Play an integer
+    * Play a playable value
     */
-  def play(x: Int) = byteQueue add x.toByte
+  def play[T](x: T)(implicit p: Playable[T]) = {
+    val i = p toInt x
+    val bytes = Seq(i, i >> 8).map(_.asInstanceOf[Byte])
+    byteQueue.addAll(bytes.asJava)
+  }
 
   /**
     * Stop the playing
