@@ -4,6 +4,9 @@ import music2.player.Player
 
 import scala.io.Source
 
+/**
+  * Parses JSON objects into Player objects
+  */
 object JsonParser {
 
   /**

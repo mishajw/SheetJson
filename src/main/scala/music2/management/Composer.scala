@@ -4,6 +4,9 @@ import music2.output.{Out, SoundAndFileOut}
 import music2.player.PlayableImplicits.Playable
 import music2.player.Player
 
+/**
+  * Responsible for playing music from a Player object
+  */
 object Composer {
 
   /**
