@@ -42,6 +42,11 @@ object PlayableImplicits {
       */
     def toBytes(x: T): Seq[Byte] =
       PlayableInt16.toBytes(to[Int](x))
+
+    /**
+      * @return the default value for this type - usually expressing playing no sound
+      */
+    val default: T
   }
 
   /**
@@ -58,6 +63,8 @@ object PlayableImplicits {
     override def toBytes(x: Int): Seq[Byte] = {
       Seq(x, x >> 8).map(_.asInstanceOf[Byte])
     }
+
+    override val default: Int = 0
   }
 
   /**
@@ -70,5 +77,7 @@ object PlayableImplicits {
     override def toScale(x: Double): Double = (x + 1) / 2
 
     override def fromScale(s: Double): Double = (s * 2) - 1
+
+    override val default: Double = 0
   }
 }
