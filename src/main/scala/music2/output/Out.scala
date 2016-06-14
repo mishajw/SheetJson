@@ -1,13 +1,11 @@
-package music2.util
+package music2.output
 
 import java.util.concurrent.LinkedBlockingQueue
-import javax.sound.sampled._
+import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 
 import music2.player.PlayableImplicits.Playable
 
-import scala.collection.JavaConverters._
-
-object Output {
+object Out {
 
   val sampleRate = 24000
 
@@ -50,6 +48,7 @@ object Output {
 
   /**
     * Destroy a line
+    *
     * @param line
     */
   private def destroy(line: SourceDataLine) = {
@@ -83,6 +82,7 @@ object Output {
 
   /**
     * Play bytes to audio
+    *
     * @param bytes the bytes to play
     * @param line the line to play them from
     */
