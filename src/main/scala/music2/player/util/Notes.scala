@@ -34,7 +34,7 @@ object Notes {
 
   private val allNotes = Seq(C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B)
 
-  private val noteStringMap = (allNotes map { rn => rn.str -> rn }).toMap
+  private val noteStringMap = (allNotes map { rn => rn.str.toLowerCase -> rn }).toMap
 
   case class AbsoluteNote(note: RelativeNote, octave: Int) extends Note {
     def this(note: RelativeNote) = this(note, 4)
@@ -54,7 +54,7 @@ object Notes {
   val Bf = As
 
   def noteFor(str: String): Option[Note] = {
-    noteStringMap contains str match {
+    noteStringMap contains str.toLowerCase() match {
       case true => Some(noteStringMap(str))
       case false => None
     }
