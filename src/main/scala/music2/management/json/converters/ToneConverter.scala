@@ -20,7 +20,6 @@ object ToneConverter extends JsonConverter {
 
   override def apply(json: JObject): Option[Player] = {
     // Transform note strings into frequencies
-    // TODO: Handle octaves
     val transformed = json transformField {
       case ("note", JString(n)) =>
         noteOf(n) match {
