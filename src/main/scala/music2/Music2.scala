@@ -1,6 +1,7 @@
 package music2
 
-import music2.management.{Composer, JsonParser}
+import music2.management.Composer
+import music2.management.json.JsonParser
 
 object Music2 {
   def main(args: Array[String]): Unit = {
