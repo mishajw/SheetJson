@@ -44,4 +44,26 @@ object Frequencies {
         f * (2 ^ relativeOctave)
     }
   }
+
+  /**
+    * Implicit class for easier access of frequencies from `Note`s
+    */
+  implicit class FrequencyOf(val n: Note) extends AnyVal {
+
+    /**
+      * @return the tone of a note
+      */
+    def tone = get(n)
+
+    /**
+      * @param octave the octave of the note
+      * @return the tone of the not at some octave
+      */
+    def toneOf(octave: Int) = n match {
+      case note: RelativeNote =>
+        get(AbsoluteNote(note, octave))
+      case AbsoluteNote(note, _) =>
+        get(AbsoluteNote(note, octave))
+    }
+  }
 }
