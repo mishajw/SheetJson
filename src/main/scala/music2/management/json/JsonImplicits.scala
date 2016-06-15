@@ -2,9 +2,10 @@ package music2.management.json
 
 import music2.player.util.Frequencies.FrequencyOf
 import music2.player.util.Notes
-import music2.player.{Combiner, Player, PlayerSpec, Tone}
+import music2.player._
 import org.json4s.DefaultFormats
 import org.json4s.JsonAST._
+import music2.player.Riff._
 
 object JsonImplicits {
 
@@ -58,6 +59,21 @@ object JsonImplicits {
       Some(new Combiner(
         getComponents(json),
         getSpec(json)))
+    },
+
+    "riff" -> { json: JObject =>
+      val descriptions = for {
+        JObject(obj) <- json
+        ("components", JArray(components)) <- obj
+        JArray((jsonComponent: JObject) :: description) <- components
+      } yield (fromJson(jsonComponent), description) match {
+        case (Some(player), List(JDouble(start), JDouble(end))) =>
+          PlayerSpan(player, start, end)
+        case (Some(player), List(JDouble(duration))) =>
+          PlayerDuration(player, duration)
+      }
+
+      Some(new Riff(descriptions, getSpec(json)))
     }
   )
 }
