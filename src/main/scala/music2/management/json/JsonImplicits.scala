@@ -53,7 +53,7 @@ object JsonImplicits {
       }
 
       transformed.extractOpt[JTone]
-        .map(jTone => new Tone(jTone.note, getSpec(json)))
+        .map(jTone => new Tone(jTone.note, _spec = getSpec(json)))
     },
 
     "combiner" -> { json: JObject =>
