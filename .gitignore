@@ -2,3 +2,4 @@
 project
 target
 out.pcm
+src/main/resources/local
