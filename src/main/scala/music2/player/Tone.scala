@@ -7,7 +7,7 @@ import music2.player.PlayableImplicits.Playable
   * Plays a single tone
   * @param frequency the frequency of the tone
   */
-class SimpleTone(val frequency: Frequency, _lifeTime: LifeTime = None) extends Player[Int](_lifeTime) {
+class Tone(val frequency: Frequency, _lifeTime: LifeTime = None) extends Player[Int](_lifeTime) {
 
   /**
     * Stores 2pi

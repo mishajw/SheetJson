@@ -1,7 +1,7 @@
 package music2.player.util
 
 import music2.Frequency
-import music2.player.SimpleTone
+import music2.player.Tone
 import music2.player.util.Notes._
 
 object Frequencies {
@@ -23,8 +23,8 @@ object Frequencies {
     * @param note the note to get
     * @return a SimpleTone object with the correct frequency
     */
-  def get(note: Note): SimpleTone =
-    new SimpleTone(getFrequency(note))
+  def get(note: Note): Tone =
+    new Tone(getFrequency(note))
 
   /**
     * @param n the note to get
