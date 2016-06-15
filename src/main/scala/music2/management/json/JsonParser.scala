@@ -2,6 +2,7 @@ package music2.management.json
 
 import java.io.FileNotFoundException
 
+import music2.management.json.converters.{CombinerConverter, RiffConverter, ToneConverter}
 import music2.player.Player
 import org.json4s.JsonAST.JValue
 import org.json4s._
@@ -50,5 +51,20 @@ object JsonParser {
     * @param json the JSON object
     * @return an option of a player from the JSON object
     */
-  def parseJson(json: JObject): Option[Player] = JsonImplicits.fromJson(json)
+  def parseJson(json: JObject): Option[Player] = for {
+    t <- getType(json)
+    func <- converters get t
+    player <- func(json)
+  } yield player
+
+  private def getType(json: JObject): Option[String] = {
+    json.obj collect {
+      case ("type", JString(t)) => t
+    } headOption
+  }
+
+  val converters =
+    Seq(ToneConverter, CombinerConverter, RiffConverter)
+      .map(c => c.identifier -> c)
+      .toMap
 }
