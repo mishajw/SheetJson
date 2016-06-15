@@ -15,17 +15,17 @@ abstract class Player[T](val playerSpec: PlayerSpec) {
   /**
     * The speed of the `Player`
     */
-  var speed: Double = playerSpec.speed
+  var speed: Double = playerSpec.speed getOrElse 1
 
   /**
     * How long a `Player` plays for
     */
-  val lifeTime = playerSpec.lifeTime
+  val lifeTime: Option[Double] = playerSpec.lifeTime
 
   /**
     * How loud a `Player` is
     */
-  val volume = playerSpec.volume
+  val volume: Double = playerSpec.volume getOrElse 1
 
   /**
     * @return the next value played, and handle other transformations

@@ -1,5 +1,8 @@
 package music2
 
 package object player {
-  case class PlayerSpec(volume: Double = 1, lifeTime: LifeTime = None, speed: Double = 1)
+  case class PlayerSpec(
+    volume: Option[Double] = None,
+    lifeTime: Option[Double] = None,
+    speed: Option[Double] = None)
 }
