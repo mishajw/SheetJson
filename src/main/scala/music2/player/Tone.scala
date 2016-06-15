@@ -37,4 +37,6 @@ object Tone {
 
   val cosine: WaveFunction =
     x => Math.cos(x * fullAngle)
+
+  val id: WaveFunction = identity
 }
