@@ -26,6 +26,12 @@ object JsonImplicits {
     json.extract[PlayerSpec]
   }
 
+  private def getComponents(json: JObject): Seq[Player] = for {
+    JObject(obj) <- json
+    ("components", JArray(components)) <- obj
+    component: JObject <- components
+  } yield toJson(component)
+
   case class JTone(note: Double)
 
   type JsonConverter[T <: Player] = JObject => Option[T]
