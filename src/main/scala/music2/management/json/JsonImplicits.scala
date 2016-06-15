@@ -35,7 +35,7 @@ object JsonImplicits {
     component <- fromJson(jsonComponent)
   } yield component
 
-  case class JTone(note: Double)
+  case class JTone(note: Double, waveFunction: String = "sine")
 
   type JsonConverter = JObject => Option[Player]
 
@@ -52,8 +52,14 @@ object JsonImplicits {
           }
       }
 
+      val waveFunctionNames = Map(
+        "sine" -> Tone.sine,
+        "cosine" -> Tone.cosine,
+        "id" -> Tone.id
+      )
+
       transformed.extractOpt[JTone]
-        .map(jTone => new Tone(jTone.note, _spec = getSpec(json)))
+        .map(jTone => new Tone(jTone.note, waveFunctionNames(jTone.waveFunction), getSpec(json)))
     },
 
     "combiner" -> { json: JObject =>
