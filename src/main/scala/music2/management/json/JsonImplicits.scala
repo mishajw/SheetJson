@@ -1,11 +1,12 @@
 package music2.management.json
 
+import music2.player._
+import music2.player.composite.{Combiner, Riff}
+import music2.player.composite.Riff.{PlayerDuration, PlayerSpan}
 import music2.player.util.Frequencies.FrequencyOf
 import music2.player.util.Notes
-import music2.player._
 import org.json4s.DefaultFormats
 import org.json4s.JsonAST._
-import music2.player.Riff._
 
 object JsonImplicits {
 
