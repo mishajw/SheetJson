@@ -1,5 +1,4 @@
 package music2.player
-import music2.LifeTime
 import music2.player.PlayableImplicits.Playable
 import music2.player.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 

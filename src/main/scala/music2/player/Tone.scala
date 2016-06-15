@@ -1,6 +1,6 @@
 package music2.player
 
-import music2.{Frequency, LifeTime}
+import music2.Frequency
 import music2.player.PlayableImplicits.Playable
 
 /**
