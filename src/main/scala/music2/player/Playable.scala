@@ -26,7 +26,7 @@ object Playable {
   }
 
   private def trim(value: Double): Double = {
-    minPlayable max value min minPlayable
+    Math.max(minPlayable, Math.min(maxPlayable, value))
   }
 
   val default = new Playable(0)
