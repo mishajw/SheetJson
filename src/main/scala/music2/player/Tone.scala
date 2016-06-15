@@ -9,7 +9,7 @@ import Tone._
   */
 class Tone( val frequency: Frequency,
             val waveFunction: WaveFunction = sine,
-            _spec: PlayerSpec = PlayerSpec()) extends Player(_spec) {
+            _spec: PlayerSpec = PlayerSpec()) extends OriginPlayer(_spec) {
 
   private lazy val waveLength = 1 / frequency
 
