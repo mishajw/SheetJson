@@ -29,14 +29,15 @@ object JsonImplicits {
   private def getComponents(json: JObject): Seq[Player] = for {
     JObject(obj) <- json
     ("components", JArray(components)) <- obj
-    component: JObject <- components
-  } yield fromJson(component)
+    jsonComponent @ JObject(_) <- components
+    component <- fromJson(jsonComponent)
+  } yield component
 
   case class JTone(note: Double)
 
-  type JsonConverter[T <: Player] = JObject => Option[T]
+  type JsonConverter = JObject => Option[Player]
 
-  val converters = Map(
+  val converters: Map[String, JsonConverter] = Map(
 
     "tone" -> { json: JObject =>
       // Transform note strings into frequencies
@@ -54,7 +55,9 @@ object JsonImplicits {
     },
 
     "combiner" -> { json: JObject =>
-      ???
+      Some(new Combiner(
+        getComponents(json),
+        getSpec(json)))
     }
   )
 }
