@@ -1,24 +1,40 @@
 package music2.player
 
 import music2.Frequency
+import Tone._
 
 /**
   * Plays a single tone
   * @param frequency the frequency of the tone
   */
-class Tone(val frequency: Frequency, _spec: PlayerSpec = PlayerSpec()) extends Player(_spec) {
+class Tone( val frequency: Frequency,
+            val waveFunction: WaveFunction = sine,
+            _spec: PlayerSpec = PlayerSpec()) extends Player(_spec) {
+
+  private lazy val waveLength = 1 / frequency
+
+  protected def _play: Playable = {
+    val progress = (step % waveLength) / waveLength
+    Playable(waveFunction(progress))
+  }
+}
+
+object Tone {
 
   /**
     * Stores 2pi
     */
   val fullAngle = Math.PI * 2
 
-  private lazy val waveLength = 1 / frequency
+  /**
+    * Define a type for a wave function (typically sine)
+    * Takes a value 0 to 1 inclusively, although this isn't enforced
+    */
+  type WaveFunction = Double => Double
 
-  protected def _play: Playable = {
-    val progress = (step % waveLength) / waveLength
-    val angle = progress * fullAngle
+  val sine: WaveFunction =
+    x => Math.sin(x * fullAngle)
 
-    Playable(Math.sin(angle))
-  }
+  val cosine: WaveFunction =
+    x => Math.cos(x * fullAngle)
 }
