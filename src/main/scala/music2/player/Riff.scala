@@ -1,5 +1,4 @@
 package music2.player
-import music2.player.PlayableImplicits.Playable
 import music2.player.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 
 /**
@@ -7,16 +6,16 @@ import music2.player.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
  *
   * @param _notes the notes and their spanning times
   */
-class Riff[T](_notes: Seq[PlayerDescription[T]], _spec: PlayerSpec = PlayerSpec()) extends Player[T](_spec) {
+class Riff[T](_notes: Seq[PlayerDescription], _spec: PlayerSpec = PlayerSpec()) extends Player(_spec) {
 
   /**
     * Cast all notes to `PlayerSpan`
     */
-  lazy val notes: Seq[PlayerSpan[T]] = {
+  lazy val notes: Seq[PlayerSpan] = {
     var cumulativeTime: Double = 0
 
     for (n <- _notes) yield n match {
-      case ps: PlayerSpan[T] =>
+      case ps: PlayerSpan =>
         cumulativeTime = ps.end ; ps
       case PlayerDuration(p, d) =>
         val ps = PlayerSpan(p, cumulativeTime, cumulativeTime + d)
@@ -30,7 +29,7 @@ class Riff[T](_notes: Seq[PlayerDescription[T]], _spec: PlayerSpec = PlayerSpec(
     */
   private lazy val riffDuration = notes.map(_.end).max
 
-  override protected def _play(implicit p: Playable[T]): T = {
+  override protected def _play: Playable = {
     val progress = step % riffDuration
 
     val playingNotes = notes
@@ -47,20 +46,20 @@ class Riff[T](_notes: Seq[PlayerDescription[T]], _spec: PlayerSpec = PlayerSpec(
 object Riff {
 
   /**
-    * Description of when a `Player` should play within a `Riff``
+    * Description of when a `Player` should play within a `Riff`
     */
-  sealed trait PlayerDescription[T]
+  sealed trait PlayerDescription
 
   /**
     * @param player the `Player` to play
     * @param duration how long to play
     */
-  case class PlayerDuration[T](player: Player[T], duration: Double) extends PlayerDescription[T]
+  case class PlayerDuration(player: Player, duration: Double) extends PlayerDescription
 
   /**
     * @param player the `Player` to play
     * @param start when to start playing
     * @param end when to finish playing
     */
-  case class PlayerSpan[T](player: Player[T], start: Double, end: Double) extends PlayerDescription[T]
+  case class PlayerSpan(player: Player, start: Double, end: Double) extends PlayerDescription
 }

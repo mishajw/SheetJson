@@ -1,7 +1,7 @@
 package music2.output
 import java.io.{BufferedOutputStream, FileOutputStream}
 
-import music2.player.PlayableImplicits.Playable
+import music2.player.Playable
 
 /**
   * Writes played data to a file
@@ -14,8 +14,8 @@ class FileOut(val path: String) extends Out {
     */
   private val pw = new BufferedOutputStream(new FileOutputStream(path))
 
-  override def play[T](x: T)(implicit p: Playable[T]): Unit = {
-    pw.write(p.toBytes(x).toArray)
+  override def play(p: Playable): Unit = {
+    pw.write(p.toBytes.toArray)
   }
 
   /**

@@ -19,7 +19,7 @@ object JsonParser {
     * @param path path of the file
     * @return an option of a player from the JSON file
     */
-  def parse(path: String): Option[Player[Int]] = {
+  def parse(path: String): Option[Player] = {
     try {
       val f = Source.fromFile(path)
       val raw = f.mkString
@@ -36,7 +36,7 @@ object JsonParser {
     * @param jsonStr the JSON string
     * @return an option of a player from the JSON string
     */
-  def parseRaw(jsonStr: String): Option[Player[Int]] = {
+  def parseRaw(jsonStr: String): Option[Player] = {
     JsonMethods.parseOpt(jsonStr) match {
       case Some(json) => parseJson(json)
       case None =>
@@ -50,5 +50,5 @@ object JsonParser {
     * @param json the JSON object
     * @return an option of a player from the JSON object
     */
-  def parseJson(json: JValue): Option[Player[Int]] = ???
+  def parseJson(json: JValue): Option[Player] = ???
 }

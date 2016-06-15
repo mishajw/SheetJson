@@ -3,10 +3,10 @@ package music2.output
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 
-import music2.player.PlayableImplicits.Playable
+import music2.player.Playable
 import music2.sampleRate
 
-import scala.collection.JavaConverters._
+import collection.JavaConverters._
 
 /**
   * Takes sound data and plays them through an audio device
@@ -100,8 +100,8 @@ object SoundOut extends Out {
   /**
     * Play a playable value
     */
-  def play[T](x: T)(implicit p: Playable[T]) = {
-    byteQueue.addAll(p.toBytes(x).asJava)
+  def play(p: Playable) = {
+    byteQueue.addAll(p.toBytes.asJava)
   }
 
   /**

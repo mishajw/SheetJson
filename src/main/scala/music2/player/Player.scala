@@ -1,11 +1,9 @@
 package music2.player
 
-import music2.player.PlayableImplicits.Playable
-
 /**
   * Represents something that "plays" music
   */
-abstract class Player[T](val playerSpec: PlayerSpec) {
+abstract class Player(val playerSpec: PlayerSpec) {
 
   /**
     * How many times play has been called on this `Player`
@@ -30,8 +28,8 @@ abstract class Player[T](val playerSpec: PlayerSpec) {
   /**
     * @return the next value played, and handle other transformations
     */
-  def play(implicit p: Playable[T]): T = {
-    if (!alive) return p.default
+  def play: Playable = {
+    if (!alive) return Playable.default
 
     val played = _play
     absoluteStep += 1
@@ -41,7 +39,7 @@ abstract class Player[T](val playerSpec: PlayerSpec) {
   /**
     * @return the next value played
     */
-  protected def _play(implicit p: Playable[T]): T
+  protected def _play: Playable
 
   /**
     * @return the relative step, scaled by speed and sample rate

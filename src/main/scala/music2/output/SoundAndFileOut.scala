@@ -1,8 +1,10 @@
 package music2.output
-import music2.player.PlayableImplicits.Playable
+
+import music2.player.Playable
 
 /**
   * Combines FileOut and SoundOut
+ *
   * @param path to file to write to
   */
 class SoundAndFileOut(val path: String) extends Out {
@@ -19,9 +21,9 @@ class SoundAndFileOut(val path: String) extends Out {
     SoundOut.start()
   }
 
-  override def play[T](x: T)(implicit p: Playable[T]): Unit = {
-    fileOut.play(x)
-    SoundOut.play(x)
+  override def play(p: Playable): Unit = {
+    fileOut.play(p)
+    SoundOut.play(p)
   }
 
   /**

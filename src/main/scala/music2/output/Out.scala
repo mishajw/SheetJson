@@ -1,6 +1,6 @@
 package music2.output
 
-import music2.player.PlayableImplicits.Playable
+import music2.player.Playable
 
 /**
   * Objects extending this take playable values and do something with them
@@ -8,7 +8,7 @@ import music2.player.PlayableImplicits.Playable
 trait Out {
   /**
     * Play to an output
-    * @param x the data to play
+    * @param p the data to play
     */
-  def play[T](x: T)(implicit p: Playable[T]): Unit
+  def play(p: Playable): Unit
 }
