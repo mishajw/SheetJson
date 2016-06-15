@@ -53,17 +53,21 @@ object Frequencies {
     /**
       * @return the tone of a note
       */
-    def tone = get(n)
+    def tone: Tone = get(n)
 
     /**
       * @param octave the octave of the note
       * @return the tone of the not at some octave
       */
-    def toneOf(octave: Int) = n match {
+    def toneOf(octave: Int): Tone = new Tone(frequencyOf(octave))
+
+    def frequency: Frequency = getFrequency(n)
+
+    def frequencyOf(octave: Int): Frequency = n match {
       case note: RelativeNote =>
-        get(AbsoluteNote(note, octave))
+        getFrequency(AbsoluteNote(note, octave))
       case AbsoluteNote(note, _) =>
-        get(AbsoluteNote(note, octave))
+        getFrequency(AbsoluteNote(note, octave))
     }
   }
 }
