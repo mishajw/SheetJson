@@ -10,7 +10,7 @@ class Smoother( _child: Player,
 
   val past = mutable.Queue[Playable]()
 
-  private val queueMax: Int = smoothness.toInt
+  private val queueMax: Int = (smoothness * 1000).toInt
 
   override protected def _play: Playable = {
     val played = child.play
