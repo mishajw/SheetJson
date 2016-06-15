@@ -32,6 +32,10 @@ object Notes {
   val A = RelativeNote("A") ; val As = RelativeNote("As")
   val B = RelativeNote("B")
 
+  private val allNotes = Seq(C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B)
+
+  private val noteStringMap = (allNotes map { rn => rn.str -> rn }).toMap
+
   case class AbsoluteNote(note: RelativeNote, octave: Int) extends Note {
     def this(note: RelativeNote) = this(note, 4)
     def ~==(n: Note) = n match {
@@ -48,6 +52,13 @@ object Notes {
   val Gf = Fs
   val Af = Gs
   val Bf = As
+
+  def noteFor(str: String): Option[Note] = {
+    noteStringMap contains str match {
+      case true => Some(noteStringMap(str))
+      case false => None
+    }
+  }
 
   val successors = Map(
     C -> Cs, Cs -> D,
