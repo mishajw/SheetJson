@@ -41,7 +41,7 @@ object Frequencies {
         throw new IllegalArgumentException(s"Couldn't find frequency for $an")
       case Some(f) =>
         val relativeOctave = an.octave - defaultOctave
-        f * (2 ^ relativeOctave)
+        f * Math.pow(2, relativeOctave)
     }
   }
 
