@@ -79,7 +79,7 @@ object Notes {
     * @param str the string representation
     * @return the note for that string
     */
-  def noteFor(str: String): Option[Note] =
+  def noteFor(str: String): Option[RelativeNote] =
     noteStringMap get str.toLowerCase
                          .replace("#", "s")
 
