@@ -22,13 +22,13 @@ object ToneConverter extends JsonConverter {
         }
     }
 
-    val waveFunctionNames = Map(
-      "sine" -> Tone.sine,
-      "cosine" -> Tone.cosine,
-      "id" -> Tone.id
-    )
-
     transformed.extractOpt[JTone]
       .map(jTone => new Tone(jTone.note, waveFunctionNames(jTone.waveFunction), getSpec(json)))
   }
+
+  val waveFunctionNames = Map(
+    "sine" -> Tone.sine,
+    "cosine" -> Tone.cosine,
+    "id" -> Tone.id
+  )
 }
