@@ -1,7 +1,10 @@
-package music2.player
+package music2.player.composite
+
+import music2.player.{Playable, Player, PlayerSpec}
 
 /**
   * Takes multiple `Player`s, and outputs all of them
+  *
   * @param _components the `Player`s to take output from
   */
 class Combiner(_components: Seq[Player], _spec: PlayerSpec = PlayerSpec()) extends CompositePlayer(_spec) {

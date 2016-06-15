@@ -1,5 +1,7 @@
-package music2.player
-import music2.player.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
+package music2.player.composite
+
+import music2.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
+import music2.player.{Playable, Player, PlayerSpec}
 
 /**
   * Plays a sequence of notes for certain time spans
