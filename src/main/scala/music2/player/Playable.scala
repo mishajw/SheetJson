@@ -2,12 +2,17 @@ package music2.player
 
 import Playable._
 
-class Playable(private val value: Double) {
+class Playable(_value: Double) {
+
+  private val value = trim(_value)
+
   def toBytes: Seq[Byte] = {
     val i: Int = (value * (rangeInt16 / rangePlayable)).toInt
 
     Seq(i, i >> 8).map(_.toByte)
   }
+
+  def *(other: Double) = Playable(this.value * other)
 }
 
 object Playable {
@@ -16,6 +21,10 @@ object Playable {
 
   implicit class PlayableCollection(val col: Traversable[Playable]) extends AnyVal {
     def average: Playable = Playable(col.map(_.value).sum / col.size)
+  }
+
+  private def trim(value: Double): Double = {
+    minPlayable max value min minPlayable
   }
 
   val default = new Playable(0)
