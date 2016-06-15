@@ -57,12 +57,18 @@ object JsonParser {
     player <- func(json)
   } yield player
 
+  /**
+    * Get the type string of a JSON object
+    */
   private def getType(json: JObject): Option[String] = {
     json.obj collect {
       case ("type", JString(t)) => t
     } headOption
   }
 
+  /**
+    * A map of type names to their converter objects
+    */
   val converters =
     Seq(ToneConverter, CombinerConverter, RiffConverter)
       .map(c => c.identifier -> c)
