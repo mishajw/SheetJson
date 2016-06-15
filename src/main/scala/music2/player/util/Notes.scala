@@ -19,6 +19,7 @@ object Notes {
 
   /**
     * A note with no octave
+ *
     * @param str the string representation of that note
     */
   sealed case class RelativeNote(str: String) extends Note {
@@ -51,6 +52,7 @@ object Notes {
 
   /**
     * A note that has an octave
+ *
     * @param note the relative note
     * @param octave the octave
     */
@@ -73,6 +75,7 @@ object Notes {
 
   /**
     * Get a note by string representation
+ *
     * @param str the string representation
     * @return the note for that string
     */
@@ -94,9 +97,9 @@ object Notes {
   )
 
   /**
-    * Map of a notes precessors
+    * Map of a notes predecessors
     */
-  val precessors = successors.map({ case (k, v) => (v, k)})
+  val predecessors = successors.map({ case (k, v) => (v, k)})
 
   /**
     * Get the successor of an `AbsoluteNote`
@@ -107,10 +110,10 @@ object Notes {
   }
 
   /**
-    * Get the precessor of an `AbsoluteNote`
+    * Get the predecessor of an `AbsoluteNote`
     */
-  def absolutePrecessors(n: AbsoluteNote): AbsoluteNote = n match {
-    case AbsoluteNote(B, o) => AbsoluteNote(precessors(B), o - 1)
-    case AbsoluteNote(n, o) => AbsoluteNote(precessors(n), o)
+  def absolutePredecessors(n: AbsoluteNote): AbsoluteNote = n match {
+    case AbsoluteNote(B, o) => AbsoluteNote(predecessors(B), o - 1)
+    case AbsoluteNote(n, o) => AbsoluteNote(predecessors(n), o)
   }
 }
