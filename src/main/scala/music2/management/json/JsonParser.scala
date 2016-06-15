@@ -50,5 +50,5 @@ object JsonParser {
     * @param json the JSON object
     * @return an option of a player from the JSON object
     */
-  def parseJson(json: JObject): Option[Player] = JsonImplicits.toJson(json)
+  def parseJson(json: JObject): Option[Player] = JsonImplicits.fromJson(json)
 }

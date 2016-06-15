@@ -10,7 +10,7 @@ object JsonImplicits {
 
   implicit val formats = DefaultFormats
 
-  def toJson(json: JObject): Option[Player] = for {
+  def fromJson(json: JObject): Option[Player] = for {
     t <- getType(json)
     func <- converters get t
     player <- func(json)
@@ -30,7 +30,7 @@ object JsonImplicits {
     JObject(obj) <- json
     ("components", JArray(components)) <- obj
     component: JObject <- components
-  } yield toJson(component)
+  } yield fromJson(component)
 
   case class JTone(note: Double)
 
