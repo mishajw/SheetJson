@@ -38,8 +38,8 @@ object JsonParser {
     */
   def parseRaw(jsonStr: String): Option[Player] = {
     JsonMethods.parseOpt(jsonStr) match {
-      case Some(json) => parseJson(json)
-      case None =>
+      case Some(json: JObject) => parseJson(json)
+      case _ =>
         System.err.println("Provided JSON is not valid")
         None
     }
@@ -50,5 +50,5 @@ object JsonParser {
     * @param json the JSON object
     * @return an option of a player from the JSON object
     */
-  def parseJson(json: JValue): Option[Player] = ???
+  def parseJson(json: JObject): Option[Player] = JsonImplicits.toJson(json)
 }
