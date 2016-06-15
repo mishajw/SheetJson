@@ -6,7 +6,7 @@ import music2.player.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
  *
   * @param _notes the notes and their spanning times
   */
-class Riff[T](_notes: Seq[PlayerDescription], _spec: PlayerSpec = PlayerSpec()) extends Player(_spec) {
+class Riff[T](_notes: Seq[PlayerDescription], _spec: PlayerSpec = PlayerSpec()) extends CompositePlayer(_spec) {
 
   /**
     * Cast all notes to `PlayerSpan`
@@ -38,6 +38,8 @@ class Riff[T](_notes: Seq[PlayerDescription], _spec: PlayerSpec = PlayerSpec()) 
 
     new Combiner(playingNotes).play
   }
+
+  override def components: Seq[Player] = notes.map(_.player)
 }
 
 /**
