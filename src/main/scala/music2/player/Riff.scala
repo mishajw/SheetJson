@@ -8,7 +8,7 @@ import music2.player.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
  *
   * @param _notes the notes and their spanning times
   */
-class Riff[T](_notes: Seq[PlayerDescription[T]], _lifeTime: LifeTime = None) extends Player[T](_lifeTime) {
+class Riff[T](_notes: Seq[PlayerDescription[T]], _spec: PlayerSpec = PlayerSpec()) extends Player[T](_spec) {
 
   /**
     * Cast all notes to `PlayerSpan`

@@ -5,7 +5,7 @@ import music2.player.PlayableImplicits.Playable
 /**
   * Represents something that "plays" music
   */
-abstract class Player[T](val lifeTime: Option[Double]) {
+abstract class Player[T](val playerSpec: PlayerSpec) {
 
   /**
     * How many times play has been called on this `Player`
@@ -15,7 +15,17 @@ abstract class Player[T](val lifeTime: Option[Double]) {
   /**
     * The speed of the `Player`
     */
-  var speed: Double = 1
+  var speed: Double = playerSpec.speed
+
+  /**
+    * How long a `Player` plays for
+    */
+  val lifeTime = playerSpec.lifeTime
+
+  /**
+    * How loud a `Player` is
+    */
+  val volume = playerSpec.volume
 
   /**
     * @return the next value played, and handle other transformations
