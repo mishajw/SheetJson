@@ -1,13 +1,13 @@
-package music2.management
+package music2.management.json
 
 import java.io.FileNotFoundException
 
 import music2.player.Player
-import org.json4s.JsonAST.{JObject, JValue}
-
-import scala.io.Source
+import org.json4s.JsonAST.JValue
 import org.json4s._
 import org.json4s.jackson.JsonMethods
+
+import scala.io.Source
 
 /**
   * Parses JSON objects into Player objects
