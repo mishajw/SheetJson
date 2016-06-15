@@ -1,7 +1,8 @@
-package music2.player
+package music2.player.origin
 
 import music2.Frequency
-import Tone._
+import music2.player.{Playable, PlayerSpec}
+import music2.player.origin.Tone._
 
 /**
   * Plays a single tone

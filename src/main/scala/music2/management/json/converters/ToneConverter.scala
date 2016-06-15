@@ -1,8 +1,9 @@
 package music2.management.json.converters
+import music2.player.Player
+import music2.player.origin.Tone
 import music2.player.util.Frequencies.FrequencyOf
 import music2.player.util.Notes
 import music2.player.util.Notes.{AbsoluteNote, Note}
-import music2.player.{Player, Tone}
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JString}
 
