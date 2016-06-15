@@ -2,7 +2,7 @@ package music2.management.json
 
 import java.io.FileNotFoundException
 
-import music2.management.json.converters.{CombinerConverter, RandomizerConverter, RiffConverter, ToneConverter}
+import music2.management.json.converters._
 import music2.player.Player
 import org.json4s.JsonAST.JValue
 import org.json4s._
@@ -70,7 +70,7 @@ object JsonParser {
     * A map of type names to their converter objects
     */
   val converters =
-    Seq(ToneConverter, CombinerConverter, RiffConverter, RandomizerConverter)
+    Seq(ToneConverter, CombinerConverter, RiffConverter, RandomizerConverter, SmootherConverter)
       .map(c => c.identifier -> c)
       .toMap
 }
