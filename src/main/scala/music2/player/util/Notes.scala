@@ -53,12 +53,9 @@ object Notes {
   val Af = Gs
   val Bf = As
 
-  def noteFor(str: String): Option[Note] = {
-    noteStringMap contains str.toLowerCase() match {
-      case true => Some(noteStringMap(str))
-      case false => None
-    }
-  }
+  def noteFor(str: String): Option[Note] =
+    noteStringMap get str.toLowerCase
+                         .replace("#", "s")
 
   val successors = Map(
     C -> Cs, Cs -> D,
