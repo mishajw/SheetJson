@@ -6,8 +6,6 @@ import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 import music2.player.Playable
 import music2.sampleRate
 
-import collection.JavaConverters._
-
 /**
   * Takes sound data and plays them through an audio device
   */
@@ -22,7 +20,7 @@ object SoundOut extends Out {
     * Bytes are read from this queue
     */
   private val byteQueue =
-    new LinkedBlockingQueue[Byte]()
+    new LinkedBlockingQueue[Playable]()
 
   /**
     * The thread that plays bytes
@@ -69,9 +67,9 @@ object SoundOut extends Out {
     while (running) {
       try {
         playBytes({
-          for (_ <- 0 until bufferAmount) yield {
-            byteQueue.take()
-          }
+          (for (_ <- 0 until bufferAmount) yield {
+            byteQueue.take().toBytes
+          }).flatten
         })
       } catch {
         case e: InterruptedException =>
@@ -101,7 +99,7 @@ object SoundOut extends Out {
     * Play a playable value
     */
   def play(p: Playable) = {
-    byteQueue.addAll(p.toBytes.asJava)
+    byteQueue add p
   }
 
   /**
