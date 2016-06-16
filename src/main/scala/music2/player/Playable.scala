@@ -22,7 +22,23 @@ object Playable {
   def apply(value: Double) = new Playable(value)
 
   implicit class PlayableCollection(val col: Traversable[Playable]) extends AnyVal {
-    def average: Playable = Playable(col.map(_.value).sum / col.size)
+
+    def values = col.map(_.value)
+
+    def average: Playable = Playable(values.sum / values.size)
+
+    def max: Playable = Playable(values.max)
+
+    def min: Playable = Playable(values.min)
+
+    def normalised: Seq[Playable] = {
+      val range = max.value - min.value
+
+      values
+        .map(v => ((v - min.value) / range) * (maxPlayable - minPlayable) + minPlayable)
+        .map(Playable(_))
+        .toSeq
+    }
   }
 
   private def trim(value: Double): Double = {
