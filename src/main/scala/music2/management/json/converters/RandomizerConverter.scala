@@ -9,8 +9,6 @@ object RandomizerConverter extends JsonConverter {
   override val identifier: String = "randomizer"
 
   override def apply(json: JObject): Option[Player] = {
-    println(json)
-
     val parameters: Seq[Option[(Player, Double)]] = for {
       JObject(obj) <- json
       ("randomness", JDouble(randomness)) <- obj
