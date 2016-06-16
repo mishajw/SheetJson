@@ -50,7 +50,9 @@ abstract class Player(val playerSpec: PlayerSpec) {
     * @return whether the `Player` is alive
     */
   def alive: Boolean = lifeTime match {
-    case Some(lt) => step <= lt
+    case Some(lt) => step <= lt && childrenAlive
     case None => true
   }
+
+  def childrenAlive: Boolean = false
 }

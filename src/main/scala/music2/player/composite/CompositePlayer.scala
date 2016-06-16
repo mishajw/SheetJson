@@ -6,4 +6,6 @@ abstract class CompositePlayer(_spec: PlayerSpec = PlayerSpec()) extends Player(
 
   def components: Seq[Player]
 
+  override def childrenAlive: Boolean = components.forall(_.alive)
+
 }
