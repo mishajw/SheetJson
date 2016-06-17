@@ -11,7 +11,7 @@ import scala.collection.mutable.ArrayBuffer
 /**
   * Takes sound data and plays them through an audio device
   */
-object SoundOut extends Out {
+class SoundOut extends Out {
 
   /**
     * Input audio is read in these size chunks

@@ -15,27 +15,32 @@ class SoundAndFileOut(val path: String) extends Out {
   val fileOut = new FileOut(path)
 
   /**
+    * The SoundOut object used
+    */
+  val soundOut = new SoundOut()
+
+  /**
     * Start writing out
     */
   def start() = {
-    SoundOut.start()
+    soundOut.start()
   }
 
   override def play(p: Playable): Unit = {
     fileOut.play(p)
-    SoundOut.play(p)
+    soundOut.play(p)
   }
 
 
   override def playing: Boolean = {
-    fileOut.playing || SoundOut.playing
+    fileOut.playing || soundOut.playing
   }
 
   /**
     * Stop writing out
     */
   def stop() = {
-    SoundOut.stop()
+    soundOut.stop()
     fileOut.stop()
   }
 }
