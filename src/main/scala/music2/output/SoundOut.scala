@@ -31,7 +31,7 @@ class SoundOut extends Out {
     * How long to wait before playing
     * (in milliseconds)
     */
-  private val waitBuffer: Double = 100
+  private val waitBuffer: Double = 10
 
   /**
     * The thread that plays bytes
