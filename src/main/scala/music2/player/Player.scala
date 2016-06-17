@@ -1,5 +1,8 @@
 package music2.player
 
+import music2.player.composite.CompositePlayer
+import music2.player.filter.FilterPlayer
+
 /**
   * Represents something that "plays" music
   */
@@ -55,4 +58,15 @@ abstract class Player(val playerSpec: PlayerSpec) {
   }
 
   def childrenAlive: Boolean = false
+}
+
+object Player {
+  def flatten(p: Player): Seq[Player] = p match {
+    case p: CompositePlayer =>
+      p +: p.components.flatMap(flatten)
+    case p: FilterPlayer =>
+      p +: flatten(p.child)
+    case p: Player =>
+      Seq(p)
+  }
 }
