@@ -10,13 +10,14 @@ object Scales {
   /**
     * Scales
     */
-  sealed abstract class Scale(val ns: RelativeNote*)
+  val scales = Map(
+    "major"     -> Seq(C, D, E, Fs, A, B),
+    "blues"     -> Seq(C, Ds, F, G, As),
+    "blues-ext" -> Seq(C, Ds, F, Fs, G, As)
+  )
 
-  case object Major extends Scale(C, D, E, Fs, A, B)
-  case object Blues extends Scale(C, Ds, F, G, As)
-  case object BluesExt extends Scale(C, Ds, F, Fs, G, As)
-
-  def get(n: RelativeNote, s: Scale): Seq[RelativeNote] = translate(n, s.ns)
+  def get(n: RelativeNote, s: String): Option[Seq[RelativeNote]] =
+    (scales get s) map (translate(n, _))
 
   /**
     * Translate a scale to start at a note
