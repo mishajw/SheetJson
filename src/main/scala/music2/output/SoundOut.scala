@@ -64,14 +64,12 @@ class SoundOut extends Out {
     */
   private def playFromQueue() = {
     implicit val line = defaultLine
-    var running = true
 
     val bytes: ArrayBuffer[Byte] = ArrayBuffer()
-    while (running) {
+    while (playing) {
       val playable = byteQueue.take()
 
       if (playable.isInstanceOf[EndPlayable]) {
-        running = false
         reachedEnd()
       }
 
