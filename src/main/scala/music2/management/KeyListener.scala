@@ -39,10 +39,10 @@ class KeyListener(_rootPlayer: Player) {
       override def keyTyped(keyEvent: KeyEvent): Unit = {}
 
       override def keyPressed(keyEvent: KeyEvent): Unit =
-        notifyKeyReleased(keyEvent.getKeyCode)
+        notifyKeyPressed(keyEvent.getKeyCode)
 
       override def keyReleased(keyEvent: KeyEvent): Unit =
-        notifyKeyPressed(keyEvent.getKeyCode)
+        notifyKeyReleased(keyEvent.getKeyCode)
     })
   }
 
