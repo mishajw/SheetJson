@@ -1,5 +1,7 @@
 package music2.player.composite
 
+import java.awt.AWTKeyStroke
+import java.awt.event.KeyEvent._
 import javax.swing.KeyStroke
 
 import music2.management.KeyListener.KeyCode
@@ -14,17 +16,11 @@ class Keyboard(playerKeys: Seq[(Player, KeyCode)],
 
   def this(scale: Seq[RelativeNote], spec: PlayerSpec = PlayerSpec())(implicit i: DummyImplicit) =
     this({
-      val keys = Seq('a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l')
+      val keys = Seq(VK_A, VK_S, VK_D, VK_F, VK_G, VK_H, VK_J, VK_K, VK_L)
       scale
         .map(_.frequency)
         .map(new Tone(_))
-        .zip(
-          keys map {
-            KeyStroke
-              .getKeyStroke(_, 0)
-              .getKeyCode
-          }
-        )
+        .zip(keys)
     }, spec)
 
   override protected val wrapped: Seq[Player] =
@@ -32,5 +28,14 @@ class Keyboard(playerKeys: Seq[(Player, KeyCode)],
 
   override protected def extract(t: Player): Player = t
 
-  override protected def _play: Playable = components.map(_.play) average
+  override protected def _play: Playable = {
+
+    val (pr, npr) = components
+      .map(_.asInstanceOf[KeyActivated])
+      .partition(_.pressed)
+
+    npr.foreach(_.play)
+
+    pr.map(_.play) average
+  }
 }
