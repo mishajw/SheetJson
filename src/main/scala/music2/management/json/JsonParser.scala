@@ -70,7 +70,9 @@ object JsonParser {
     * A map of type names to their converter objects
     */
   val converters =
-    Seq(ToneConverter, CombinerConverter, RiffConverter, RandomizerConverter, SmootherConverter)
+    Seq(
+      ToneConverter, CombinerConverter, RiffConverter,
+      RandomizerConverter, SmootherConverter, KeyActivatedConverter)
       .map(c => c.identifier -> c)
       .toMap
 }
