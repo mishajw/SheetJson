@@ -13,24 +13,26 @@ class KeyActivated( _key: KeyCode,
 
   private val log = Logger(getClass)
 
-  private val pressed = new AtomicBoolean(false)
+  private val _pressed = new AtomicBoolean(false)
+
+  def pressed = _pressed.get()
 
   override val keys: Seq[KeyCode] = Seq(_key)
 
   override protected def _play: Playable = {
     val played = child.play
 
-    if (pressed.get()) played
+    if (_pressed.get()) played
     else               Playable.default
   }
 
   override def keyPressed(kc: KeyCode): Unit = {
     log.debug(s"Key pressed: $kc")
-    pressed set false
+    _pressed set true
   }
 
   override def keyReleased(kc: KeyCode): Unit = {
     log.debug(s"Key released: $kc")
-    pressed set true
+    _pressed set false
   }
 }
