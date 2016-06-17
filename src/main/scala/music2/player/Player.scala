@@ -11,7 +11,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
   /**
     * How many times play has been called on this `Player`
     */
-  private var absoluteStep: Double = 0
+  protected var absoluteStep: Int = 0
 
   /**
     * The speed of the `Player`
@@ -47,7 +47,11 @@ abstract class Player(val playerSpec: PlayerSpec) {
   /**
     * @return the relative step, scaled by speed and sample rate
     */
-  def step = (absoluteStep * speed) / music2.sampleRate
+  def step = fromAbsolute(absoluteStep)
+
+  def fromAbsolute(abs: Int) = (abs * speed) / music2.sampleRate
+
+  def toAbsolute(x: Double): Int = ((x * music2.sampleRate) / speed).toInt
 
   /**
     * @return whether the `Player` is alive
