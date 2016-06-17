@@ -3,8 +3,8 @@ package music2.management.json
 import java.io.FileNotFoundException
 
 import music2.management.json.converters._
+import music2.management.json.converters.composite.{CombinerConverter, RiffConverter}
 import music2.player.Player
-import org.json4s.JsonAST.JValue
 import org.json4s._
 import org.json4s.jackson.JsonMethods
 
