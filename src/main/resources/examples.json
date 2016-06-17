@@ -34,6 +34,15 @@
       "type": "keyboard-scale",
       "scale": "blues-ext",
       "key": "C"
+    }],
+    [55, {
+      "type": "looper",
+      "seconds": 2.0,
+      "child": {
+        "type": "keyboard-scale",
+        "scale": "blues-ext",
+        "key": "C"
+      }
     }]
   ]
 }

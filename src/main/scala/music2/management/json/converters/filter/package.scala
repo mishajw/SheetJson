@@ -2,7 +2,7 @@ package music2.management.json.converters
 
 import music2.management.json.JsonParser
 import music2.player.Player
-import music2.player.filter.{KeyActivated, Randomizer, Smoother}
+import music2.player.filter.{KeyActivated, Looper, Randomizer, Smoother}
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JInt}
 
@@ -65,6 +65,21 @@ package object filter {
     override protected def applyWithChild(child: Player, json: JObject): Option[Player] = {
       json \ "key" match {
         case JInt(key) => Some(new KeyActivated(key.toInt, child))
+        case _ => None
+      }
+    }
+  }
+
+  /**
+    * Convert to `Looper`
+    */
+  object LooperConverter extends FilterConverter {
+    override val identifier: String = "looper"
+
+    override protected def applyWithChild(child: Player, json: JObject): Option[Player] = {
+      Option(json \ "seconds") match {
+        case Some(JDouble(seconds)) =>
+          Some(new Looper(seconds, child, getSpec(json)))
         case _ => None
       }
     }
