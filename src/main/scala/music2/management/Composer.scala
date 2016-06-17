@@ -1,5 +1,6 @@
 package music2.management
 
+import com.typesafe.scalalogging.Logger
 import music2.output.{Out, SoundAndFileOut}
 import music2.player.{EndPlayable, Player}
 
@@ -7,6 +8,8 @@ import music2.player.{EndPlayable, Player}
   * Responsible for playing music from a Player object
   */
 object Composer {
+
+  private val log = Logger(getClass)
 
   /**
     * Play from a Player
@@ -16,9 +19,13 @@ object Composer {
   def play[T](player: Player, out: Out): Unit = {
     new KeyListener(player)
 
+    log.debug(s"Start taking from $player and putting into $out")
+
     while (player.alive) {
       out.play(player.play)
     }
+
+    log.debug("Stop playing")
 
     out.play(new EndPlayable())
   }
@@ -29,6 +36,7 @@ object Composer {
     */
   def play[T](player: Player): Unit = {
     val out = new SoundAndFileOut("out.pcm")
+    log.debug(s"Make new out: $out")
 
     out.start()
     play(player, out)

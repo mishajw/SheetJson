@@ -3,6 +3,7 @@ package music2.output
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 
+import com.typesafe.scalalogging.Logger
 import music2.player.{EndPlayable, Playable}
 import music2.sampleRate
 
@@ -12,6 +13,8 @@ import scala.collection.mutable.ArrayBuffer
   * Takes sound data and plays them through an audio device
   */
 class SoundOut extends Out {
+
+  private val log = Logger(getClass)
 
   /**
     * Input audio is read in these size chunks
@@ -71,6 +74,8 @@ class SoundOut extends Out {
   private def playFromQueue() = {
     implicit val line = defaultLine
 
+    log.debug("Start playing from queue")
+
     val bytes: ArrayBuffer[Byte] = ArrayBuffer()
     while (playing) {
       val playable = byteQueue.take()
@@ -86,6 +91,8 @@ class SoundOut extends Out {
         bytes.clear()
       }
     }
+
+    log.debug("Stop playing from queue")
 
     destroy(line)
   }

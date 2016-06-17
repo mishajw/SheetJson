@@ -4,12 +4,15 @@ import java.awt.event.KeyEvent
 import java.util.concurrent.ConcurrentHashMap
 import javax.swing.JFrame
 
+import com.typesafe.scalalogging.Logger
 import music2.management.KeyListener._
 import music2.player.{ListenerPlayer, Player}
 
 import scala.collection.mutable.ArrayBuffer
 
 class KeyListener(_rootPlayer: Player) {
+
+  private val log = Logger(getClass)
 
   /**
     * Map of key codes to what `Player`s are listening to that key
@@ -26,6 +29,7 @@ class KeyListener(_rootPlayer: Player) {
 
   {
     // Setup a window for listening to keys
+    log.debug("Create window for listening to keys")
     val f = new JFrame("music2")
     f.setSize(10, 10)
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
@@ -44,17 +48,22 @@ class KeyListener(_rootPlayer: Player) {
 
   /**
     * Register a listener to listen on a key
+    *
     * @param lp the listener
     * @param kc the key to listen to
     */
-  private def listen(lp: ListenerPlayer, kc: KeyCode): Unit =
+  private def listen(lp: ListenerPlayer, kc: KeyCode): Unit = {
+    log.debug(s"Register $lp to listen for $kc")
+
     if (listeners contains kc)
       (listeners get kc) += lp
     else
-      listeners put (kc, ArrayBuffer(lp))
+      listeners put(kc, ArrayBuffer(lp))
+  }
 
   /**
     * Register a listener for multiple keys
+    *
     * @param lp the listener
     * @param kcs the keys
     */
@@ -63,6 +72,7 @@ class KeyListener(_rootPlayer: Player) {
 
   /**
     * Notify listener a key has been pressed
+    *
     * @param kc the key that has been pressed
     */
   private def notifyKeyPressed(kc: KeyCode): Unit = {
@@ -72,6 +82,7 @@ class KeyListener(_rootPlayer: Player) {
 
   /**
     * Notify listener a key has been released
+    *
     * @param kc the key that has been released
     */
   private def notifyKeyReleased(kc: KeyCode): Unit = {

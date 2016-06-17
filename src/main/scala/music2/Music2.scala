@@ -1,9 +1,14 @@
 package music2
 
+import com.typesafe.scalalogging.Logger
 import music2.management.Composer
 import music2.management.json.JsonParser
+import music2.player.Player
 
 object Music2 {
+
+  private val log = Logger(getClass)
+
   def main(args: Array[String]): Unit = {
     val playerOpt = args match {
       case Array("--path", path) =>
@@ -11,15 +16,16 @@ object Music2 {
       case Array("--raw", raw) =>
         JsonParser parseRaw raw
       case _ =>
-        System.err.println("Usage: music2 [--path | --raw] [<file path> | <JSON string>]")
+        log.error("Usage: music2 [--path | --raw] [<file path> | <JSON string>]")
         return
     }
 
     playerOpt match {
       case Some(player) =>
+        log.debug(s"Create players: ${Player.flatten(player)}")
         Composer play player
       case None =>
-        System.err.println("JSON was malformed, or file not found")
+        log.error("JSON was malformed, or file not found")
     }
   }
 }
