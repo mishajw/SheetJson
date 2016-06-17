@@ -18,6 +18,8 @@ class Tone( val frequency: Frequency,
     val progress = (step % waveLength) / waveLength
     Playable(waveFunction(progress))
   }
+
+  override def toString: String = s"Tone($frequency)"
 }
 
 object Tone {
