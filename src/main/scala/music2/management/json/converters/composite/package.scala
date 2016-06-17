@@ -1,9 +1,10 @@
 package music2.management.json.converters
 
+import music2.management.KeyListener.KeyCode
 import music2.management.json.JsonParser
 import music2.player.Player
 import music2.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
-import music2.player.composite.{Combiner, Keyboard, Riff}
+import music2.player.composite.{Combiner, Keyboard, Riff, Switcher}
 import music2.player.filter.KeyActivated
 import music2.player.util.{Notes, Scales}
 import org.json4s.JsonAST.{JArray, JDouble, JInt, JString}
@@ -81,5 +82,22 @@ package object composite {
 
     override protected def applyWithComponents(cs: Seq[Player], json: JObject): Option[Player] =
       Some(new Keyboard(cs, getSpec(json)))
+  }
+
+  /**
+    * Convert to `Switcher`
+    */
+  object SwitcherConverter extends CompositeConverter[(KeyCode, Player)] {
+    override val identifier: String = "switcher"
+
+    override protected def convertWrapped(json: JValue): Option[(KeyCode, Player)] = json match {
+      case JArray(List(JInt(keyCode), child: JObject)) =>
+        (JsonParser parseJson child) map ((keyCode.toInt, _))
+      case _ => None
+    }
+
+    override protected def applyWithComponents(cs: Seq[(KeyCode, Player)], json: JObject): Option[Player] = {
+      Some(new Switcher(cs, getSpec(json)))
+    }
   }
 }
