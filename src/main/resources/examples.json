@@ -1,0 +1,39 @@
+{
+  "type": "switcher",
+  "components": [
+    [49, {
+      "type": "tone",
+      "note": "C"
+    }],
+    [50, {
+      "type": "randomizer",
+      "randomness": 0.2,
+      "child": { "type": "tone", "note": "c" }
+    }],
+    [51, {
+      "type": "smoother",
+      "smoothness": 0.2,
+      "child": { "type": "tone", "note": "c" }
+    }],
+    [52, {
+      "type": "combiner",
+      "components": [
+        { "type": "tone", "note": "C" },
+        { "type": "tone", "note": "E" },
+        { "type": "tone", "note": "G" }
+      ]
+    }],
+    [53, {
+      "type": "riff",
+      "components": [
+        [{ "type": "tone", "note": "G" }, 0.5],
+        [{ "type": "tone", "note": "Gs" }, 0.5]
+      ]
+    }],
+    [54, {
+      "type": "keyboard-scale",
+      "scale": "blues-ext",
+      "key": "C"
+    }]
+  ]
+}
