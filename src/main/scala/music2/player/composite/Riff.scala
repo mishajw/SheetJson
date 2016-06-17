@@ -8,7 +8,7 @@ import music2.player.{Playable, Player, PlayerSpec}
  *
   * @param _notes the notes and their spanning times
   */
-class Riff[T]( _notes: Seq[PlayerDescription],
+class Riff( _notes: Seq[PlayerDescription],
                _spec: PlayerSpec = PlayerSpec()) extends CompositePlayer[PlayerSpan](_spec) {
 
   /**
