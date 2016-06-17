@@ -1,4 +1,6 @@
-package music2.management.json.converters
+package music2.management.json.converters.origin
+
+import music2.management.json.converters.JsonConverter
 import music2.player.Player
 import music2.player.origin.Tone
 import music2.player.util.Frequencies.FrequencyOf
