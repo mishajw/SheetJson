@@ -25,6 +25,12 @@ class SoundOut extends Out {
     new LinkedBlockingQueue[Playable]()
 
   /**
+    * How long to wait before playing
+    * (in milliseconds)
+    */
+  private val waitBuffer: Double = 100
+
+  /**
     * The thread that plays bytes
     */
   private val thread = new Thread(new Runnable {
@@ -103,6 +109,12 @@ class SoundOut extends Out {
     * Play a playable value
     */
   def play(p: Playable) = {
+    val inQueue = byteQueue.size()
+    val timeToConsume = (inQueue.toDouble / sampleRate.toDouble) * 1000
+
+    if (timeToConsume > waitBuffer)
+      Thread.sleep((timeToConsume - waitBuffer).toInt)
+
     byteQueue add p
   }
 
