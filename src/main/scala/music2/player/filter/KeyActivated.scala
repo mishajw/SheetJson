@@ -13,7 +13,9 @@ class KeyActivated( _key: KeyCode,
   override val keys: Seq[KeyCode] = Seq(_key)
 
   override protected def _play: Playable = {
-    if (pressed) child.play
+    val played = child.play
+
+    if (pressed) played
     else         Playable.default
   }
 
