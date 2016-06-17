@@ -2,7 +2,6 @@ package music2.management.json
 
 import java.io.FileNotFoundException
 
-import music2.management.json.converters._
 import music2.management.json.converters.composite.{CombinerConverter, RiffConverter}
 import music2.management.json.converters.filter.{KeyActivatedConverter, RandomizerConverter, SmootherConverter}
 import music2.management.json.converters.origin.ToneConverter

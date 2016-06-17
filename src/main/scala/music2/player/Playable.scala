@@ -1,6 +1,6 @@
 package music2.player
 
-import Playable._
+import music2.player.Playable._
 
 class Playable(_value: Double) {
 
