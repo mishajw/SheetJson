@@ -11,13 +11,10 @@ object Composer {
   /**
     * Play from a Player
     * @param player the Player to play from
-    * @param seconds how long to play for
     * @param out the output
     */
-  def play[T](player: Player, seconds: Double, out: Out): Unit = {
-    val steps = (music2.sampleRate * seconds).toInt
-
-    for (_ <- 0 until steps) {
+  def play[T](player: Player, out: Out): Unit = {
+    while (player.alive) {
       out.play(player.play)
     }
 
@@ -27,13 +24,12 @@ object Composer {
   /**
     * Play from a player, and create the output
     * @param player the Player to play from
-    * @param time how long to play for
     */
-  def play[T](player: Player, time: Long): Unit = {
+  def play[T](player: Player): Unit = {
     val out = new SoundAndFileOut("out.pcm")
 
     out.start()
-    play(player, time, out)
+    play(player, out)
     out.stop()
   }
 }

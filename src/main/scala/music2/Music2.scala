@@ -17,7 +17,7 @@ object Music2 {
 
     playerOpt match {
       case Some(player) =>
-        Composer play (player, 10)
+        Composer play player
       case None =>
         System.err.println("JSON was malformed, or file not found")
     }
