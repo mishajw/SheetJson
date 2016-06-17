@@ -3,8 +3,10 @@ package music2.output
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 
-import music2.player.Playable
+import music2.player.{EndPlayable, Playable}
 import music2.sampleRate
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * Takes sound data and plays them through an audio device
@@ -64,16 +66,20 @@ object SoundOut extends Out {
     implicit val line = defaultLine
     var running = true
 
+    val bytes: ArrayBuffer[Byte] = ArrayBuffer()
     while (running) {
-      try {
-        playBytes({
-          (for (_ <- 0 until bufferAmount) yield {
-            byteQueue.take().toBytes
-          }).flatten
-        })
-      } catch {
-        case e: InterruptedException =>
-          running = false
+      val playable = byteQueue.take()
+
+      if (playable.isInstanceOf[EndPlayable]) {
+        running = false
+        reachedEnd()
+      }
+
+      bytes ++= playable.toBytes
+
+      if (bytes.size > bufferAmount) {
+        playBytes(bytes)
+        bytes.clear()
       }
     }
 
@@ -105,8 +111,7 @@ object SoundOut extends Out {
   /**
     * Stop the playing
     */
-  def stop() = thread.synchronized {
-    thread.interrupt()
+  def stop() = /*thread.synchronized */{
     thread.join()
   }
 }

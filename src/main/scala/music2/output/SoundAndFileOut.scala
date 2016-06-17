@@ -26,6 +26,11 @@ class SoundAndFileOut(val path: String) extends Out {
     SoundOut.play(p)
   }
 
+
+  override def playing: Boolean = {
+    fileOut.playing || SoundOut.playing
+  }
+
   /**
     * Stop writing out
     */

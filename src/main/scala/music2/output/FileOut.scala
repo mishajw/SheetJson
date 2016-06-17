@@ -1,7 +1,7 @@
 package music2.output
 import java.io.{BufferedOutputStream, FileOutputStream}
 
-import music2.player.Playable
+import music2.player.{EndPlayable, Playable}
 
 /**
   * Writes played data to a file
@@ -16,6 +16,9 @@ class FileOut(val path: String) extends Out {
 
   override def play(p: Playable): Unit = {
     pw.write(p.toBytes.toArray)
+
+    if (p.isInstanceOf[EndPlayable])
+      reachedEnd()
   }
 
   /**

@@ -1,7 +1,7 @@
 package music2.management
 
 import music2.output.{Out, SoundAndFileOut}
-import music2.player.Player
+import music2.player.{EndPlayable, Player}
 
 /**
   * Responsible for playing music from a Player object
@@ -21,7 +21,7 @@ object Composer {
       out.play(player.play)
     }
 
-    Thread.sleep((seconds * 1000).toInt)
+    out.play(new EndPlayable())
   }
 
   /**
