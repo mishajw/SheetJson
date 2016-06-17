@@ -24,7 +24,7 @@ object KeyboardScaleConverter extends JsonConverter {
         JString(key) <- Option(json \ "key")
         note <- Notes noteFor key
         scale <- Scales get(note, scale)
-      } yield new Keyboard(scale, getSpec(jsonObj))
+      } yield Keyboard fromScale (scale, getSpec(jsonObj))
     case _ => None
   }
 }
