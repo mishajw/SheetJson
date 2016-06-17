@@ -14,6 +14,8 @@ object Composer {
     * @param out the output
     */
   def play[T](player: Player, out: Out): Unit = {
+    new KeyListener(player)
+
     while (player.alive) {
       out.play(player.play)
     }
