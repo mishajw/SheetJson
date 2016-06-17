@@ -36,6 +36,6 @@ class Keyboard(playerKeys: Seq[(Player, KeyCode)],
 
     npr.foreach(_.play)
 
-    pr.map(_.play) average
+    pr.map(_.play) combine
   }
 }

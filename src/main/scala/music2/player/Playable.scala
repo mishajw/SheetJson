@@ -25,7 +25,7 @@ object Playable {
 
     def values = col.map(_.value)
 
-    def average: Playable = Playable(values.sum / values.size)
+    def combine: Playable = Playable(values.sum / values.size)
 
     def max: Playable = Playable(values.max)
 

@@ -26,6 +26,6 @@ class Smoother( _child: Player,
     while (past.size > queueMax)
       past.dequeue
 
-    past.average
+    past.combine
   }
 }

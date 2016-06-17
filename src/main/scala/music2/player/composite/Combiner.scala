@@ -10,7 +10,7 @@ import music2.player.{Playable, Player, PlayerSpec}
 class Combiner(_components: Seq[Player], _spec: PlayerSpec = PlayerSpec()) extends CompositePlayer[Player](_spec) {
 
   override protected def _play: Playable = {
-    (components map (_.play)) average
+    (components map (_.play)) combine
   }
 
   override def components: Seq[Player] = _components
