@@ -62,7 +62,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
 
 object Player {
   def flatten(p: Player): Seq[Player] = p match {
-    case p: CompositePlayer =>
+    case p: CompositePlayer[_] =>
       p +: p.components.flatMap(flatten)
     case p: FilterPlayer =>
       p +: flatten(p.child)

@@ -8,12 +8,13 @@ import music2.player.{Playable, Player, PlayerSpec}
  *
   * @param _notes the notes and their spanning times
   */
-class Riff[T](_notes: Seq[PlayerDescription], _spec: PlayerSpec = PlayerSpec()) extends CompositePlayer(_spec) {
+class Riff[T]( _notes: Seq[PlayerDescription],
+               _spec: PlayerSpec = PlayerSpec()) extends CompositePlayer[PlayerSpan](_spec) {
 
   /**
     * Cast all notes to `PlayerSpan`
     */
-  lazy val notes: Seq[PlayerSpan] = {
+  override protected val wrapped: Seq[PlayerSpan] = {
     var cumulativeTime: Double = 0
 
     for (n <- _notes) yield n match {
@@ -29,19 +30,19 @@ class Riff[T](_notes: Seq[PlayerDescription], _spec: PlayerSpec = PlayerSpec()) 
   /**
     * The total duration of the riffs
     */
-  private lazy val riffDuration = notes.map(_.end).max
+  private lazy val riffDuration = wrapped.map(_.end).max
 
   override protected def _play: Playable = {
     val progress = step % riffDuration
 
-    val playingNotes = notes
+    val playingNotes = wrapped
       .filter(n => n.start <= progress && progress <= n.end)
       .map(_.player)
 
     new Combiner(playingNotes).play
   }
 
-  override def components: Seq[Player] = notes.map(_.player)
+  override protected def extract(p: PlayerSpan): Player = p.player
 }
 
 /**
