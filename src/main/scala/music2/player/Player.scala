@@ -26,7 +26,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
   /**
     * How loud a `Player` is
     */
-  val volume: Double = playerSpec.volume getOrElse 1
+  val volume: Double = playerSpec.volume getOrElse 0.5
 
   /**
     * @return the next value played, and handle other transformations
@@ -34,7 +34,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
   def play: Playable = {
     if (!alive) return Playable.default
 
-    val played = _play
+    val played = _play * volume
     absoluteStep += 1
     played
   }
