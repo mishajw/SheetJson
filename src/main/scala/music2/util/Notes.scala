@@ -1,4 +1,4 @@
-package music2.player.util
+package music2.util
 
 /**
   * Represents the notes and frequencies

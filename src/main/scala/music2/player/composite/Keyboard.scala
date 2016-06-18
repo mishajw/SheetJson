@@ -5,8 +5,8 @@ import java.awt.event.KeyEvent._
 import music2.management.KeyListener.KeyCode
 import music2.player.filter.KeyActivated
 import music2.player.origin.Tone
-import music2.player.util.Frequencies.FrequencyOf
-import music2.player.util.Notes.RelativeNote
+import music2.util.Frequencies.FrequencyOf
+import music2.util.Notes.RelativeNote
 import music2.player.{Playable, Player, PlayerSpec}
 
 class Keyboard(_wrapped: Seq[Player],

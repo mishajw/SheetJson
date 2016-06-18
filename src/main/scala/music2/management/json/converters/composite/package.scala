@@ -6,7 +6,7 @@ import music2.player.Player
 import music2.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import music2.player.composite.{Combiner, Keyboard, Riff, Switcher}
 import music2.player.filter.KeyActivated
-import music2.player.util.{Notes, Scales}
+import music2.util.{Notes, Scales}
 import org.json4s.JsonAST.{JArray, JDouble, JInt, JString}
 import org.json4s.{JObject, JValue}
 

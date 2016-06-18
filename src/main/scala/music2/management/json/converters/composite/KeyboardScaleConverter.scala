@@ -3,7 +3,7 @@ package music2.management.json.converters.composite
 import music2.management.json.converters.JsonConverter
 import music2.player.Player
 import music2.player.composite.Keyboard
-import music2.player.util.{Notes, Scales}
+import music2.util.{Notes, Scales}
 import org.json4s.JObject
 import org.json4s.JsonAST.JString
 
