@@ -17,7 +17,6 @@ class Tone( val frequency: Frequency,
 
   protected def _play: Playable = {
     val progress = (step % Seconds(waveLength)) / Seconds(waveLength)
-    println(progress)
     Playable(waveFunction(progress.toDouble))
   }
 
