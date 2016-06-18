@@ -2,7 +2,7 @@ package music2.management.json.converters
 
 import music2.management.KeyListener.KeyCode
 import music2.management.json.JsonParser
-import music2.player.Player
+import music2.player.{Player, PlayerSpec}
 import music2.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import music2.player.composite.{Combiner, Keyboard, Riff, Switcher}
 import music2.player.filter.KeyActivated
@@ -78,7 +78,7 @@ package object composite {
 
     override protected def convertWrapped(json: JValue): Option[Player] = json match {
       case JArray(List(child: JObject, JInt(keyCode))) =>
-        (JsonParser parseJson child) map (new KeyActivated(keyCode.toInt, _)) // TODO: Get spec
+        (JsonParser parseJson child) map (new KeyActivated(keyCode.toInt, _, PlayerSpec())) // TODO: Get spec
     }
 
     override protected def applyWithComponents(cs: Seq[Player], json: JObject): Option[Player] =

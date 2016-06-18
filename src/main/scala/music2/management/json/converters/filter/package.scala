@@ -65,7 +65,7 @@ package object filter {
 
     override protected def applyWithChild(child: Player, json: JObject): Option[Player] = {
       json \ "key" match {
-        case JInt(key) => Some(new KeyActivated(key.toInt, child))
+        case JInt(key) => Some(new KeyActivated(key.toInt, child, getSpec(json)))
         case _ => None
       }
     }

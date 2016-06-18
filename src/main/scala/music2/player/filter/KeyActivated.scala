@@ -8,7 +8,7 @@ import music2.player.{ListenerPlayer, Playable, Player, PlayerSpec}
 
 class KeyActivated( _key: KeyCode,
                     _child: Player,
-                    _spec: PlayerSpec = PlayerSpec())
+                    _spec: PlayerSpec)
                     extends FilterPlayer(_child, _spec) with ListenerPlayer {
 
   private val log = Logger(getClass)

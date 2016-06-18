@@ -7,7 +7,7 @@ import music2.player.{Playable, Player, PlayerSpec}
   *
   * @param _components the `Player`s to take output from
   */
-class Combiner(_components: Seq[Player], _spec: PlayerSpec = PlayerSpec()) extends CompositePlayer[Player](_spec) {
+class Combiner(_components: Seq[Player], _spec: PlayerSpec) extends CompositePlayer[Player](_spec) {
 
   override protected def _play: Playable = {
     (components map (_.play)) combine

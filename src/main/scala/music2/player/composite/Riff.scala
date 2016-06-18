@@ -10,7 +10,7 @@ import music2.util.Time.Bars
   * @param _notes the notes and their spanning times
   */
 class Riff( _notes: Seq[PlayerDescription],
-            _spec: PlayerSpec = PlayerSpec()) extends CompositePlayer[PlayerSpan](_spec) {
+            _spec: PlayerSpec) extends CompositePlayer[PlayerSpan](_spec) {
 
   /**
     * Cast all notes to `PlayerSpan`

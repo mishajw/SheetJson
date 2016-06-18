@@ -29,14 +29,14 @@ class Keyboard(_wrapped: Seq[Player],
 
 object Keyboard {
   def fromKeys(playerKeys: Seq[(Player, KeyCode)], _spec: PlayerSpec) =
-    new Keyboard(playerKeys map { case (p, k) => new KeyActivated(k, p) }, _spec)
+    new Keyboard(playerKeys map { case (p, k) => new KeyActivated(k, p, PlayerSpec()) }, _spec)
 
-  def fromScale(scale: Seq[RelativeNote], spec: PlayerSpec = PlayerSpec()) =
+  def fromScale(scale: Seq[RelativeNote], spec: PlayerSpec) =
     fromKeys({
       val keys = Seq(VK_A, VK_S, VK_D, VK_F, VK_G, VK_H, VK_J, VK_K, VK_L)
       scale
         .map(_.frequency)
-        .map(new Tone(_))
+        .map(new Tone(_, _spec = PlayerSpec()))
         .zip(keys)
     }, spec)
 }

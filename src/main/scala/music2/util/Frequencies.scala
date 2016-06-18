@@ -1,6 +1,7 @@
 package music2.util
 
 import music2.Frequency
+import music2.player.PlayerSpec
 import music2.player.origin.Tone
 import music2.util.Notes._
 
@@ -24,7 +25,7 @@ object Frequencies {
     * @return a SimpleTone object with the correct frequency
     */
   def get(note: Note): Tone =
-    new Tone(getFrequency(note))
+    new Tone(getFrequency(note), _spec = PlayerSpec())
 
   /**
     * @param n the note to get
@@ -59,7 +60,7 @@ object Frequencies {
       * @param octave the octave of the note
       * @return the tone of the not at some octave
       */
-    def toneOf(octave: Int): Tone = new Tone(frequencyOf(octave))
+    def toneOf(octave: Int): Tone = new Tone(frequencyOf(octave), _spec = PlayerSpec())
 
     def frequency: Frequency = getFrequency(n)
 

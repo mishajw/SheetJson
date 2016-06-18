@@ -2,7 +2,7 @@ package music2.player.composite
 
 import music2.player.{Player, PlayerSpec}
 
-abstract class CompositePlayer[T](_spec: PlayerSpec = PlayerSpec()) extends Player(_spec) {
+abstract class CompositePlayer[T](_spec: PlayerSpec) extends Player(_spec) {
 
   /**
     * A list of `Player`s, wrapped in some way

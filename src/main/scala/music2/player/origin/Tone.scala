@@ -11,7 +11,7 @@ import music2.util.Time.Seconds
   */
 class Tone( val frequency: Frequency,
             val waveFunction: WaveFunction = waveFunctions("sine"),
-            _spec: PlayerSpec = PlayerSpec()) extends OriginPlayer(_spec) {
+            _spec: PlayerSpec) extends OriginPlayer(_spec) {
 
   private lazy val waveLength = 1 / frequency
 

@@ -4,7 +4,7 @@ import music2.management.KeyListener.KeyCode
 import music2.player.{ListenerPlayer, Playable, Player, PlayerSpec}
 
 class Switcher(_wrapped: Seq[(KeyCode, Player)],
-               _spec: PlayerSpec) extends CompositePlayer[(KeyCode, Player)] with ListenerPlayer {
+               _spec: PlayerSpec) extends CompositePlayer[(KeyCode, Player)](_spec) with ListenerPlayer {
   override protected val wrapped: Seq[(KeyCode, Player)] = _wrapped
 
   private var current: Option[KeyCode] = None
