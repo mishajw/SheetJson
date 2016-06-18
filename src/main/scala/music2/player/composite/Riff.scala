@@ -2,6 +2,7 @@ package music2.player.composite
 
 import music2.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import music2.player.{Playable, Player, PlayerSpec}
+import music2.util.Time.Bars
 
 /**
   * Plays a sequence of notes for certain time spans
@@ -15,14 +16,14 @@ class Riff( _notes: Seq[PlayerDescription],
     * Cast all notes to `PlayerSpan`
     */
   override protected val wrapped: Seq[PlayerSpan] = {
-    var cumulativeTime: Double = 0
+    var cumulativeTime: Bars = Bars(0)
 
     for (n <- _notes) yield n match {
       case ps: PlayerSpan =>
         cumulativeTime = ps.end ; ps
       case PlayerDuration(p, d) =>
-        val ps = PlayerSpan(p, cumulativeTime, cumulativeTime + d)
-        cumulativeTime += d
+        val ps = PlayerSpan(p, cumulativeTime, Bars(cumulativeTime.value + d.value))
+        cumulativeTime = Bars(cumulativeTime.value + d.value)
         ps
     }
   }
@@ -30,13 +31,13 @@ class Riff( _notes: Seq[PlayerDescription],
   /**
     * The total duration of the riffs
     */
-  private lazy val riffDuration = wrapped.map(_.end).max
+  private lazy val riffDuration = Bars(wrapped.map(_.end.value).max)
 
   override protected def _play: Playable = {
-    val progress = step % riffDuration
+    val progress = Bars(step.value % riffDuration.value)
 
     val playingNotes = wrapped
-      .filter(n => n.start <= progress && progress <= n.end)
+      .filter(n => n.start.value <= progress.value && progress.value <= n.end.value)
       .map(_.player)
 
     new Combiner(playingNotes).play
@@ -59,12 +60,12 @@ object Riff {
     * @param player the `Player` to play
     * @param duration how long to play
     */
-  case class PlayerDuration(player: Player, duration: Double) extends PlayerDescription
+  case class PlayerDuration(player: Player, duration: Bars) extends PlayerDescription
 
   /**
     * @param player the `Player` to play
     * @param start when to start playing
     * @param end when to finish playing
     */
-  case class PlayerSpan(player: Player, start: Double, end: Double) extends PlayerDescription
+  case class PlayerSpan(player: Player, start: Bars, end: Bars) extends PlayerDescription
 }

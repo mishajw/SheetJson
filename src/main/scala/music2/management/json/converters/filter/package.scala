@@ -3,6 +3,7 @@ package music2.management.json.converters
 import music2.management.json.JsonParser
 import music2.player.Player
 import music2.player.filter.{KeyActivated, Looper, Randomizer, Smoother}
+import music2.util.Time.Bars
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JInt}
 
@@ -78,8 +79,8 @@ package object filter {
 
     override protected def applyWithChild(child: Player, json: JObject): Option[Player] = {
       Option(json \ "seconds") match {
-        case Some(JDouble(seconds)) =>
-          Some(new Looper(seconds, child, getSpec(json)))
+        case Some(JDouble(bars)) =>
+          Some(new Looper(Bars(bars), child, getSpec(json)))
         case _ => None
       }
     }

@@ -2,7 +2,7 @@ package music2.player
 
 import music2.player.composite.CompositePlayer
 import music2.player.filter.FilterPlayer
-import music2.util.Time.sampleRate
+import music2.util.Time.{Absolute, Bars, Seconds}
 
 /**
   * Represents something that "plays" music
@@ -12,7 +12,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
   /**
     * How many times play has been called on this `Player`
     */
-  protected var absoluteStep: Int = 0
+  protected var absoluteStep: Absolute = Absolute(0)
 
   /**
     * The speed of the `Player`
@@ -22,7 +22,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
   /**
     * How long a `Player` plays for
     */
-  val lifeTime: Option[Double] = playerSpec.lifeTime
+  val lifeTime: Option[Bars] = playerSpec.lifeTime
 
   /**
     * How loud a `Player` is
@@ -36,7 +36,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
     if (!alive) return Playable.default
 
     val played = _play * volume
-    absoluteStep += 1
+    absoluteStep = Absolute(absoluteStep.value + 1)
     played
   }
 
@@ -45,20 +45,13 @@ abstract class Player(val playerSpec: PlayerSpec) {
     */
   protected def _play: Playable
 
-  /**
-    * @return the relative step, scaled by speed and sample rate
-    */
-  def step = fromAbsolute(absoluteStep)
-
-  def fromAbsolute(abs: Int) = (abs * speed) / sampleRate
-
-  def toAbsolute(x: Double): Int = ((x * sampleRate) / speed).toInt
+  def step: Seconds = Seconds(absoluteStep)
 
   /**
     * @return whether the `Player` is alive
     */
   def alive: Boolean = lifeTime match {
-    case Some(lt) => step <= lt && childrenAlive
+    case Some(lt) => step.value <= lt.value && childrenAlive
     case None => true
   }
 

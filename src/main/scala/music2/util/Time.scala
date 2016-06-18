@@ -40,11 +40,11 @@ object Time {
     * Represents amount of ticks called
     * Used for time-independent things, like `Looper`
     */
-  case class Absolute(value: Int)
+  case class Absolute(value: Double)
 
   object Absolute {
     def apply(s: Seconds): Absolute =
-      Absolute((s.value * sampleRate).toInt)
+      Absolute(s.value * sampleRate)
     def apply(b: Bars): Absolute =
       Absolute(Seconds(b))
   }

@@ -6,6 +6,7 @@ import music2.player.Player
 import music2.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import music2.player.composite.{Combiner, Keyboard, Riff, Switcher}
 import music2.player.filter.KeyActivated
+import music2.util.Time.Bars
 import music2.util.{Notes, Scales}
 import org.json4s.JsonAST.{JArray, JDouble, JInt, JString}
 import org.json4s.{JObject, JValue}
@@ -57,9 +58,9 @@ package object composite {
       case JArray((jsonComponent: JObject) :: description) =>
         (JsonParser parseJson jsonComponent, description) match {
           case (Some(player), List(JDouble(start), JDouble(end))) =>
-            Some(PlayerSpan(player, start, end))
+            Some(PlayerSpan(player, Bars(start), Bars(end)))
           case (Some(player), List(JDouble(duration))) =>
-            Some(PlayerDuration(player, duration))
+            Some(PlayerDuration(player, Bars(duration)))
           case _ => None
         }
       case _ => None
