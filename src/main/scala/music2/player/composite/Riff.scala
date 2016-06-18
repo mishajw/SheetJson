@@ -22,8 +22,8 @@ class Riff( _notes: Seq[PlayerDescription],
       case ps: PlayerSpan =>
         cumulativeTime = ps.end ; ps
       case PlayerDuration(p, d) =>
-        val ps = PlayerSpan(p, cumulativeTime, Bars(cumulativeTime.value + d.value))
-        cumulativeTime = Bars(cumulativeTime.value + d.value)
+        val ps = PlayerSpan(p, cumulativeTime, cumulativeTime + d)
+        cumulativeTime = cumulativeTime + d
         ps
     }
   }
@@ -31,13 +31,13 @@ class Riff( _notes: Seq[PlayerDescription],
   /**
     * The total duration of the riffs
     */
-  private lazy val riffDuration = Bars(wrapped.map(_.end.value).max)
+  private lazy val riffDuration = wrapped.map(_.end).maxBy(_._value)
 
   override protected def _play: Playable = {
-    val progress = Bars(step.value % riffDuration.value)
+    val progress = Bars(step) % riffDuration
 
     val playingNotes = wrapped
-      .filter(n => n.start.value <= progress.value && progress.value <= n.end.value)
+      .filter(n => n.start <= progress && progress <= n.end)
       .map(_.player)
 
     new Combiner(playingNotes).play

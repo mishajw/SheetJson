@@ -3,6 +3,7 @@ package music2.player.origin
 import music2.Frequency
 import music2.player.origin.Tone._
 import music2.player.{Playable, PlayerSpec}
+import music2.util.Time.Seconds
 
 /**
   * Plays a single tone
@@ -15,9 +16,9 @@ class Tone( val frequency: Frequency,
   private lazy val waveLength = 1 / frequency
 
   protected def _play: Playable = {
-    val progress = (step.value % waveLength) / waveLength
+    val progress = (step % Seconds(waveLength)) / Seconds(waveLength)
     println(progress)
-    Playable(waveFunction(progress))
+    Playable(waveFunction(progress.toDouble))
   }
 
   override def toString: String = s"Tone($frequency)"

@@ -12,9 +12,9 @@ class Looper(val bars: Bars,
   val past = ArrayBuffer[ArrayBuffer[Playable]]()
 
   override protected def _play: Playable = {
-    val currentStep = absoluteStep.value % Absolute(bars).value
+    val currentStep = absoluteStep % Absolute(bars)
 
-    while (past.size < currentStep + 1) {
+    while (Absolute(past.size) < currentStep.incr) {
       past += ArrayBuffer()
     }
 

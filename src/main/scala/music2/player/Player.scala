@@ -36,7 +36,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
     if (!alive) return Playable.default
 
     val played = _play * volume
-    absoluteStep = Absolute(absoluteStep.value + 1)
+    absoluteStep = absoluteStep.incr
     played
   }
 
@@ -51,7 +51,7 @@ abstract class Player(val playerSpec: PlayerSpec) {
     * @return whether the `Player` is alive
     */
   def alive: Boolean = lifeTime match {
-    case Some(lt) => step.value <= lt.value && childrenAlive
+    case Some(lt) => Bars(step) <= lt && childrenAlive
     case None => true
   }
 
