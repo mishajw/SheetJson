@@ -1,5 +1,7 @@
 package music2.util
 
+import scala.util.Try
+
 /**
   * Represents the notes and frequencies
   */
@@ -73,15 +75,35 @@ object Notes {
   val Af = Gs
   val Bf = As
 
+  val rRelativeNote = """([A-Za-z]{1,2})""".r
+  val rAbsoluteNote = """([A-Za-z]{1,2})([\-\d]+)""".r
+
   /**
     * Get a note by string representation
  *
     * @param str the string representation
     * @return the note for that string
     */
-  def noteFor(str: String): Option[RelativeNote] =
+  def relativeNoteFor(str: String): Option[RelativeNote] =
     noteStringMap get str.toLowerCase
                          .replace("#", "s")
+
+  def noteFor(str: String): Option[Note] = {
+    val parts = str match {
+      case rRelativeNote(key) =>
+        (Notes relativeNoteFor key, None)
+      case rAbsoluteNote(key, octave) =>
+        (Notes relativeNoteFor key, Try(octave.toInt).toOption)
+      case _ =>
+        (None, None)
+    }
+
+    parts match {
+      case (Some(key), Some(octave)) =>
+        Some(AbsoluteNote(key, octave))
+      case (keyOpt, _) => keyOpt
+    }
+  }
 
   /**
     * Map of note's successors
