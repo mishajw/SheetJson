@@ -39,6 +39,7 @@ object Tone {
   val waveFunctions: Map[String, WaveFunction] = Map(
     "sine" -> { x: Double => Math.sin(x * fullAngle) },
     "cosine" -> { x: Double => Math.cos(x * fullAngle) },
-    "id" -> { x: Double => x }
+    "id" -> { x: Double => x },
+    "binary" -> { x: Double => if (x < 0.5) -1 else 1 }
   )
 }
