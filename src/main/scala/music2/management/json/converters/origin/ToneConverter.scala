@@ -3,6 +3,7 @@ package music2.management.json.converters.origin
 import music2.management.json.converters.JsonConverter
 import music2.player.Player
 import music2.player.origin.Tone
+import music2.player.origin.Tone._
 import music2.util.Frequencies.FrequencyOf
 import music2.util.Notes
 import music2.util.Notes.{AbsoluteNote, Note}
@@ -30,8 +31,10 @@ object ToneConverter extends JsonConverter {
         }
     }
 
-    transformed.extractOpt[JTone]
-      .map(jTone => new Tone(jTone.note, waveFunctionNames(jTone.waveFunction), getSpec(json)))
+    for {
+      jTone <- transformed.extractOpt[JTone]
+      wave <- waveFunctions get jTone.waveFunction
+    } yield new Tone(jTone.note, wave, getSpec(json))
   }
 
   def noteOf(str: String): Option[Note] = {
@@ -50,10 +53,4 @@ object ToneConverter extends JsonConverter {
       case (keyOpt, _) => keyOpt
     }
   }
-
-  val waveFunctionNames = Map(
-    "sine" -> Tone.sine,
-    "cosine" -> Tone.cosine,
-    "id" -> Tone.id
-  )
 }

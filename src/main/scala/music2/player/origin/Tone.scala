@@ -10,7 +10,7 @@ import music2.util.Time.Seconds
   * @param frequency the frequency of the tone
   */
 class Tone( val frequency: Frequency,
-            val waveFunction: WaveFunction = sine,
+            val waveFunction: WaveFunction = waveFunctions("sine"),
             _spec: PlayerSpec = PlayerSpec()) extends OriginPlayer(_spec) {
 
   private lazy val waveLength = 1 / frequency
@@ -36,11 +36,9 @@ object Tone {
     */
   type WaveFunction = Double => Double
 
-  val sine: WaveFunction =
-    x => Math.sin(x * fullAngle)
-
-  val cosine: WaveFunction =
-    x => Math.cos(x * fullAngle)
-
-  val id: WaveFunction = identity
+  val waveFunctions: Map[String, WaveFunction] = Map(
+    "sine" -> { x: Double => Math.sin(x * fullAngle) },
+    "cosine" -> { x: Double => Math.cos(x * fullAngle) },
+    "id" -> { x: Double => x }
+  )
 }
