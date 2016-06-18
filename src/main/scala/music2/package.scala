@@ -4,6 +4,6 @@
 package object music2 {
   type SampleRate = Int
   type Frequency = Double
+  type BPM = Int
 
-  val sampleRate: SampleRate = 24000
 }
