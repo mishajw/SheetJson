@@ -85,7 +85,7 @@ object Time {
 
   object Bars {
     def apply(s: Seconds): Bars =
-      Bars(s._value / (bpm / beatsPerBar / 60))
+      Bars(s._value / (bpm.toDouble / beatsPerBar.toDouble / 60.0))
     def apply(a: Absolute): Bars =
       Bars(Seconds(a))
   }
