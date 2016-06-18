@@ -40,7 +40,7 @@ class Riff( _notes: Seq[PlayerDescription],
       .filter(n => n.start <= progress && progress <= n.end)
       .map(_.player)
 
-    new Combiner(playingNotes).play
+    playingNotes.map(_.play) combine
   }
 
   override protected def extract(p: PlayerSpan): Player = p.player
