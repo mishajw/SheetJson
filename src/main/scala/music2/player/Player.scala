@@ -2,6 +2,7 @@ package music2.player
 
 import music2.player.composite.CompositePlayer
 import music2.player.filter.FilterPlayer
+import music2.util.Time.sampleRate
 
 /**
   * Represents something that "plays" music
@@ -49,9 +50,9 @@ abstract class Player(val playerSpec: PlayerSpec) {
     */
   def step = fromAbsolute(absoluteStep)
 
-  def fromAbsolute(abs: Int) = (abs * speed) / music2.sampleRate
+  def fromAbsolute(abs: Int) = (abs * speed) / sampleRate
 
-  def toAbsolute(x: Double): Int = ((x * music2.sampleRate) / speed).toInt
+  def toAbsolute(x: Double): Int = ((x * sampleRate) / speed).toInt
 
   /**
     * @return whether the `Player` is alive

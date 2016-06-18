@@ -5,7 +5,7 @@ import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 
 import com.typesafe.scalalogging.Logger
 import music2.player.{EndPlayable, Playable}
-import music2.sampleRate
+import music2.util.Time.sampleRate
 
 import scala.collection.mutable.ArrayBuffer
 
