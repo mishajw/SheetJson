@@ -7,7 +7,7 @@ import music2.management.json.converters.origin._
 import music2.management.json.converters.composite._
 import music2.management.json.converters.filter._
 import music2.player.Player
-import music2.player.composite.{Combiner, Keyboard, Riff, Switcher}
+import music2.player.composite._
 import music2.player.filter._
 import music2.player.origin.{FadingNoise, Tone}
 import org.json4s._
@@ -84,7 +84,8 @@ object JsonParser {
       case "smoother" => convert[Smoother](json)
       case "toggle" => convert[Toggle](json)
       case "combiner" => convert[Combiner](json)
-      case "keyboard-scale" => convert[Keyboard](json)
+      case "keyboard" => convert[Keyboard](json)
+      case "keyboard-scale" => convert[KeyboardScale](json)
       case "riff" => convert[Riff](json)
       case "switcher" => convert[Switcher](json)
     }

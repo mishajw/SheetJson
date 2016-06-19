@@ -1,18 +1,15 @@
 package music2.player.composite
 
-import java.awt.event.KeyEvent._
-
 import music2.management.KeyListener.KeyCode
 import music2.player.filter.KeyActivated
-import music2.player.origin.Tone
-import music2.util.Frequencies.FrequencyOf
-import music2.util.Notes.RelativeNote
 import music2.player.{Playable, Player, PlayerSpec}
 
-class Keyboard(_wrapped: Seq[Player],
+class Keyboard(playerKeys: Seq[(Player, KeyCode)],
                _spec: PlayerSpec) extends CompositePlayer[Player](_spec) {
 
-  override protected val wrapped: Seq[Player] = _wrapped
+  override protected val wrapped: Seq[Player] = {
+    playerKeys map { case (p, k) => new KeyActivated(k, p, PlayerSpec()) }
+  }
 
   override protected def extract(t: Player): Player = t
 
@@ -25,18 +22,4 @@ class Keyboard(_wrapped: Seq[Player],
 
     pr.map(_.play) combine
   }
-}
-
-object Keyboard {
-  def fromKeys(playerKeys: Seq[(Player, KeyCode)], _spec: PlayerSpec) =
-    new Keyboard(playerKeys map { case (p, k) => new KeyActivated(k, p, PlayerSpec()) }, _spec)
-
-  def fromScale(scale: Seq[RelativeNote], spec: PlayerSpec) =
-    fromKeys({
-      val keys = Seq(VK_A, VK_S, VK_D, VK_F, VK_G, VK_H, VK_J, VK_K, VK_L)
-      scale
-        .map(_.frequency)
-        .map(new Tone(_, _spec = PlayerSpec()))
-        .zip(keys)
-    }, spec)
 }

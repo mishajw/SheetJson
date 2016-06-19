@@ -66,18 +66,18 @@ package object composite {
       Some(new Riff(cs, getSpec(json)))
   }
 
-//  /**
-//    * Convert to `Keyboard`
-//    */
-//  implicit object KeyboardConverter extends CompositeConverter[Keyboard, Player] {
-//    override protected def convertWrapped(json: JValue): Option[Player] = json match {
-//      case JArray(List(child: JObject, JInt(keyCode))) =>
-//        (JsonParser parseJson child) map (new KeyActivated(keyCode.toInt, _, PlayerSpec())) // TODO: Get spec
-//    }
-//
-//    override protected def applyWithComponents(cs: Seq[Player], json: JObject): Option[Keyboard] =
-//      Some(new Keyboard(cs, getSpec(json)))
-//  }
+  /**
+    * Convert to `Keyboard`
+    */
+  implicit object KeyboardConverter extends CompositeConverter[Keyboard, (Player, KeyCode)] {
+    override protected def convertWrapped(json: JValue): Option[(Player, KeyCode)] = json match {
+      case JArray(List(child: JObject, JInt(keyCode))) =>
+        (JsonParser parseJson child) map ((_, keyCode.toInt))
+    }
+
+    override protected def applyWithComponents(cs: Seq[(Player, KeyCode)], json: JObject): Option[Keyboard] =
+      Some(new Keyboard(cs, getSpec(json)))
+  }
 
   /**
     * Convert to `Switcher`

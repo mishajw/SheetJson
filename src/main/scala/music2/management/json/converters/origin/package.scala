@@ -1,12 +1,11 @@
 package music2.management.json.converters
 
-import music2.player.Player
-import music2.player.composite.Keyboard
-import music2.player.origin.{FadingNoise, Tone}
+import music2.player.composite.KeyboardScale
 import music2.player.origin.Tone._
+import music2.player.origin.{FadingNoise, Tone}
 import music2.util.Frequencies.FrequencyOf
-import music2.util.{Notes, Scales}
 import music2.util.Time.Bars
+import music2.util.{Notes, Scales}
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JString}
 
@@ -50,19 +49,19 @@ package object origin {
   /**
     * Convert to `Keyboard`
     */
-  implicit object KeyboardScaleConverter extends JsonConverter[Keyboard] {
+  implicit object KeyboardScaleConverter extends JsonConverter[KeyboardScale] {
     /**
       * @param json the JSON object to convert
       * @return the converted `Player` object
       */
-    override def apply(json: JObject): Option[Keyboard] = json match {
+    override def apply(json: JObject): Option[KeyboardScale] = json match {
       case jsonObj: JObject =>
         for {
           JString(scale) <- Option(json \ "scale")
           JString(key) <- Option(json \ "key")
           note <- Notes relativeNoteFor key
           scale <- Scales get(note, scale)
-        } yield Keyboard fromScale (scale, getSpec(jsonObj))
+        } yield new KeyboardScale(scale, getSpec(jsonObj))
       case _ => None
     }
   }
