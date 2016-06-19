@@ -4,7 +4,7 @@ import java.io.FileNotFoundException
 
 import music2.management.json.converters.composite._
 import music2.management.json.converters.filter.{KeyActivatedConverter, LooperConverter, RandomizerConverter, SmootherConverter}
-import music2.management.json.converters.origin.ToneConverter
+import music2.management.json.converters.origin.{FadingNoiseConverter, ToneConverter}
 import music2.player.Player
 import org.json4s._
 import org.json4s.jackson.JsonMethods
@@ -75,7 +75,7 @@ object JsonParser {
       ToneConverter, CombinerConverter, RiffConverter,
       RandomizerConverter, SmootherConverter, KeyActivatedConverter,
       KeyboardScaleConverter, KeyboardConverter, SwitcherConverter,
-      LooperConverter)
+      LooperConverter, FadingNoiseConverter)
       .map(c => c.identifier -> c)
       .toMap
 }
