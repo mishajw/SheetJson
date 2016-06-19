@@ -2,7 +2,7 @@ package music2.management.json.converters
 
 import music2.management.json.JsonParser
 import music2.player.Player
-import music2.player.filter.{KeyActivated, Looper, Randomizer, Smoother}
+import music2.player.filter._
 import music2.util.Time.Bars
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JInt}
@@ -84,5 +84,16 @@ package object filter {
         case _ => None
       }
     }
+  }
+
+  /**
+    * Convert to `Toggle`
+    */
+  object ToggleConverter extends FilterConverter {
+    override val identifier: String = "toggle"
+
+    override protected def applyWithChild(child: Player, json: JObject): Option[Player] = for {
+      JInt(key) <- Option(json \ "key")
+    } yield new Toggle(key.toInt, child, getSpec(json))
   }
 }
