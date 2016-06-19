@@ -14,7 +14,7 @@ object Time {
   /**
     * The BPM (Beats Per Minute) used across the project
     */
-  val bpm: BPM = 100
+  val bpm: BPM = 200
 
   /**
     * How many beats are there per bar
