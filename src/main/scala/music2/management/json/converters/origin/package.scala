@@ -11,6 +11,10 @@ import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JString}
 
 package object origin {
+
+  /**
+    * Convert to `Tone`
+    */
   implicit object ToneConverter extends JsonConverter[Tone] {
 
     case class JTone(note: Double, waveFunction: String = "sine")
@@ -32,6 +36,9 @@ package object origin {
     }
   }
 
+  /**
+    * Convert to `FadingNoise`
+    */
   implicit object FadingNoiseConverter extends JsonConverter[FadingNoise] {
     override def apply(json: JObject): Option[FadingNoise] = {
       for {
@@ -40,6 +47,9 @@ package object origin {
     }
   }
 
+  /**
+    * Convert to `Keyboard`
+    */
   implicit object KeyboardScaleConverter extends JsonConverter[Keyboard] {
     /**
       * @param json the JSON object to convert
