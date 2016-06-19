@@ -12,8 +12,8 @@ package object filter {
   /**
     * Convert to `FilterPlayer` types
     */
-  trait FilterConverter extends JsonConverter {
-    final def apply(json: JObject): Option[Player] = {
+  trait FilterConverter[T <: FilterPlayer] extends JsonConverter[T] {
+    final def apply(json: JObject): Option[T] = {
       val children: Seq[Option[Player]] = for {
         JObject(obj) <- json
         ("child", child: JObject) <- obj
@@ -25,17 +25,14 @@ package object filter {
       }
     }
 
-    protected def applyWithChild(child: Player, json: JObject): Option[Player]
+    protected def applyWithChild(child: Player, json: JObject): Option[T]
   }
 
   /**
     * Convert to `Smoother`
     */
-  object SmootherConverter extends FilterConverter {
-
-    override val identifier: String = "smoother"
-
-    override protected def applyWithChild(child: Player, json: JObject): Option[Player] = {
+  implicit object SmootherConverter extends FilterConverter[Smoother] {
+    override protected def applyWithChild(child: Player, json: JObject): Option[Smoother] = {
       json \ "smoothness" match {
         case JDouble(smoothness) => Some(new Smoother(child, smoothness, getSpec(json)))
         case _ => None
@@ -46,10 +43,8 @@ package object filter {
   /**
     * Convert to `Randomizer`
     */
-  object RandomizerConverter extends FilterConverter {
-    override val identifier: String = "randomizer"
-
-    override protected def applyWithChild(child: Player, json: JObject): Option[Player] = {
+  implicit object RandomizerConverter extends FilterConverter[Randomizer] {
+    override protected def applyWithChild(child: Player, json: JObject): Option[Randomizer] = {
       json \ "randomness" match {
         case JDouble(randomness) => Some(new Randomizer(child, randomness, getSpec(json)))
         case _ => None
@@ -60,10 +55,8 @@ package object filter {
   /**
     * Convert to `KeyActivated`
     */
-  object KeyActivatedConverter extends FilterConverter {
-    override val identifier: String = "key-activated"
-
-    override protected def applyWithChild(child: Player, json: JObject): Option[Player] = {
+  implicit object KeyActivatedConverter extends FilterConverter[KeyActivated] {
+    override protected def applyWithChild(child: Player, json: JObject): Option[KeyActivated] = {
       json \ "key" match {
         case JInt(key) => Some(new KeyActivated(key.toInt, child, getSpec(json)))
         case _ => None
@@ -74,10 +67,8 @@ package object filter {
   /**
     * Convert to `Looper`
     */
-  object LooperConverter extends FilterConverter {
-    override val identifier: String = "looper"
-
-    override protected def applyWithChild(child: Player, json: JObject): Option[Player] = {
+  implicit object LooperConverter extends FilterConverter[Looper] {
+    override protected def applyWithChild(child: Player, json: JObject): Option[Looper] = {
       Option(json \ "seconds") match {
         case Some(JDouble(bars)) =>
           Some(new Looper(Bars(bars), child, getSpec(json)))
@@ -89,10 +80,8 @@ package object filter {
   /**
     * Convert to `Toggle`
     */
-  object ToggleConverter extends FilterConverter {
-    override val identifier: String = "toggle"
-
-    override protected def applyWithChild(child: Player, json: JObject): Option[Player] = for {
+  implicit object ToggleConverter extends FilterConverter[Toggle] {
+    override protected def applyWithChild(child: Player, json: JObject): Option[Toggle] = for {
       JInt(key) <- Option(json \ "key")
     } yield new Toggle(key.toInt, child, getSpec(json))
   }

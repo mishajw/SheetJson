@@ -4,7 +4,7 @@ import music2.management.KeyListener.KeyCode
 import music2.management.json.JsonParser
 import music2.player.{Player, PlayerSpec}
 import music2.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
-import music2.player.composite.{Combiner, Keyboard, Riff, Switcher}
+import music2.player.composite._
 import music2.player.filter.KeyActivated
 import music2.util.Time.Bars
 import music2.util.{Notes, Scales}
@@ -17,9 +17,9 @@ package object composite {
     * Convert to composite `Player`s
     * @tparam T
     */
-  trait CompositeConverter[T] extends JsonConverter {
-    override def apply(json: JObject): Option[Player] = {
-      val cs: Seq[T] = (for {
+  trait CompositeConverter[T <: CompositePlayer[_], V] extends JsonConverter[T] {
+    override def apply(json: JObject): Option[T] = {
+      val cs: Seq[V] = (for {
         JObject(obj) <- json
         ("components", JArray(components)) <- obj
         component <- components
@@ -28,32 +28,28 @@ package object composite {
       applyWithComponents(cs, json)
     }
 
-    protected def convertWrapped(json: JValue): Option[T]
+    protected def convertWrapped(json: JValue): Option[V]
 
-    protected def applyWithComponents(cs: Seq[T], json: JObject): Option[Player]
+    protected def applyWithComponents(cs: Seq[V], json: JObject): Option[T]
   }
 
   /**
     * Convert to a `Combiner`
     */
-  object CombinerConverter extends CompositeConverter[Player] {
-    override val identifier: String = "combiner"
-
+  implicit object CombinerConverter extends CompositeConverter[Combiner, Player] {
     override protected def convertWrapped(json: JValue): Option[Player] = json match {
       case j: JObject => JsonParser parseJson j
       case _ => None
     }
 
-    override protected def applyWithComponents(cs: Seq[Player], json: JObject): Option[Player] =
+    override protected def applyWithComponents(cs: Seq[Player], json: JObject): Option[Combiner] =
       Some(new Combiner( cs, getSpec(json)))
   }
 
   /**
     * Convert to `Riff`
     */
-  object RiffConverter extends CompositeConverter[PlayerDescription] {
-    override val identifier: String = "riff"
-
+  implicit object RiffConverter extends CompositeConverter[Riff, PlayerDescription] {
     override protected def convertWrapped(json: JValue): Option[PlayerDescription] = json match {
       case JArray((jsonComponent: JObject) :: description) =>
         (JsonParser parseJson jsonComponent, description) match {
@@ -66,38 +62,34 @@ package object composite {
       case _ => None
     }
 
-    override protected def applyWithComponents(cs: Seq[PlayerDescription], json: JObject): Option[Player] =
+    override protected def applyWithComponents(cs: Seq[PlayerDescription], json: JObject): Option[Riff] =
       Some(new Riff(cs, getSpec(json)))
   }
 
-  /**
-    * Convert to `Keyboard`
-    */
-  object KeyboardConverter extends CompositeConverter[Player] {
-    override val identifier: String = "keyboard"
-
-    override protected def convertWrapped(json: JValue): Option[Player] = json match {
-      case JArray(List(child: JObject, JInt(keyCode))) =>
-        (JsonParser parseJson child) map (new KeyActivated(keyCode.toInt, _, PlayerSpec())) // TODO: Get spec
-    }
-
-    override protected def applyWithComponents(cs: Seq[Player], json: JObject): Option[Player] =
-      Some(new Keyboard(cs, getSpec(json)))
-  }
+//  /**
+//    * Convert to `Keyboard`
+//    */
+//  implicit object KeyboardConverter extends CompositeConverter[Keyboard, Player] {
+//    override protected def convertWrapped(json: JValue): Option[Player] = json match {
+//      case JArray(List(child: JObject, JInt(keyCode))) =>
+//        (JsonParser parseJson child) map (new KeyActivated(keyCode.toInt, _, PlayerSpec())) // TODO: Get spec
+//    }
+//
+//    override protected def applyWithComponents(cs: Seq[Player], json: JObject): Option[Keyboard] =
+//      Some(new Keyboard(cs, getSpec(json)))
+//  }
 
   /**
     * Convert to `Switcher`
     */
-  object SwitcherConverter extends CompositeConverter[(KeyCode, Player)] {
-    override val identifier: String = "switcher"
-
+  implicit object SwitcherConverter extends CompositeConverter[Switcher, (KeyCode, Player)] {
     override protected def convertWrapped(json: JValue): Option[(KeyCode, Player)] = json match {
       case JArray(List(JInt(keyCode), child: JObject)) =>
         (JsonParser parseJson child) map ((keyCode.toInt, _))
       case _ => None
     }
 
-    override protected def applyWithComponents(cs: Seq[(KeyCode, Player)], json: JObject): Option[Player] = {
+    override protected def applyWithComponents(cs: Seq[(KeyCode, Player)], json: JObject): Option[Switcher] = {
       Some(new Switcher(cs, getSpec(json)))
     }
   }

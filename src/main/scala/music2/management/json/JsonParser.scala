@@ -2,10 +2,14 @@ package music2.management.json
 
 import java.io.FileNotFoundException
 
+import music2.management.json.converters.JsonConverter
+import music2.management.json.converters.origin._
 import music2.management.json.converters.composite._
 import music2.management.json.converters.filter._
-import music2.management.json.converters.origin.{FadingNoiseConverter, ToneConverter}
 import music2.player.Player
+import music2.player.composite.{Combiner, Keyboard, Riff, Switcher}
+import music2.player.filter._
+import music2.player.origin.{FadingNoise, Tone}
 import org.json4s._
 import org.json4s.jackson.JsonMethods
 
@@ -54,8 +58,7 @@ object JsonParser {
     */
   def parseJson(json: JObject): Option[Player] = for {
     t <- getType(json)
-    func <- converters get t
-    player <- func(json)
+    player <- getPlayer(t, json)
   } yield player
 
   /**
@@ -67,15 +70,23 @@ object JsonParser {
     } headOption
   }
 
-  /**
-    * A map of type names to their converter objects
-    */
-  val converters =
-    Seq(
-      ToneConverter, CombinerConverter, RiffConverter,
-      RandomizerConverter, SmootherConverter, KeyActivatedConverter,
-      KeyboardScaleConverter, KeyboardConverter, SwitcherConverter,
-      LooperConverter, FadingNoiseConverter, ToggleConverter)
-      .map(c => c.identifier -> c)
-      .toMap
+  def getPlayer(id: String, json: JObject): Option[Player] = {
+    def convert[T <: Player]
+               (json: JObject)
+               (implicit jc: JsonConverter[T]): Option[T] = jc(json)
+
+    id match {
+      case "tone" => convert[Tone](json)
+      case "fading-noise" => convert[FadingNoise](json)
+      case "key-activated" => convert[KeyActivated](json)
+      case "looper" => convert[Looper](json)
+      case "randomizer" => convert[Randomizer](json)
+      case "smoother" => convert[Smoother](json)
+      case "toggle" => convert[Toggle](json)
+      case "combiner" => convert[Combiner](json)
+      case "keyboard-scale" => convert[Keyboard](json)
+      case "riff" => convert[Riff](json)
+      case "switcher" => convert[Switcher](json)
+    }
+  }
 }

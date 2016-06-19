@@ -5,19 +5,14 @@ import music2.player.{Player, PlayerSpec}
 import org.json4s.JsonAST.JArray
 import org.json4s.{DefaultFormats, JObject}
 
-trait JsonConverter {
+trait JsonConverter[T <: Player] {
   implicit val formats = DefaultFormats
-
-  /**
-    * The identifier used in JSON files
-    */
-  val identifier: String
 
   /**
     * @param json the JSON object to convert
     * @return the converted `Player` object
     */
-  def apply(json: JObject): Option[Player]
+  def apply(json: JObject): Option[T]
 
   /**
     * Get the `PlayerSpec` from a JSON object
