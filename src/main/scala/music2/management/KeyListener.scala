@@ -6,6 +6,7 @@ import javax.swing.JFrame
 
 import com.typesafe.scalalogging.Logger
 import music2.management.KeyListener._
+import music2.management.gui.GUI
 import music2.player.{ListenerPlayer, Player}
 
 import scala.collection.mutable.ArrayBuffer
@@ -27,24 +28,15 @@ class KeyListener(_rootPlayer: Player) {
       }
   }
 
-  {
-    // Setup a window for listening to keys
-    log.debug("Create window for listening to keys")
-    val f = new JFrame("music2")
-    f.setSize(10, 10)
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    f.setVisible(true)
+  GUI.addKeyListener(new java.awt.event.KeyListener() {
+    override def keyTyped(keyEvent: KeyEvent): Unit = {}
 
-    f.addKeyListener(new java.awt.event.KeyListener() {
-      override def keyTyped(keyEvent: KeyEvent): Unit = {}
+    override def keyPressed(keyEvent: KeyEvent): Unit =
+      notifyKeyPressed(keyEvent.getKeyCode)
 
-      override def keyPressed(keyEvent: KeyEvent): Unit =
-        notifyKeyPressed(keyEvent.getKeyCode)
-
-      override def keyReleased(keyEvent: KeyEvent): Unit =
-        notifyKeyReleased(keyEvent.getKeyCode)
-    })
-  }
+    override def keyReleased(keyEvent: KeyEvent): Unit =
+      notifyKeyReleased(keyEvent.getKeyCode)
+  })
 
   /**
     * Register a listener to listen on a key
