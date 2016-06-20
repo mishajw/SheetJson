@@ -14,6 +14,8 @@ class Playable(_value: Double) {
 
   def *(other: Double) = Playable(this.value * other)
 
+  def toDouble = _value
+
   override def toString: String = s"Playable($value)"
 }
 
