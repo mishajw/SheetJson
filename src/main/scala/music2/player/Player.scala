@@ -1,5 +1,6 @@
 package music2.player
 
+import music2.management.gui.Model
 import music2.player.composite.CompositePlayer
 import music2.player.filter.FilterPlayer
 import music2.util.Time.{Absolute, Bars, Seconds}
@@ -37,6 +38,9 @@ abstract class Player(val playerSpec: PlayerSpec) {
 
     val played = _play * volume
     absoluteStep = absoluteStep.incr
+
+    Model.addReading(this, played)
+
     played
   }
 
