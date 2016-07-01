@@ -81,12 +81,23 @@ class View extends JPanel with Observer {
       (((p.toDouble + 1) / 2) * height.toDouble).toInt
     }
 
-    val scaledReadings = readings.zipWithIndex map { case (y, x) => (scaleY(y), scaleX(x)) }
-
-    scaledReadings.foreach
-      { case (y, x) =>
-        g.drawRect(x, y, 1, 1)
+    // Scale the readings
+    val scaledReadings =
+      readings.zipWithIndex map {
+        case (y, x) => (scaleY(y), scaleX(x))
       }
+
+    // Pair the readings to make lines
+    val pairedReadings =
+      for (i <- scaledReadings.indices.tail) yield {
+        (scaledReadings(i - 1), scaledReadings(i))
+      }
+
+    // Draw the paired readings
+    pairedReadings.foreach {
+      case ((y1, x1), (y2, x2)) =>
+        g.drawLine(x1, y1, x2, y2)
+    }
   }
 
   override def update(observable: Observable, o: scala.Any): Unit = repaint()
