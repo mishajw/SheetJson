@@ -50,20 +50,20 @@ class View extends JPanel with Observer {
   }
 
   /**
+    * Draw the background
+    */
+  private def drawBackground()(implicit g: Graphics): Unit = {
+    g.setColor(Color.white)
+    g.fillRect(0, 0, getWidth, getHeight)
+  }
+
+  /**
     * Check if enough time has passed for a repaint
     */
   private def shouldRepaint: Boolean = lastUpdated match {
     case Some(t) if System.currentTimeMillis() - t > updateTime => true
     case None => true
     case _ => false
-  }
-
-  /**
-    * Draw the background
-    */
-  private def drawBackground()(implicit g: Graphics): Unit = {
-    g.setColor(Color.white)
-    g.fillRect(0, 0, getWidth, getHeight)
   }
 
   /**
