@@ -39,7 +39,8 @@ abstract class Player(val spec: PlayerSpec) {
     val played = _play * volume
     absoluteStep = absoluteStep.incr
 
-    Model.addReading(this, played)
+    if (spec.visible)
+      Model.addReading(this, played)
 
     played
   }

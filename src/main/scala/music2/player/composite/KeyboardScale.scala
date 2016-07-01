@@ -12,6 +12,6 @@ class KeyboardScale(scale: Seq[RelativeNote], _spec: PlayerSpec)
       val keys = Seq(VK_A, VK_S, VK_D, VK_F, VK_G, VK_H, VK_J, VK_K, VK_L)
       scale
         .map(_.frequency)
-        .map(new Tone(_, _spec = PlayerSpec()))
+        .map(new Tone(_, _spec = PlayerSpec(visible = false)))
         .zip(keys)
     }, _spec)

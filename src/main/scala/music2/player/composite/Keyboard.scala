@@ -8,7 +8,7 @@ class Keyboard(playerKeys: Seq[(Player, KeyCode)],
                _spec: PlayerSpec) extends CompositePlayer[Player](_spec) {
 
   override protected val wrapped: Seq[Player] = {
-    playerKeys map { case (p, k) => new KeyActivated(k, p, PlayerSpec()) }
+    playerKeys map { case (p, k) => new KeyActivated(k, p, PlayerSpec(visible = false)) }
   }
 
   override protected def extract(t: Player): Player = t
