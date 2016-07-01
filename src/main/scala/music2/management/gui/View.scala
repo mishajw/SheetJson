@@ -98,7 +98,14 @@ object View {
     */
   private val updateTime = 1000 / 15
 
+  /**
+    * List of colors for `Player` visualisations
+    */
   private val playerColors = Seq(Color.RED, Color.BLUE, Color.GREEN)
 
+  /**
+    * @param i the index of a player
+    * @return the color to use to draw it
+    */
   private def colorForIndex(i: Int) = playerColors(i % playerColors.size)
 }
