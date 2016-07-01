@@ -5,6 +5,7 @@ import java.util.{Observable, Observer}
 import javax.swing.JPanel
 
 import music2.player.{Playable, Player}
+import music2.management.gui.View._
 
 class View extends JPanel with Observer {
 
@@ -12,11 +13,6 @@ class View extends JPanel with Observer {
     * The last time of a repaint
     */
   private var lastUpdated: Option[Long] = None
-
-  /**
-    * How often to update
-    */
-  private val updateTime = 1000 / 15
 
   // Observe model
   Model addObserver this
@@ -43,7 +39,10 @@ class View extends JPanel with Observer {
 
     val heightForPlayer: Int = getWidth / readings.size
 
-    readings.foreach { case (p, rs) =>
+    readings.toSeq.zipWithIndex.foreach { case ((p, rs), i) =>
+
+      g.setColor(colorForIndex(i))
+
       g.translate(0, heightForPlayer)
       drawReadings(p, rs.toSeq, heightForPlayer)
     }
@@ -76,8 +75,6 @@ class View extends JPanel with Observer {
                             readings: Seq[Playable],
                             height: Int)(implicit g: Graphics): Unit = {
 
-    g.setColor(Color.green)
-
     def scaleX(i: Int): Int = {
       ((i.toDouble / readings.size.toDouble) * getWidth.toDouble).toInt
     }
@@ -95,4 +92,15 @@ class View extends JPanel with Observer {
   }
 
   override def update(observable: Observable, o: scala.Any): Unit = repaint()
+}
+
+object View {
+  /**
+    * How often to update
+    */
+  private val updateTime = 1000 / 15
+
+  private val playerColors = Seq(Color.RED, Color.BLUE, Color.GREEN)
+
+  private def colorForIndex(i: Int) = playerColors(i % playerColors.size)
 }
