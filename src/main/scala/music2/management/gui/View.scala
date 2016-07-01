@@ -8,10 +8,22 @@ import music2.player.{Playable, Player}
 
 class View extends JPanel with Observer {
 
+  private var lastUpdated: Option[Long] = None
+  private val updateTime = 1000 / 15
+
   // Observe model
   Model addObserver this
 
   override def paint(g: Graphics): Unit = {
+    // Return if not enough time has passed since last paint
+    lastUpdated match {
+      case Some(t) if System.currentTimeMillis() - t > updateTime =>
+      case None =>
+      case _ => return
+    }
+
+    lastUpdated = Some(System.currentTimeMillis())
+
     implicit val _g: Graphics = g
 
     drawBackground()
@@ -56,7 +68,5 @@ class View extends JPanel with Observer {
       }
   }
 
-  override def update(observable: Observable, o: scala.Any): Unit = {
-    repaint()
-  }
+  override def update(observable: Observable, o: scala.Any): Unit = repaint()
 }
