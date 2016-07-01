@@ -8,7 +8,7 @@ import music2.util.Time.{Absolute, Bars, Seconds}
 /**
   * Represents something that "plays" music
   */
-abstract class Player(val playerSpec: PlayerSpec) {
+abstract class Player(val spec: PlayerSpec) {
 
   /**
     * How many times play has been called on this `Player`
@@ -18,17 +18,17 @@ abstract class Player(val playerSpec: PlayerSpec) {
   /**
     * The speed of the `Player`
     */
-  var speed: Double = playerSpec.speed getOrElse 1
+  var speed: Double = spec.speed getOrElse 1
 
   /**
     * How long a `Player` plays for
     */
-  val lifeTime: Option[Bars] = playerSpec.lifeTime
+  val lifeTime: Option[Bars] = spec.lifeTime
 
   /**
     * How loud a `Player` is
     */
-  val volume: Double = playerSpec.volume getOrElse 0.5
+  val volume: Double = spec.volume getOrElse 0.5
 
   /**
     * @return the next value played, and handle other transformations
