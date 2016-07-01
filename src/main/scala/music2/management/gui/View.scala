@@ -50,7 +50,7 @@ class View extends JPanel with Observer {
     * Draw the background
     */
   private def drawBackground()(implicit g: Graphics): Unit = {
-    g.setColor(Color.white)
+    g.setColor(new Color(40, 40, 40))
     g.fillRect(0, 0, getWidth, getHeight)
   }
 
@@ -101,7 +101,11 @@ object View {
   /**
     * List of colors for `Player` visualisations
     */
-  private val playerColors = Seq(Color.RED, Color.BLUE, Color.GREEN)
+  private val playerColors = Seq(
+    new Color(255, 129, 129),
+    new Color(129, 255, 129),
+    new Color(129, 129, 255)
+  )
 
   /**
     * @param i the index of a player
