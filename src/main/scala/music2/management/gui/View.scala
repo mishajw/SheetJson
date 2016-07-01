@@ -37,14 +37,12 @@ class View extends JPanel with Observer {
   private def drawPlayers()(implicit g: Graphics): Unit = {
     val readings = Model.allReadings
 
-    val heightForPlayer: Int = getWidth / readings.size
+    val heightForPlayer: Int = getHeight / readings.size
 
     readings.toSeq.zipWithIndex.foreach { case ((p, rs), i) =>
-
       g.setColor(colorForIndex(i))
-
-      g.translate(0, heightForPlayer)
       drawReadings(p, rs.toSeq, heightForPlayer)
+      g.translate(0, heightForPlayer)
     }
   }
 
