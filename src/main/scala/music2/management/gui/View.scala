@@ -16,18 +16,19 @@ class View extends JPanel with Observer {
 
   override def paint(g: Graphics): Unit = {
     // Return if not enough time has passed since last paint
-    lastUpdated match {
-      case Some(t) if System.currentTimeMillis() - t > updateTime =>
-      case None =>
-      case _ => return
-    }
+    if (!shouldRepaint) return
 
+    // Update to last updated time
     lastUpdated = Some(System.currentTimeMillis())
 
+    // Make graphics implicit TODO: better way of doing this?
     implicit val _g: Graphics = g
 
     drawBackground()
+    drawPlayers()
+  }
 
+  private def drawPlayers()(implicit g: Graphics): Unit = {
     val readings = Model.allReadings
 
     val heightForPlayer: Int = getWidth / readings.size
@@ -36,10 +37,14 @@ class View extends JPanel with Observer {
       g.translate(0, heightForPlayer)
       drawReadings(p, rs.toSeq, heightForPlayer)
     }
-
-    g.setColor(Color.black)
-    g.drawString(Model.allReadings.map { case (p, rs) => rs.size }.toString(), 10, 10)
   }
+
+  private def shouldRepaint: Boolean = lastUpdated match {
+    case Some(t) if System.currentTimeMillis() - t > updateTime => true
+    case None => true
+    case _ => false
+  }
+
 
   private def drawBackground()(implicit g: Graphics): Unit = {
     g.setColor(Color.white)
