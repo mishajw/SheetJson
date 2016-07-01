@@ -8,7 +8,14 @@ import music2.player.{Playable, Player}
 
 class View extends JPanel with Observer {
 
+  /**
+    * The last time of a repaint
+    */
   private var lastUpdated: Option[Long] = None
+
+  /**
+    * How often to update
+    */
   private val updateTime = 1000 / 15
 
   // Observe model
@@ -28,6 +35,9 @@ class View extends JPanel with Observer {
     drawPlayers()
   }
 
+  /**
+    * Draw the players to the screen
+    */
   private def drawPlayers()(implicit g: Graphics): Unit = {
     val readings = Model.allReadings
 
@@ -39,18 +49,29 @@ class View extends JPanel with Observer {
     }
   }
 
+  /**
+    * Check if enough time has passed for a repaint
+    */
   private def shouldRepaint: Boolean = lastUpdated match {
     case Some(t) if System.currentTimeMillis() - t > updateTime => true
     case None => true
     case _ => false
   }
 
-
+  /**
+    * Draw the background
+    */
   private def drawBackground()(implicit g: Graphics): Unit = {
     g.setColor(Color.white)
     g.fillRect(0, 0, getWidth, getHeight)
   }
 
+  /**
+    * Draw a set of readings
+    * @param player the `Player` where the readings come from
+    * @param readings the readings
+    * @param height the height of the frame to draw on
+    */
   private def drawReadings( player: Player,
                             readings: Seq[Playable],
                             height: Int)(implicit g: Graphics): Unit = {
