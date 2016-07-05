@@ -7,27 +7,26 @@ import java.util.concurrent.{ConcurrentHashMap, ConcurrentLinkedQueue}
 
 import music2.player.{Playable, Player}
 
+import scala.collection.mutable.ArrayBuffer
+
 object Model extends Observable {
 
   private type Map[T, V] = ConcurrentHashMap[T, V]
   private type Queue[T] = ConcurrentLinkedQueue[T]
 
-  private val readings = new Map[Player, Queue[Playable]]().asScala
+  private val readings = new Map[Player, (ArrayBuffer[Playable], Int)]().asScala
 
   private val readingsKept = 1000
 
   def addReading(player: Player, reading: Playable): Unit = {
     readings get player match {
-      case Some(queue) =>
-        queue add reading
-
-        // If the queue is too large, poll it
-        while (queue.size() > readingsKept)
-          queue.poll()
+      case Some((a, i)) =>
+        a(i) = reading
+        readings put (player, (a, (i + 1) % readingsKept))
       case None =>
-        val newQueue = new Queue[Playable]()
-        newQueue add reading
-        readings put (player, newQueue)
+        val newQueue = ArrayBuffer.fill(readingsKept) { Playable.default }
+        newQueue(0) = reading
+        readings put (player, (newQueue, 1))
     }
 
     changed()
@@ -39,6 +38,8 @@ object Model extends Observable {
   }
 
   def allReadings: Traversable[(Player, Traversable[Playable])] = {
-    readings map { case (p, rs) => (p, rs.asScala) }
+    readings map { case (p, (a, i)) => (p, {
+      a.drop(i) ++ a.take(i)
+    }) }
   }
 }
