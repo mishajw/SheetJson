@@ -4,8 +4,8 @@ import java.awt.{Color, Graphics}
 import java.util.{Observable, Observer}
 import javax.swing.JPanel
 
-import music2.player.{Playable, Player}
 import music2.management.gui.View._
+import music2.player.{Playable, Player}
 
 class View extends JPanel with Observer {
 
@@ -98,6 +98,8 @@ class View extends JPanel with Observer {
       case ((y1, x1), (y2, x2)) =>
         g.drawLine(x1, y1, x2, y2)
     }
+
+    g.drawString(player.toString, 0, 0)
   }
 
   override def update(observable: Observable, o: scala.Any): Unit = repaint()
