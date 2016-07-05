@@ -111,7 +111,7 @@ object View {
   /**
     * How often to update
     */
-  private val updateTime = 1000 / 15
+  private val updateTime = 1000 / 30
 
   /**
     * List of colors for `Player` visualisations
