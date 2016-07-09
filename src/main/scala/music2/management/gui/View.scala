@@ -101,7 +101,7 @@ class View extends JPanel with Observer {
         g.drawLine(x1, y1, x2, y2)
     }
 
-    g.drawString(player.toString, 0, 0)
+    g.drawString(player.toString, 0, 20)
   }
 
   override def update(observable: Observable, o: scala.Any): Unit = repaint()
