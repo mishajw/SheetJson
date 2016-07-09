@@ -34,6 +34,10 @@
       "type": "keyboard-scale",
       "scale": "blues-ext",
       "key": "C"
+    }],
+    [55, {
+      "type": "rawfile",
+      "path": "/home/misha/Downloads/lb.wav"
     }]
   ]
 }

@@ -9,7 +9,7 @@ import music2.management.json.converters.filter._
 import music2.player.Player
 import music2.player.composite._
 import music2.player.filter._
-import music2.player.origin.{FadingNoise, Tone}
+import music2.player.origin.{FadingNoise, RawFile, Tone}
 import org.json4s._
 import org.json4s.jackson.JsonMethods
 
@@ -88,6 +88,7 @@ object JsonParser {
       case "keyboard-scale" => convert[KeyboardScale](json)
       case "riff" => convert[Riff](json)
       case "switcher" => convert[Switcher](json)
+      case "rawfile" => convert[RawFile](json)
     }
   }
 }
