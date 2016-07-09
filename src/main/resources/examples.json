@@ -38,6 +38,15 @@
     [55, {
       "type": "rawfile",
       "path": "/home/misha/Downloads/lb.wav"
+    }],
+    [56, {
+      "type": "riff",
+      "components": [
+        [{ "type": "tone", "note": "C", "waveFunction": "sine" }, 0.5],
+        [{ "type": "tone", "note": "C", "waveFunction": "cosine" }, 0.5],
+        [{ "type": "tone", "note": "C", "waveFunction": "id" }, 0.5],
+        [{ "type": "tone", "note": "C", "waveFunction": "binary" }, 0.5]
+      ]
     }]
   ]
 }
