@@ -6,6 +6,7 @@ import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 import com.typesafe.scalalogging.Logger
 import music2.player.{EndPlayable, Playable}
 import music2.util.Time.sampleRate
+import music2.output.SoundOut.format
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -44,8 +45,6 @@ class SoundOut extends Out {
     * @return the default audio line
     */
   private def defaultLine = {
-    val format =
-      new AudioFormat(sampleRate, 16, 1, true, false)
 
     val info =
       new DataLine.Info(classOf[SourceDataLine], format)
@@ -131,4 +130,9 @@ class SoundOut extends Out {
   def stop() = /*thread.synchronized */{
     thread.join()
   }
+}
+
+object SoundOut {
+  val format =
+    new AudioFormat(sampleRate, 16, 1, true, false)
 }
