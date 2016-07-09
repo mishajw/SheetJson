@@ -2,7 +2,6 @@ package music2.management
 
 import java.awt.event.KeyEvent
 import java.util.concurrent.ConcurrentHashMap
-import javax.swing.JFrame
 
 import com.typesafe.scalalogging.Logger
 import music2.management.KeyListener._

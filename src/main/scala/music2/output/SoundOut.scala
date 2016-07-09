@@ -4,9 +4,9 @@ import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
 
 import com.typesafe.scalalogging.Logger
+import music2.output.SoundOut.format
 import music2.player.{EndPlayable, Playable}
 import music2.util.Time.sampleRate
-import music2.output.SoundOut.format
 
 import scala.collection.mutable.ArrayBuffer
 

@@ -3,9 +3,9 @@ package music2.management.json
 import java.io.FileNotFoundException
 
 import music2.management.json.converters.JsonConverter
-import music2.management.json.converters.origin._
 import music2.management.json.converters.composite._
 import music2.management.json.converters.filter._
+import music2.management.json.converters.origin._
 import music2.player.Player
 import music2.player.composite._
 import music2.player.filter._

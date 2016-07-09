@@ -1,12 +1,11 @@
 package music2.management.gui
 
 import java.util.Observable
-
-import scala.collection.convert.decorateAsScala._
 import java.util.concurrent.{ConcurrentHashMap, ConcurrentLinkedQueue}
 
 import music2.player.{Playable, Player}
 
+import scala.collection.convert.decorateAsScala._
 import scala.collection.mutable.ArrayBuffer
 
 object Model extends Observable {

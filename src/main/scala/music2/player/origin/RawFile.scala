@@ -1,7 +1,6 @@
 package music2.player.origin
 
 import java.io.File
-import java.nio.{ByteBuffer, ByteOrder}
 import javax.sound.sampled.{AudioInputStream, AudioSystem}
 
 import music2.output.SoundOut

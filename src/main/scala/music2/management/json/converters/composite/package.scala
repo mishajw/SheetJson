@@ -2,13 +2,11 @@ package music2.management.json.converters
 
 import music2.management.KeyListener.KeyCode
 import music2.management.json.JsonParser
-import music2.player.{Player, PlayerSpec}
+import music2.player.Player
 import music2.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import music2.player.composite._
-import music2.player.filter.KeyActivated
 import music2.util.Time.Bars
-import music2.util.{Notes, Scales}
-import org.json4s.JsonAST.{JArray, JDouble, JInt, JString}
+import org.json4s.JsonAST.{JArray, JDouble, JInt}
 import org.json4s.{JObject, JValue}
 
 package object composite {
