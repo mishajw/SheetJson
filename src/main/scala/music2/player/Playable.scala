@@ -23,6 +23,11 @@ object Playable {
 
   def apply(value: Double) = new Playable(value)
 
+  def fromInt(value: Int) = {
+    val scaled: Double = (value - minInt16).toDouble / (maxInt16 - minInt16).toDouble
+    new Playable((scaled * 2) - 1)
+  }
+
   implicit class PlayableCollection(val col: Traversable[Playable]) extends AnyVal {
 
     def values = col.map(_.value)
