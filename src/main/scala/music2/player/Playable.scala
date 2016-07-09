@@ -1,6 +1,10 @@
 package music2.player
 
+import java.nio.{ByteBuffer, ByteOrder}
+
 import music2.player.Playable._
+
+import scala.util.Try
 
 class Playable(_value: Double) {
 
@@ -26,6 +30,13 @@ object Playable {
   def fromInt(value: Int) = {
     val scaled: Double = (value - minInt16).toDouble / (maxInt16 - minInt16).toDouble
     new Playable((scaled * 2) - 1)
+  }
+
+  def fromBytes(bs: Traversable[Byte]): Option[Playable] = {
+    Try({
+      val byteBuffer = ByteBuffer.wrap(bs.toArray).order(ByteOrder.LITTLE_ENDIAN)
+      Playable fromInt byteBuffer.getShort().toInt
+    }).toOption
   }
 
   implicit class PlayableCollection(val col: Traversable[Playable]) extends AnyVal {

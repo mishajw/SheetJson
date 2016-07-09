@@ -35,11 +35,8 @@ class RawFile(path: String, _spec: PlayerSpec) extends Player(_spec) {
     // Format the bytes to be playables
     bytes
       .grouped(2)
-      .map { case bs =>
-        val byteBuffer = ByteBuffer.wrap(bs.toArray).order(ByteOrder.LITTLE_ENDIAN)
-        byteBuffer.getShort().toInt
-      }
-      .map(Playable.fromInt)
+      .map(Playable.fromBytes)
+      .map(_.getOrElse(Playable.default))
       .toVector
   }
 
