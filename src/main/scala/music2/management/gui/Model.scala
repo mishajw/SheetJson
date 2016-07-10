@@ -6,14 +6,15 @@ import java.util.concurrent.{ConcurrentHashMap, ConcurrentLinkedQueue}
 import music2.player.{Playable, Player}
 
 import scala.collection.convert.decorateAsScala._
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 object Model extends Observable {
 
-  private type Map[T, V] = ConcurrentHashMap[T, V]
+  private type Map[T, V] = mutable.LinkedHashMap[T, V]
   private type Queue[T] = ConcurrentLinkedQueue[T]
 
-  private val readings = new Map[Player, (ArrayBuffer[Playable], Int)]().asScala
+  private val readings = new Map[Player, (ArrayBuffer[Playable], Int)]()
 
   private val readingsKept = 1000
 
