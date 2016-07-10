@@ -8,8 +8,8 @@ object GUI {
     val f = new JFrame("music2")
     f.setSize(10, 10)
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    f.setVisible(true)
     f.setContentPane(new View())
+    f.setVisible(true)
     f
   }
 
