@@ -118,8 +118,8 @@ object JsonParser {
   def fillInPreset(preset: JObject, json: JObject): JObject = {
     val toReplace: Map[String, JValue] = (for {
       JObject(obj) <- json
-      ("parameters", JObject(parameters)) <- obj
-      (name, value) <- parameters
+      (name, value) <- obj
+      if name != "type"
     } yield (name, value)).toMap
 
     (preset transformField {
