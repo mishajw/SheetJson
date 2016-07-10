@@ -5,6 +5,7 @@ import javax.sound.sampled.{AudioInputStream, AudioSystem}
 
 import music2.output.SoundOut
 import music2.player.{Playable, Player, PlayerSpec}
+import music2.util.Config
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Breaks._
@@ -18,7 +19,7 @@ class RawFile(path: String, _spec: PlayerSpec) extends Player(_spec) {
     val rawInput = AudioSystem.getAudioInputStream(new File(path))
 
     // Change the input so that it's the same format as the rest of the system
-    val formattedInput: AudioInputStream = AudioSystem.getAudioInputStream(SoundOut.format, rawInput)
+    val formattedInput: AudioInputStream = AudioSystem.getAudioInputStream(Config.format, rawInput)
 
     // Read in the bytes
     val bytes: ArrayBuffer[Byte] = new ArrayBuffer()

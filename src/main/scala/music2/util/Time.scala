@@ -1,27 +1,9 @@
 package music2.util
 
-import music2.{BPM, SampleRate}
+import music2.BPM
 
 object Time {
 
-  // TODO: Take these values from a config file
-
-  /**
-    * The sample rate used across the project
-    */
-  val sampleRate: SampleRate = 24000
-
-  /**
-    * The BPM (Beats Per Minute) used across the project
-    */
-  val bpm: BPM = 200
-
-  /**
-    * How many beats are there per bar
-    * If 4, the time signature is 4/4
-    * If 3, the time signature is 3/4
-    */
-  val beatsPerBar: Int = 4
 
   abstract class Time[T <: Time[_]](private val value: Double) extends Ordered[Time[T]] {
     def cons(value: Double): T
@@ -55,9 +37,9 @@ object Time {
 
   object Seconds {
     def apply(a: Absolute): Seconds =
-      Seconds(a._value / sampleRate)
+      Seconds(a._value / Config.sampleRate)
     def apply(b: Bars): Seconds =
-      Seconds(((bpm / beatsPerBar) / 60) * b._value)
+      Seconds(((Config.bpm / Config.beatsPerBar) / 60) * b._value)
   }
 
   /**
@@ -70,7 +52,7 @@ object Time {
 
   object Absolute {
     def apply(s: Seconds): Absolute =
-      Absolute(s._value * sampleRate)
+      Absolute(s._value * Config.sampleRate)
     def apply(b: Bars): Absolute =
       Absolute(Seconds(b))
   }
@@ -85,7 +67,7 @@ object Time {
 
   object Bars {
     def apply(s: Seconds): Bars =
-      Bars(s._value / (bpm.toDouble / beatsPerBar.toDouble / 60.0))
+      Bars(s._value / (Config.bpm.toDouble / Config.beatsPerBar.toDouble / 60.0))
     def apply(a: Absolute): Bars =
       Bars(Seconds(a))
   }

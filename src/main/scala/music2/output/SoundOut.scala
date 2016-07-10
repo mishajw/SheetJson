@@ -1,12 +1,11 @@
 package music2.output
 
 import java.util.concurrent.LinkedBlockingQueue
-import javax.sound.sampled.{AudioFormat, AudioSystem, DataLine, SourceDataLine}
+import javax.sound.sampled.{AudioSystem, DataLine, SourceDataLine}
 
 import com.typesafe.scalalogging.Logger
-import music2.output.SoundOut.format
 import music2.player.{EndPlayable, Playable}
-import music2.util.Time.sampleRate
+import music2.util.Config
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -47,12 +46,12 @@ class SoundOut extends Out {
   private def defaultLine = {
 
     val info =
-      new DataLine.Info(classOf[SourceDataLine], format)
+      new DataLine.Info(classOf[SourceDataLine], Config.format)
 
     val line =
       AudioSystem.getLine(info).asInstanceOf[SourceDataLine]
 
-    line.open(format, 4096)
+    line.open(Config.format, 4096)
     line.start()
 
     line
@@ -116,7 +115,7 @@ class SoundOut extends Out {
     */
   def play(p: Playable) = {
     val inQueue = byteQueue.size()
-    val timeToConsume = (inQueue.toDouble / sampleRate.toDouble) * 1000
+    val timeToConsume = (inQueue.toDouble / Config.sampleRate.toDouble) * 1000
 
     if (timeToConsume > waitBuffer)
       Thread.sleep((timeToConsume - waitBuffer).toInt)
@@ -133,6 +132,4 @@ class SoundOut extends Out {
 }
 
 object SoundOut {
-  val format =
-    new AudioFormat(sampleRate, 16, 1, true, false)
 }
