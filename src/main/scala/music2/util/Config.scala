@@ -3,17 +3,20 @@ package music2.util
 import javax.sound.sampled.AudioFormat
 
 import music2.{BPM, SampleRate}
+import org.json4s.JsonAST.JValue
+
+case class Preset(name: String, constructor: JValue)
 
 /**
   * For documentation on parameters, see Config object accessors
   */
-case class Config(sampleRate: SampleRate, bpm: BPM, beatsPerBar: Int)
+case class Config(sampleRate: SampleRate, bpm: BPM, beatsPerBar: Int, presets: Seq[Preset])
 
 object Config {
   /**
     * The default configuration. If no configuration is given, this is used
     */
-  private val defaultConfig = Config(24000, 120, 4)
+  private val defaultConfig = Config(24000, 120, 4, Seq())
 
   /**
     * The current active configuration
