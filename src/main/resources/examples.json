@@ -44,6 +44,7 @@
       "components": [
         [{ "type": "tone", "note": "C", "waveFunction": "sine" }, 0.5],
         [{ "type": "tone", "note": "C", "waveFunction": "cosine" }, 0.5],
+        [{ "type": "tone", "note": "C", "waveFunction": "zigzag" }, 0.5],
         [{ "type": "tone", "note": "C", "waveFunction": "id" }, 0.5],
         [{ "type": "tone", "note": "C", "waveFunction": "binary" }, 0.5]
       ]

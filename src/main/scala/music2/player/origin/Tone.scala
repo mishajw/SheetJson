@@ -7,6 +7,7 @@ import music2.util.Time.Seconds
 
 /**
   * Plays a single tone
+  *
   * @param frequency the frequency of the tone
   */
 class Tone( val frequency: Frequency,
@@ -39,6 +40,13 @@ object Tone {
   val waveFunctions: Map[String, WaveFunction] = Map(
     "sine" -> { x: Double => Math.sin(x * fullAngle) },
     "cosine" -> { x: Double => Math.cos(x * fullAngle) },
+    "zigzag" -> { x: Double =>
+      if (x < 0.5) {
+        (x * 4) - 1
+      } else {
+        (1 - ((x - 0.5) * 2)) * 2 - 1
+      }
+    },
     "id" -> { x: Double => x },
     "binary" -> { x: Double => if (x < 0.5) -1 else 1 }
   )
