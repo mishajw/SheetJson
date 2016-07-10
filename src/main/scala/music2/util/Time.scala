@@ -4,6 +4,7 @@ import music2.BPM
 
 object Time {
 
+  private val secondsToBarsScalar: Double = (Config.bpm / Config.beatsPerBar).toDouble / 60D
 
   abstract class Time[T <: Time[_]](private val value: Double) extends Ordered[Time[T]] {
     def cons(value: Double): T
@@ -39,7 +40,7 @@ object Time {
     def apply(a: Absolute): Seconds =
       Seconds(a._value / Config.sampleRate)
     def apply(b: Bars): Seconds =
-      Seconds(((Config.bpm / Config.beatsPerBar) / 60) * b._value)
+      Seconds(b._value / secondsToBarsScalar)
   }
 
   /**
@@ -67,7 +68,7 @@ object Time {
 
   object Bars {
     def apply(s: Seconds): Bars =
-      Bars(s._value / (Config.bpm.toDouble / Config.beatsPerBar.toDouble / 60.0))
+      Bars(s._value * secondsToBarsScalar)
     def apply(a: Absolute): Bars =
       Bars(Seconds(a))
   }
