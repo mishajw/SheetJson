@@ -13,6 +13,7 @@ package object composite {
 
   /**
     * Convert to composite `Player`s
+ *
     * @tparam T
     */
   trait CompositeConverter[T <: CompositePlayer[_], V] extends JsonConverter[T] {
@@ -36,7 +37,7 @@ package object composite {
     */
   implicit object CombinerConverter extends CompositeConverter[Combiner, Player] {
     override protected def convertWrapped(json: JValue): Option[Player] = json match {
-      case j: JObject => JsonParser parseJson j
+      case j: JObject => JsonParser parsePlayerJson j
       case _ => None
     }
 
@@ -50,7 +51,7 @@ package object composite {
   implicit object RiffConverter extends CompositeConverter[Riff, PlayerDescription] {
     override protected def convertWrapped(json: JValue): Option[PlayerDescription] = json match {
       case JArray((jsonComponent: JObject) :: description) =>
-        (JsonParser parseJson jsonComponent, description) match {
+        (JsonParser parsePlayerJson jsonComponent, description) match {
           case (Some(player), List(JDouble(start), JDouble(end))) =>
             Some(PlayerSpan(player, Bars(start), Bars(end)))
           case (Some(player), List(JDouble(duration))) =>
@@ -70,7 +71,7 @@ package object composite {
   implicit object KeyboardConverter extends CompositeConverter[Keyboard, (Player, KeyCode)] {
     override protected def convertWrapped(json: JValue): Option[(Player, KeyCode)] = json match {
       case JArray(List(child: JObject, JInt(keyCode))) =>
-        (JsonParser parseJson child) map ((_, keyCode.toInt))
+        (JsonParser parsePlayerJson child) map ((_, keyCode.toInt))
     }
 
     override protected def applyWithComponents(cs: Seq[(Player, KeyCode)], json: JObject): Option[Keyboard] =
@@ -83,7 +84,7 @@ package object composite {
   implicit object SwitcherConverter extends CompositeConverter[Switcher, (KeyCode, Player)] {
     override protected def convertWrapped(json: JValue): Option[(KeyCode, Player)] = json match {
       case JArray(List(JInt(keyCode), child: JObject)) =>
-        (JsonParser parseJson child) map ((keyCode.toInt, _))
+        (JsonParser parsePlayerJson child) map ((keyCode.toInt, _))
       case _ => None
     }
 

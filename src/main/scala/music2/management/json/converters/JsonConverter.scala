@@ -28,6 +28,6 @@ trait JsonConverter[T <: Player] {
     JObject(obj) <- json
     ("components", JArray(components)) <- obj
     jsonComponent @ JObject(_) <- components
-    component <- JsonParser parseJson jsonComponent
+    component <- JsonParser parsePlayerJson jsonComponent
   } yield component
 }

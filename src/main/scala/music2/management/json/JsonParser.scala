@@ -10,15 +10,19 @@ import music2.player.Player
 import music2.player.composite._
 import music2.player.filter._
 import music2.player.origin.{FadingNoise, RawFile, Tone}
+import music2.util.Config
 import org.json4s._
 import org.json4s.jackson.JsonMethods
 
+import scala.Option
 import scala.io.Source
 
 /**
   * Parses JSON objects into Player objects
   */
 object JsonParser {
+
+  implicit val formats = DefaultFormats
 
   /**
     * Parse JSON from a file
@@ -44,7 +48,7 @@ object JsonParser {
     */
   def parseRaw(jsonStr: String): Option[Player] = {
     JsonMethods.parseOpt(jsonStr) match {
-      case Some(json: JObject) => parseJson(json)
+      case Some(json: JObject) => parseAllJson(json)
       case _ =>
         System.err.println("Provided JSON is not valid")
         None
@@ -56,7 +60,20 @@ object JsonParser {
     * @param json the JSON object
     * @return an option of a player from the JSON object
     */
-  def parseJson(json: JObject): Option[Player] = for {
+  def parseAllJson(json: JObject): Option[Player] = {
+    Option(json \ "config") match {
+      case Some(configJson: JObject) =>
+        Config.update(configJson.extract[Config])
+      case _ =>
+    }
+
+    for {
+      JObject(playerJson) <- Option(json \ "players")
+      player <- parsePlayerJson(JObject(playerJson))
+    } yield player
+  }
+
+  def parsePlayerJson(json: JObject): Option[Player] = for {
     t <- getType(json)
     player <- getPlayer(t, json)
   } yield player

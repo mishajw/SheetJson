@@ -17,7 +17,7 @@ package object filter {
       val children: Seq[Option[Player]] = for {
         JObject(obj) <- json
         ("child", child: JObject) <- obj
-      } yield JsonParser.parseJson(child)
+      } yield JsonParser.parsePlayerJson(child)
 
       children.flatten.headOption match {
         case Some(child) => applyWithChild(child, json)
