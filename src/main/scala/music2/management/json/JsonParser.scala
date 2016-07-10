@@ -11,6 +11,7 @@ import music2.player.composite._
 import music2.player.filter._
 import music2.player.origin.{FadingNoise, RawFile, Tone}
 import music2.util.Config
+import org.json4s.JsonAST.JValue
 import org.json4s._
 import org.json4s.jackson.JsonMethods
 
@@ -106,6 +107,25 @@ object JsonParser {
       case "riff" => convert[Riff](json)
       case "switcher" => convert[Switcher](json)
       case "rawfile" => convert[RawFile](json)
+      case other => for {
+        preset <- Config.getPreset(other)
+        filledIn = fillInPreset(preset, json)
+        player <- parsePlayerJson(filledIn)
+      } yield player
     }
+  }
+
+  def fillInPreset(preset: JObject, json: JObject): JObject = {
+    val toReplace: Map[String, JValue] = (for {
+      JObject(obj) <- json
+      ("parameters", JObject(parameters)) <- obj
+      (name, value) <- parameters
+    } yield (name, value)).toMap
+
+    (preset transformField {
+      case JField(name, JString(value))
+        if toReplace.keys.toSeq contains value =>
+          JField(name, toReplace(value))
+    }).asInstanceOf[JObject]
   }
 }

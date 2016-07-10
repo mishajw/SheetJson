@@ -3,9 +3,10 @@ package music2.util
 import javax.sound.sampled.AudioFormat
 
 import music2.{BPM, SampleRate}
+import org.json4s.JObject
 import org.json4s.JsonAST.JValue
 
-case class Preset(name: String, constructor: JValue)
+case class Preset(name: String, constructor: JObject)
 
 /**
   * For documentation on parameters, see Config object accessors
@@ -40,6 +41,18 @@ object Config {
     * If 3, the time signature is 3/4
     */
   def beatsPerBar: Int = config.beatsPerBar
+
+  /**
+    * Get a preset from the configuration
+    * A preset is a template for creating Players
+    * @param name name of the preset
+    * @return the preset corresponding to that name
+    */
+  def getPreset(name: String): Option[JObject] =
+    config.presets
+      .filter(_.name == name)
+      .map(_.constructor)
+      .headOption
 
   /**
     * Update the current configuration
