@@ -1,4 +1,4 @@
-name := "music2"
+name := "SheetJson"
 
 version := "1.0"
 
