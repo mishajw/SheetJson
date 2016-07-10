@@ -1,53 +1,60 @@
 {
-  "type": "switcher",
-  "components": [
-    [49, {
-      "type": "tone",
-      "note": "C"
-    }],
-    [50, {
-      "type": "randomizer",
-      "randomness": 0.2,
-      "child": { "type": "tone", "note": "c" }
-    }],
-    [51, {
-      "type": "smoother",
-      "smoothness": 0.2,
-      "child": { "type": "tone", "note": "c" }
-    }],
-    [52, {
-      "type": "combiner",
-      "components": [
-        { "type": "tone", "note": "C" },
-        { "type": "tone", "note": "E" },
-        { "type": "tone", "note": "G" }
-      ]
-    }],
-    [53, {
-      "type": "riff",
-      "components": [
-        [{ "type": "tone", "note": "G" }, 0.5],
-        [{ "type": "tone", "note": "Gs" }, 0.5]
-      ]
-    }],
-    [54, {
-      "type": "keyboard-scale",
-      "scale": "blues-ext",
-      "key": "C"
-    }],
-    [55, {
-      "type": "rawfile",
-      "path": "/home/misha/Downloads/lb.wav"
-    }],
-    [56, {
-      "type": "riff",
-      "components": [
-        [{ "type": "tone", "note": "C", "waveFunction": "sine" }, 0.5],
-        [{ "type": "tone", "note": "C", "waveFunction": "cosine" }, 0.5],
-        [{ "type": "tone", "note": "C", "waveFunction": "zigzag" }, 0.5],
-        [{ "type": "tone", "note": "C", "waveFunction": "id" }, 0.5],
-        [{ "type": "tone", "note": "C", "waveFunction": "binary" }, 0.5]
-      ]
-    }]
-  ]
+  "config": {
+    "bpm": 120,
+    "sampleRate": 24000,
+    "beatsPerBar": 4
+  },
+  "players": {
+    "type": "switcher",
+    "components": [
+      [49, {
+        "type": "tone",
+        "note": "C"
+      }],
+      [50, {
+        "type": "randomizer",
+        "randomness": 0.2,
+        "child": { "type": "tone", "note": "c" }
+      }],
+      [51, {
+        "type": "smoother",
+        "smoothness": 0.2,
+        "child": { "type": "tone", "note": "c" }
+      }],
+      [52, {
+        "type": "combiner",
+        "components": [
+          { "type": "tone", "note": "C" },
+          { "type": "tone", "note": "E" },
+          { "type": "tone", "note": "G" }
+        ]
+      }],
+      [53, {
+        "type": "riff",
+        "components": [
+          [{ "type": "tone", "note": "G" }, 0.5],
+          [{ "type": "tone", "note": "Gs" }, 0.5]
+        ]
+      }],
+      [54, {
+        "type": "keyboard-scale",
+        "scale": "blues-ext",
+        "key": "C"
+      }],
+      [55, {
+        "type": "rawfile",
+        "path": "/home/misha/Downloads/lb.wav"
+      }],
+      [56, {
+        "type": "riff",
+        "components": [
+          [{ "type": "tone", "note": "C", "waveFunction": "sine" }, 0.5],
+          [{ "type": "tone", "note": "C", "waveFunction": "cosine" }, 0.5],
+          [{ "type": "tone", "note": "C", "waveFunction": "zigzag" }, 0.5],
+          [{ "type": "tone", "note": "C", "waveFunction": "id" }, 0.5],
+          [{ "type": "tone", "note": "C", "waveFunction": "binary" }, 0.5]
+        ]
+      }]
+    ]
+  }
 }
