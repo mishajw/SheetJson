@@ -2,9 +2,10 @@ package sheetjson.util
 
 import javax.sound.sampled.AudioFormat
 
-import sheetjson.{BPM, SampleRate}
 import org.json4s.JObject
-import org.json4s.JsonAST.JValue
+import sheetjson.{BPM, JsonParsingException, SampleRate}
+
+import scala.util.{Failure, Success, Try}
 
 case class Preset(name: String, constructor: JObject)
 
@@ -50,11 +51,13 @@ object Config {
     * @param name name of the preset
     * @return the preset corresponding to that name
     */
-  def getPreset(name: String): Option[JObject] =
+  def getPreset(name: String): Try[JObject] =
     config.presets
-      .filter(_.name == name)
-      .map(_.constructor)
-      .headOption
+        .filter(_.name == name)
+        .map(_.constructor) match {
+      case c :: _ => Success(c)
+      case _ => Failure(new JsonParsingException(s"No preset for $name"))
+    }
 
   /**
     * Update the current configuration

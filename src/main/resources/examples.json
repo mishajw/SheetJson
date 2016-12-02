@@ -24,7 +24,7 @@
       [52, {
         "type": "combiner",
         "components": [
-          { "type": "tone", "note": "C" },
+          { "type": "tone", "note": "A" },
           { "type": "tone", "note": "E" },
           { "type": "tone", "note": "G" }
         ]
@@ -41,18 +41,14 @@
         "scale": "blues-ext",
         "key": "C"
       }],
-      [55, {
-        "type": "rawfile",
-        "path": "/home/misha/Downloads/lb.wav"
-      }],
       [56, {
         "type": "riff",
         "components": [
-          [{ "type": "tone", "note": "C", "waveFunction": "sine" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "cosine" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "zigzag" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "id" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "binary" }, 0.5]
+          [{ "type": "tone", "note": "B", "waveFunction": "sine" }, 0.5],
+          [{ "type": "tone", "note": "D", "waveFunction": "cosine" }, 0.5],
+          [{ "type": "tone", "note": "E", "waveFunction": "zigzag" }, 0.5],
+          [{ "type": "tone", "note": "F", "waveFunction": "id" }, 0.5],
+          [{ "type": "tone", "note": "G", "waveFunction": "binary" }, 0.5]
         ]
       }]
     ]

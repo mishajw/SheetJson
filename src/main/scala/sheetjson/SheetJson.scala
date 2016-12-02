@@ -5,6 +5,8 @@ import sheetjson.management.Composer
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 
+import scala.util.{Failure, Success}
+
 object SheetJson {
 
   private val log = Logger(getClass)
@@ -21,11 +23,11 @@ object SheetJson {
     }
 
     playerOpt match {
-      case Some(player) =>
+      case Success(player) =>
         log.debug(s"Create players: ${Player.flatten(player)}")
         Composer play player
-      case None =>
-        log.error("JSON was malformed, or file not found")
+      case Failure(e) =>
+        log.error("Got error from parsing JSON", e)
     }
   }
 }

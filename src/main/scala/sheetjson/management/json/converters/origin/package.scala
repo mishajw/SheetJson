@@ -8,6 +8,9 @@ import sheetjson.util.Time.Bars
 import sheetjson.util.{Notes, Scales}
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JString}
+import sheetjson.JsonParsingException
+
+import scala.util.{Failure, Success, Try}
 
 package object origin {
 
@@ -18,7 +21,7 @@ package object origin {
 
     case class JTone(note: Double, waveFunction: String = "sine")
 
-    override def apply(json: JObject): Option[Tone] = {
+    override def apply(json: JObject): Try[Tone] = {
       // Transform note strings into frequencies
       val transformed = json transformField {
         case ("note", JString(n)) =>
@@ -28,10 +31,13 @@ package object origin {
           }
       }
 
-      for {
+      (for {
         jTone <- transformed.extractOpt[JTone]
         wave <- waveFunctions get jTone.waveFunction
-      } yield new Tone(jTone.note, wave, getSpec(json))
+      } yield new Tone(jTone.note, wave, getSpec(json))) match {
+        case Some(t) => Success(t)
+        case None => Failure(new JsonParsingException("Couldn't get tone and wave from json", json))
+      }
     }
   }
 
@@ -39,10 +45,9 @@ package object origin {
     * Convert to `FadingNoise`
     */
   implicit object FadingNoiseConverter extends JsonConverter[FadingNoise] {
-    override def apply(json: JObject): Option[FadingNoise] = {
-      for {
-        JDouble(length) <- Option(json \ "length")
-      } yield new FadingNoise(Bars(length), getSpec(json))
+    override def apply(json: JObject): Try[FadingNoise] = json \ "length" match {
+      case JDouble(length) => Success(new FadingNoise(Bars(length), getSpec(json)))
+      case _ => Failure(new JsonParsingException("Couldn't get length from json", json))
     }
   }
 
@@ -54,15 +59,23 @@ package object origin {
       * @param json the JSON object to convert
       * @return the converted `Player` object
       */
-    override def apply(json: JObject): Option[KeyboardScale] = json match {
+    override def apply(json: JObject): Try[KeyboardScale] = json match {
       case jsonObj: JObject =>
-        for {
+        val scaleOpt = for {
           JString(scale) <- Option(json \ "scale")
           JString(key) <- Option(json \ "key")
           note <- Notes relativeNoteFor key
           scale <- Scales get(note, scale)
-        } yield new KeyboardScale(scale, getSpec(jsonObj))
-      case _ => None
+        } yield scale
+
+        scaleOpt match {
+          case Some(scale) =>
+            Success(new KeyboardScale(scale, getSpec(jsonObj)))
+          case None =>
+            Failure(new JsonParsingException("Couldn't get scale from json", json))
+        }
+      case _ =>
+        Failure(new JsonParsingException("Json wasn't an object", json))
     }
   }
 
@@ -70,13 +83,16 @@ package object origin {
     * Convert to `RawFile`
     */
   implicit object RawFileConverter extends JsonConverter[RawFile] {
-    override def apply(json: JObject): Option[RawFile] = {
+    override def apply(json: JObject): Try[RawFile] = {
       val rfs: Seq[RawFile] = for {
         JObject(obj) <- json
         ("path", JString(path)) <- obj
       } yield new RawFile(path, getSpec(json))
 
-      rfs.headOption
+      rfs match {
+        case Seq(rf) => Success(rf)
+        case _ => Failure(new JsonParsingException("Couldn't get raw file from json", json))
+      }
     }
   }
 }

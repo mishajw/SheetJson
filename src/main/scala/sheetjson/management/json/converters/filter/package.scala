@@ -6,6 +6,9 @@ import sheetjson.player.filter._
 import sheetjson.util.Time.Bars
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JInt}
+import sheetjson.JsonParsingException
+
+import scala.util.{Failure, Success, Try}
 
 package object filter {
 
@@ -13,29 +16,31 @@ package object filter {
     * Convert to `FilterPlayer` types
     */
   trait FilterConverter[T <: FilterPlayer] extends JsonConverter[T] {
-    final def apply(json: JObject): Option[T] = {
-      val children: Seq[Option[Player]] = for {
+    final def apply(json: JObject): Try[T] = {
+      val children: Seq[JObject] = for {
         JObject(obj) <- json
         ("child", child: JObject) <- obj
-      } yield JsonParser.parsePlayerJson(child)
+      } yield child
 
-      children.flatten.headOption match {
-        case Some(child) => applyWithChild(child, json)
-        case None => None
+      children match {
+        case Seq(child) => for {
+          player <- JsonParser.parsePlayerJson(child)
+          filter <- applyWithChild(player, json)
+        } yield filter
       }
     }
 
-    protected def applyWithChild(child: Player, json: JObject): Option[T]
+    protected def applyWithChild(child: Player, json: JObject): Try[T]
   }
 
   /**
     * Convert to `Smoother`
     */
   implicit object SmootherConverter extends FilterConverter[Smoother] {
-    override protected def applyWithChild(child: Player, json: JObject): Option[Smoother] = {
+    override protected def applyWithChild(child: Player, json: JObject): Try[Smoother] = {
       json \ "smoothness" match {
-        case JDouble(smoothness) => Some(new Smoother(child, smoothness, getSpec(json)))
-        case _ => None
+        case JDouble(smoothness) => Success(new Smoother(child, smoothness, getSpec(json)))
+        case _ => Failure(new JsonParsingException("Couldn't parse smoother", json))
       }
     }
   }
@@ -44,10 +49,10 @@ package object filter {
     * Convert to `Randomizer`
     */
   implicit object RandomizerConverter extends FilterConverter[Randomizer] {
-    override protected def applyWithChild(child: Player, json: JObject): Option[Randomizer] = {
+    override protected def applyWithChild(child: Player, json: JObject): Try[Randomizer] = {
       json \ "randomness" match {
-        case JDouble(randomness) => Some(new Randomizer(child, randomness, getSpec(json)))
-        case _ => None
+        case JDouble(randomness) => Success(new Randomizer(child, randomness, getSpec(json)))
+        case _ => Failure(new JsonParsingException("Couldn't parse randomizer", json))
       }
     }
   }
@@ -56,10 +61,10 @@ package object filter {
     * Convert to `KeyActivated`
     */
   implicit object KeyActivatedConverter extends FilterConverter[KeyActivated] {
-    override protected def applyWithChild(child: Player, json: JObject): Option[KeyActivated] = {
+    override protected def applyWithChild(child: Player, json: JObject): Try[KeyActivated] = {
       json \ "key" match {
-        case JInt(key) => Some(new KeyActivated(key.toInt, child, getSpec(json)))
-        case _ => None
+        case JInt(key) => Success(new KeyActivated(key.toInt, child, getSpec(json)))
+        case _ => Failure(new JsonParsingException("Couldn't parse key activated", json))
       }
     }
   }
@@ -68,11 +73,11 @@ package object filter {
     * Convert to `Looper`
     */
   implicit object LooperConverter extends FilterConverter[Looper] {
-    override protected def applyWithChild(child: Player, json: JObject): Option[Looper] = {
+    override protected def applyWithChild(child: Player, json: JObject): Try[Looper] = {
       Option(json \ "seconds") match {
         case Some(JDouble(bars)) =>
-          Some(new Looper(Bars(bars), child, getSpec(json)))
-        case _ => None
+          Success(new Looper(Bars(bars), child, getSpec(json)))
+        case _ => Failure(new JsonParsingException("Couldn't parse looper", json))
       }
     }
   }
@@ -81,8 +86,11 @@ package object filter {
     * Convert to `Toggle`
     */
   implicit object ToggleConverter extends FilterConverter[Toggle] {
-    override protected def applyWithChild(child: Player, json: JObject): Option[Toggle] = for {
-      JInt(key) <- Option(json \ "key")
-    } yield new Toggle(key.toInt, child, getSpec(json))
+    override protected def applyWithChild(child: Player, json: JObject): Try[Toggle] = json \ "key" match {
+      case JInt(key) =>
+        Success(new Toggle(key.toInt, child, getSpec(json)))
+      case _ => Failure(new JsonParsingException("Couldn't parse toggle", json))
+    }
   }
 }
+

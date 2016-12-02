@@ -5,6 +5,8 @@ import sheetjson.player.{Player, PlayerSpec}
 import org.json4s.JsonAST.JArray
 import org.json4s.{DefaultFormats, JObject}
 
+import scala.util.{Failure, Success, Try}
+
 trait JsonConverter[T <: Player] {
   implicit val formats = DefaultFormats
 
@@ -12,7 +14,7 @@ trait JsonConverter[T <: Player] {
     * @param json the JSON object to convert
     * @return the converted `Player` object
     */
-  def apply(json: JObject): Option[T]
+  def apply(json: JObject): Try[T]
 
   /**
     * Get the `PlayerSpec` from a JSON object
@@ -24,10 +26,17 @@ trait JsonConverter[T <: Player] {
   /**
     * Get a list of `Player` components from a JSON object
     */
-  protected def getComponents(json: JObject): Seq[Player] = for {
-    JObject(obj) <- json
-    ("components", JArray(components)) <- obj
-    jsonComponent @ JObject(_) <- components
-    component <- JsonParser parsePlayerJson jsonComponent
-  } yield component
+  protected def getComponents(json: JObject): Try[Seq[Player]] = {
+    val parseAttempts: Seq[Try[Player]] = for {
+      JObject(obj) <- json
+      ("components", JArray(components)) <- obj
+      jsonComponent @ JObject(_) <- components
+      component = JsonParser parsePlayerJson jsonComponent
+    } yield component
+
+    parseAttempts collect { case Failure(e) => e } match {
+      case e :: _ => Failure(e)
+      case _ => Success(parseAttempts collect { case Success(p) => p})
+    }
+  }
 }
