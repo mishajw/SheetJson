@@ -15,7 +15,17 @@ trait JsonConverter[T <: Player] {
     * @param json the JSON object to convert
     * @return the converted `Player` object
     */
-  def apply(json: JObject): Try[T]
+  def apply(json: JObject): Try[T] = {
+    applyOpt(json) match {
+      case Some(t) => Success(t)
+      case None => jsonFailure(s"Couldn't parse JSON for ${getClass}", json)
+    }
+  }
+
+  /**
+    * Convert and return and optional T
+    */
+  def applyOpt(json: JObject): Option[T] = None
 
   /**
     * Get the `PlayerSpec` from a JSON object
