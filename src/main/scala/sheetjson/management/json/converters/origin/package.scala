@@ -1,5 +1,7 @@
 package sheetjson.management.json.converters
 
+import java.util.Optional
+
 import sheetjson.player.composite.KeyboardScale
 import sheetjson.player.origin.Tone._
 import sheetjson.player.origin.{FadingNoise, RawFile, Tone}
@@ -21,7 +23,7 @@ package object origin {
 
     case class JTone(note: Double, waveFunction: String = "sine")
 
-    override def apply(json: JObject): Try[Tone] = {
+    override def applyOpt(json: JObject): Option[Tone] = {
       // Transform note strings into frequencies
       val transformed = json transformField {
         case ("note", JString(n)) =>
@@ -31,13 +33,11 @@ package object origin {
           }
       }
 
-      (for {
-        jTone <- transformed.extractOpt[JTone]
-        wave <- waveFunctions get jTone.waveFunction
-      } yield new Tone(jTone.note, wave, getSpec(json))) match {
-        case Some(t) => Success(t)
-        case None => Failure(new JsonParsingException("Couldn't get tone and wave from json", json))
-      }
+      for {
+        note <- (transformed \ "note").extractOpt[Double]
+        waveFunction <- (transformed \ "waveFunction").extractOpt[String]
+        wave <- waveFunctions get waveFunction
+      } yield new Tone(note, wave, getSpec(json))
     }
   }
 
