@@ -45,9 +45,9 @@ package object origin {
     * Convert to `FadingNoise`
     */
   implicit object FadingNoiseConverter extends JsonConverter[FadingNoise] {
-    override def apply(json: JObject): Try[FadingNoise] = json \ "length" match {
-      case JDouble(length) => Success(new FadingNoise(Bars(length), getSpec(json)))
-      case _ => Failure(new JsonParsingException("Couldn't get length from json", json))
+    override def applyOpt(json: JObject): Option[FadingNoise] = json \ "length" match {
+      case JDouble(length) => Some(new FadingNoise(Bars(length), getSpec(json)))
+      case _ => None
     }
   }
 
@@ -59,23 +59,13 @@ package object origin {
       * @param json the JSON object to convert
       * @return the converted `Player` object
       */
-    override def apply(json: JObject): Try[KeyboardScale] = json match {
-      case jsonObj: JObject =>
-        val scaleOpt = for {
-          JString(scale) <- Option(json \ "scale")
-          JString(key) <- Option(json \ "key")
-          note <- Notes relativeNoteFor key
-          scale <- Scales get(note, scale)
-        } yield scale
-
-        scaleOpt match {
-          case Some(scale) =>
-            Success(new KeyboardScale(scale, getSpec(jsonObj)))
-          case None =>
-            Failure(new JsonParsingException("Couldn't get scale from json", json))
-        }
-      case _ =>
-        Failure(new JsonParsingException("Json wasn't an object", json))
+    override def applyOpt(json: JObject): Option[KeyboardScale] = {
+      for {
+        JString(scale) <- Option(json \ "scale")
+        JString(key) <- Option(json \ "key")
+        note <- Notes relativeNoteFor key
+        scale <- Scales get(note, scale)
+      } yield new KeyboardScale(scale, getSpec(json))
     }
   }
 
@@ -83,16 +73,10 @@ package object origin {
     * Convert to `RawFile`
     */
   implicit object RawFileConverter extends JsonConverter[RawFile] {
-    override def apply(json: JObject): Try[RawFile] = {
-      val rfs: Seq[RawFile] = for {
-        JObject(obj) <- json
-        ("path", JString(path)) <- obj
+    override def applyOpt(json: JObject): Option[RawFile] = {
+      for {
+        path <- (json \ "path").extractOpt[String]
       } yield new RawFile(path, getSpec(json))
-
-      rfs match {
-        case Seq(rf) => Success(rf)
-        case _ => Failure(new JsonParsingException("Couldn't get raw file from json", json))
-      }
     }
   }
 }
