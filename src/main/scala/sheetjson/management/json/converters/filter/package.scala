@@ -16,7 +16,7 @@ package object filter {
     * Convert to `FilterPlayer` types
     */
   trait FilterConverter[T <: FilterPlayer] extends JsonConverter[T] {
-    final def apply(json: JObject): Try[T] = {
+    override final def apply(json: JObject): Try[T] = {
       val children: Seq[JObject] = for {
         JObject(obj) <- json
         ("child", child: JObject) <- obj
