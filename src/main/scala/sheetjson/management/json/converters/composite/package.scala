@@ -21,11 +21,10 @@ package object composite {
     */
   trait CompositeConverter[T <: CompositePlayer[_], V] extends JsonConverter[T] {
     override def apply(json: JObject): Try[T] = {
-      val csAttempts: Seq[Try[V]] = for {
-        JObject(obj) <- json
-        ("components", JArray(components)) <- obj
-        component <- components
-      } yield convertWrapped(component)
+      val csAttempts: Seq[Try[V]] = (json \ "components").extractOpt[JArray] match {
+        case Some(JArray(components)) => components map convertWrapped
+        case None => Seq()
+      }
 
       csAttempts collect { case Failure(e) => e } match {
         case e :: _ => Failure(e)
