@@ -92,8 +92,7 @@ package object filter {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[Toggle] = {
       for {
         key <- (json \ "key").extractOpt[Int]
-      } y
-      ield new Toggle(key.toInt, child, getSpec(json))
+      } yield new Toggle(key.toInt, child, getSpec(json))
     }
   }
 }
