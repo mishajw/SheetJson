@@ -1,14 +1,14 @@
 package sheetjson.management.json.converters
 
+import org.json4s.JsonAST.{JArray, JDouble, JInt}
+import org.json4s.{JObject, JValue}
+import sheetjson.jsonFailure
 import sheetjson.management.KeyListener.KeyCode
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 import sheetjson.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import sheetjson.player.composite._
 import sheetjson.util.Time.Bars
-import org.json4s.JsonAST.{JArray, JDouble, JField, JInt}
-import org.json4s.{JObject, JValue}
-import sheetjson.jsonFailure
 
 import scala.util.{Failure, Success, Try}
 
@@ -44,13 +44,11 @@ package object composite {
     * Convert to a `Combiner`
     */
   implicit object CombinerConverter extends CompositeConverter[Combiner, Player] {
-    override protected def convertWrapped(json: JValue): Try[Player] = json match {
-      case j: JObject => JsonParser parsePlayerJson j
-      case _ => jsonFailure("Child wasn't an JObject", json)
-    }
+    override protected def convertWrapped(json: JValue): Try[Player] =
+      JsonParser parsePlayerJson json
 
     override protected def applyWithComponents(cs: Seq[Player], json: JObject): Try[Combiner] =
-      Success(new Combiner( cs, getSpec(json)))
+      Success(new Combiner(cs, getSpec(json)))
   }
 
   /**
@@ -93,7 +91,7 @@ package object composite {
     */
   implicit object SwitcherConverter extends CompositeConverter[Switcher, (KeyCode, Player)] {
     override protected def convertWrapped(json: JValue): Try[(KeyCode, Player)] = json match {
-      case JArray(List(JInt(keyCode), child: JObject)) =>
+      case JArray(List(JInt(keyCode), child: JValue)) =>
         (JsonParser parsePlayerJson child) map ((keyCode.toInt, _))
       case _ => jsonFailure("Couldn't parse to Switcher child", json)
     }
