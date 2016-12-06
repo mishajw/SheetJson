@@ -84,9 +84,10 @@ object JsonParser {
     }
   }
 
-  def parsePlayerJson(json: JObject): Try[Player] = for {
-    t <- getType(json)
-    player <- getPlayer(t, json)
+  def parsePlayerJson(json: JValue): Try[Player] = for {
+    obj <- Try(json.extract[JObject])
+    t <- getType(obj)
+    player <- getPlayer(t, obj)
   } yield player
 
   /**
