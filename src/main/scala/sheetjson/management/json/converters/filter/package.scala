@@ -1,5 +1,6 @@
 package sheetjson.management.json.converters
 
+import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 import sheetjson.player.filter._
@@ -27,21 +28,26 @@ package object filter {
           player <- JsonParser.parsePlayerJson(child)
           filter <- applyWithChild(player, json)
         } yield filter
+        case Seq() => jsonFailure("")
       }
     }
 
-    protected def applyWithChild(child: Player, json: JObject): Try[T]
+    protected def applyWithChild(child: Player, json: JObject): Try[T] = applyWithChildOpt(child, json) match {
+      case Some(t) => Success(t)
+      case None => jsonFailure(s"Couldn't parse JSON for Filter player ${getClass}", json)
+    }
+
+    protected def applyWithChildOpt(child: Player, json: JObject): Option[T] = None
   }
 
   /**
     * Convert to `Smoother`
     */
   implicit object SmootherConverter extends FilterConverter[Smoother] {
-    override protected def applyWithChild(child: Player, json: JObject): Try[Smoother] = {
-      json \ "smoothness" match {
-        case JDouble(smoothness) => Success(new Smoother(child, smoothness, getSpec(json)))
-        case _ => Failure(new JsonParsingException("Couldn't parse smoother", json))
-      }
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[Smoother] = {
+      for {
+        smoothness <- (json \ "smoothness").extractOpt[Double]
+      } yield new Smoother(child, smoothness, getSpec(json))
     }
   }
 
@@ -49,11 +55,10 @@ package object filter {
     * Convert to `Randomizer`
     */
   implicit object RandomizerConverter extends FilterConverter[Randomizer] {
-    override protected def applyWithChild(child: Player, json: JObject): Try[Randomizer] = {
-      json \ "randomness" match {
-        case JDouble(randomness) => Success(new Randomizer(child, randomness, getSpec(json)))
-        case _ => Failure(new JsonParsingException("Couldn't parse randomizer", json))
-      }
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[Randomizer] = {
+      for {
+        randomness <- (json \ "randomness").extractOpt[Double]
+      } yield new Randomizer(child, randomness, getSpec(json))
     }
   }
 
@@ -73,12 +78,10 @@ package object filter {
     * Convert to `Looper`
     */
   implicit object LooperConverter extends FilterConverter[Looper] {
-    override protected def applyWithChild(child: Player, json: JObject): Try[Looper] = {
-      Option(json \ "seconds") match {
-        case Some(JDouble(bars)) =>
-          Success(new Looper(Bars(bars), child, getSpec(json)))
-        case _ => Failure(new JsonParsingException("Couldn't parse looper", json))
-      }
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[Looper] = {
+      for {
+        bars <- (json \ "seconds").extractOpt[Double]
+      } yield new Looper(Bars(bars), child, getSpec(json))
     }
   }
 
@@ -86,10 +89,11 @@ package object filter {
     * Convert to `Toggle`
     */
   implicit object ToggleConverter extends FilterConverter[Toggle] {
-    override protected def applyWithChild(child: Player, json: JObject): Try[Toggle] = json \ "key" match {
-      case JInt(key) =>
-        Success(new Toggle(key.toInt, child, getSpec(json)))
-      case _ => Failure(new JsonParsingException("Couldn't parse toggle", json))
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[Toggle] = {
+      for {
+        key <- (json \ "key").extractOpt[Int]
+      } y
+      ield new Toggle(key.toInt, child, getSpec(json))
     }
   }
 }
