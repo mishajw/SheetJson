@@ -54,6 +54,15 @@
           [{ "type": "tone", "note": "C", "waveFunction": "id" }, 0.5],
           [{ "type": "tone", "note": "C", "waveFunction": "binary" }, 0.5]
         ]
+      }],
+      [57, {
+        "type": "volume-function",
+        "waveFunction": "sine",
+        "frequency": 1.0,
+        "child": {
+          "type": "tone",
+          "note": "C"
+        }
       }]
     ]
   }

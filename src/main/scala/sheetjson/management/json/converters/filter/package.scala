@@ -3,6 +3,7 @@ package sheetjson.management.json.converters
 import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
+import sheetjson.player.origin.Tone.waveFunctions
 import sheetjson.player.filter._
 import sheetjson.util.Time.Bars
 import org.json4s.JObject
@@ -93,6 +94,19 @@ package object filter {
       for {
         key <- (json \ "key").extractOpt[Int]
       } yield new Toggle(key.toInt, child, getSpec(json))
+    }
+  }
+
+  /**
+    * Convert to `VolumeFunction`
+    */
+  implicit object VolumeFunctionConverter extends FilterConverter[VolumeFunction] {
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[VolumeFunction] = {
+      for {
+        frequency <- (json \ "frequency").extractOpt[Double]
+        waveFunction <- (json \ "waveFunction").extractOpt[String]
+        wave <- waveFunctions get waveFunction
+      } yield new VolumeFunction(wave, Bars(frequency), child, getSpec(json))
     }
   }
 }
