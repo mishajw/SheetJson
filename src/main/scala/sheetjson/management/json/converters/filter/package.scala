@@ -109,5 +109,20 @@ package object filter {
       } yield new VolumeFunction(wave, Bars(frequency), child, getSpec(json))
     }
   }
+
+  /**
+    * Convert to `SmoothKeyActivated`
+    */
+  implicit object SmoothKeyActivatedConverter extends FilterConverter[SmoothKeyActivated] {
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[SmoothKeyActivated] = {
+      for {
+        key <- (json \ "key").extractOpt[Int]
+        inFunctionName <- (json \ "inFunction").extractOpt[String]
+        outFunctionName <- (json \ "outFunction").extractOpt[String]
+        inFunction <- waveFunctions get inFunctionName
+        outFunction <- waveFunctions get outFunctionName
+      } yield new SmoothKeyActivated(key, inFunction, outFunction, child, getSpec(json))
+    }
+  }
 }
 

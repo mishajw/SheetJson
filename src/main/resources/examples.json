@@ -63,6 +63,16 @@
           "type": "tone",
           "note": "C"
         }
+      }],
+      [48, {
+        "type": "smooth-key-activated",
+        "key": 32,
+        "inFunction": "sine",
+        "outFunction": "sine",
+        "child": {
+          "type": "tone",
+          "note": "c"
+        }
       }]
     ]
   }

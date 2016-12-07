@@ -11,6 +11,8 @@ object Time {
 
     def +(t: Time[T]) = cons(value + t.value)
 
+    def -(t: Time[T]) = cons(value - t.value)
+
     def *(t: Time[T]) = cons(value * t.value)
 
     def /(t: Time[T]) = cons(value / t.value)
