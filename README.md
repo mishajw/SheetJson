@@ -10,3 +10,4 @@ See examples.json for examples of players.
 
 2) Implement time and pitch modification, or find a library that does.
 
+3) Extend functionality of WaveFunction to be able to give values 0 to 1, -1 to 1, repeat 0 to 1 for whatever value passed in
