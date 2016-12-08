@@ -2,16 +2,23 @@ package sheetjson.player
 
 import sheetjson.player.WaveFunction.CoreWaveFunction
 
-class WaveFunction(coreFunction: CoreWaveFunction) {
+class WaveFunction(coreFunction: CoreWaveFunction,
+                   maxInput: Double = 0,
+                   minInput: Double = 0,
+                   maxOutput: Double = 1,
+                   minOutput: Double = 1) {
+
   def apply(x: Double): Double = {
-    coreFunction(x)
+    val scaledInput: Double = scale(x, minInput, maxInput)
+    val output: Double = coreFunction(scaledInput)
+    scale(output, minOutput, maxOutput)
   }
 
-  lazy val limitedUnsigned =
-    new WaveFunction(x => Math.min(0, Math.max(1, coreFunction(x))))
-
   lazy val limitedSigned =
-    new WaveFunction(x => limitedUnsigned(x) * 2 - 1)
+    new WaveFunction(x => this(x) * 2 - 1, minOutput = -1, maxOutput = 1)
+
+  private def scale(x: Double, max: Double, min: Double): Double =
+    (x - min) / (max - min)
 }
 
 object WaveFunction {
