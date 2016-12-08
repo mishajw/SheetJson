@@ -14,7 +14,7 @@ class WaveFunction(coreFunction: CoreWaveFunction,
     scale(output, minOutput, maxOutput)
   }
 
-  lazy val limitedSigned =
+  lazy val signed =
     new WaveFunction(x => this(x) * 2 - 1, minOutput = -1, maxOutput = 1)
 
   private def scale(x: Double, max: Double, min: Double): Double =
