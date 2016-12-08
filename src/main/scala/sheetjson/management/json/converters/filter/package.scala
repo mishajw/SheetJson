@@ -2,8 +2,7 @@ package sheetjson.management.json.converters
 
 import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
-import sheetjson.player.Player
-import sheetjson.player.origin.Tone.waveFunctions
+import sheetjson.player.{Player, WaveFunction}
 import sheetjson.player.filter._
 import sheetjson.util.Time.Bars
 import org.json4s.JObject
@@ -105,7 +104,7 @@ package object filter {
       for {
         frequency <- (json \ "frequency").extractOpt[Double]
         waveFunction <- (json \ "waveFunction").extractOpt[String]
-        wave <- waveFunctions get waveFunction
+        wave <- WaveFunction getOpt waveFunction
       } yield new VolumeFunction(wave, Bars(frequency), child, getSpec(json))
     }
   }
@@ -119,8 +118,8 @@ package object filter {
         key <- (json \ "key").extractOpt[Int]
         inFunctionName <- (json \ "inFunction").extractOpt[String]
         outFunctionName <- (json \ "outFunction").extractOpt[String]
-        inFunction <- waveFunctions get inFunctionName
-        outFunction <- waveFunctions get outFunctionName
+        inFunction <- WaveFunction getOpt inFunctionName
+        outFunction <- WaveFunction getOpt outFunctionName
       } yield new SmoothKeyActivated(key, inFunction, outFunction, child, getSpec(json))
     }
   }

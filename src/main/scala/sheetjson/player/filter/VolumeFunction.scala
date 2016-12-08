@@ -1,8 +1,6 @@
 package sheetjson.player.filter
 
-import sheetjson.Frequency
-import sheetjson.player.{Playable, Player, PlayerSpec}
-import sheetjson.player.origin.Tone.WaveFunction
+import sheetjson.player.{Playable, Player, PlayerSpec, WaveFunction}
 import sheetjson.util.Time.Bars
 
 class VolumeFunction(val waveFunction: WaveFunction,

@@ -1,8 +1,7 @@
 package sheetjson.player.filter
 
 import sheetjson.management.KeyListener.KeyCode
-import sheetjson.player.origin.Tone.WaveFunction
-import sheetjson.player.{ListenerPlayer, Playable, Player, PlayerSpec}
+import sheetjson.player._
 import sheetjson.util.Time.Absolute
 
 import scala.collection.mutable.ArrayBuffer

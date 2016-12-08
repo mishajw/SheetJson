@@ -1,18 +1,13 @@
 package sheetjson.management.json.converters
 
-import java.util.Optional
-
+import org.json4s.JObject
+import org.json4s.JsonAST.{JDouble, JString}
+import sheetjson.player.WaveFunction
 import sheetjson.player.composite.KeyboardScale
-import sheetjson.player.origin.Tone._
 import sheetjson.player.origin.{FadingNoise, RawFile, Tone}
 import sheetjson.util.Frequencies.FrequencyOf
 import sheetjson.util.Time.Bars
 import sheetjson.util.{Notes, Scales}
-import org.json4s.JObject
-import org.json4s.JsonAST.{JDouble, JString}
-import sheetjson.JsonParsingException
-
-import scala.util.{Failure, Success, Try}
 
 package object origin {
 
@@ -36,7 +31,7 @@ package object origin {
       for {
         note <- (transformed \ "note").extractOpt[Double]
         waveFunction = (transformed \ "waveFunction").extractOrElse("sine": String)
-        wave <- waveFunctions get waveFunction
+        wave <- WaveFunction getOpt waveFunction
       } yield new Tone(note, wave, getSpec(json))
     }
   }
