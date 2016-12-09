@@ -116,11 +116,19 @@ package object filter {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[SmoothKeyActivated] = {
       for {
         key <- (json \ "key").extractOpt[Int]
-        inFunctionName <- (json \ "inFunction").extractOpt[String]
-        outFunctionName <- (json \ "outFunction").extractOpt[String]
+        inFunctionName = (json \ "inFunction").extractOrElse("fade-in")
+        outFunctionName = (json \ "outFunction").extractOrElse("fade-out")
         inFunction <- WaveFunction getOpt inFunctionName
         outFunction <- WaveFunction getOpt outFunctionName
-      } yield new SmoothKeyActivated(key, inFunction, outFunction, child, getSpec(json))
+        fadeInTime = (json \ "fadeInTime").extractOrElse(0.25)
+        fadeOutTime = (json \ "fadeOutTime").extractOrElse(0.25)
+      } yield new SmoothKeyActivated(key,
+                                     inFunction,
+                                     outFunction,
+                                     Bars(fadeInTime),
+                                     Bars(fadeOutTime),
+                                     child,
+                                     getSpec(json))
     }
   }
 }

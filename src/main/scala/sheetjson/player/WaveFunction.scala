@@ -43,7 +43,9 @@ object WaveFunction {
       }
     }),
     "id" -> new WaveFunction({ x: Double => x }),
-    "binary" -> new WaveFunction({ x: Double => if (x < 0.5) 0 else 1 })
+    "binary" -> new WaveFunction({ x: Double => if (x < 0.5) 0 else 1 }),
+    "fade-in" -> new WaveFunction({ x: Double => Math.cos(x * fullAngle / 2)}, minOutput = -1, maxOutput = 1),
+    "fade-out" -> new WaveFunction({ x: Double => -Math.cos(x * fullAngle / 2)}, minOutput = -1, maxOutput = 1)
   )
 
   def get(name: String): WaveFunction =
