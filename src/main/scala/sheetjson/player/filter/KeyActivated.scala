@@ -6,12 +6,10 @@ import com.typesafe.scalalogging.Logger
 import sheetjson.management.KeyListener.KeyCode
 import sheetjson.player.{ListenerPlayer, Playable, Player, PlayerSpec}
 
-class KeyActivated( _key: KeyCode,
-                    _child: Player,
-                    _spec: PlayerSpec)
-                    extends FilterPlayer(_child, _spec) with ListenerPlayer {
-
-  private val log = Logger(getClass)
+class KeyActivated(_key: KeyCode,
+                   _child: Player,
+                   _spec: PlayerSpec)
+                   extends FilterPlayer(_child, _spec) with ListenerPlayer {
 
   private val _pressed = new AtomicBoolean(false)
 
@@ -23,7 +21,7 @@ class KeyActivated( _key: KeyCode,
     val played = child.play
 
     if (_pressed.get()) played
-    else               Playable.default
+    else Playable.default
   }
 
   override def keyPressed(kc: KeyCode): Unit = {
