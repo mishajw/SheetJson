@@ -6,15 +6,15 @@ import sheetjson.util.Time.{Absolute, Bars}
 
 import scala.collection.mutable.ArrayBuffer
 
-class SmoothKeyActivated(keyCode: Int,
+class SmoothKeyActivated(_key: KeyCode,
                          val inFunction: WaveFunction,
                          val outFunction: WaveFunction,
                          val fadeInTime: Bars,
                          val fadeOutTime: Bars,
                          _child: Player,
-                         _spec: PlayerSpec) extends FilterPlayer(_child, _spec) with ListenerPlayer {
+                         _spec: PlayerSpec) extends FilterPlayer(_child, _spec) with ActivatablePlayer {
 
-  override val keys: Seq[KeyCode] = Seq(keyCode)
+  override val keys: Seq[KeyCode] = Seq(_key)
 
   val childPlays: ArrayBuffer[Playable] = ArrayBuffer()
 
@@ -55,12 +55,13 @@ class SmoothKeyActivated(keyCode: Int,
 
   }
 
-  override def keyPressed(kc: KeyCode): Unit = {
+  override def activate(): Unit = {
     if (lastPressed.isEmpty)
       lastPressed = Some(absoluteStep)
   }
 
-  override def keyReleased(kc: KeyCode): Unit = {
+  override def deactivate(): Unit = {
     lastReleased = Some(absoluteStep)
   }
+
 }
