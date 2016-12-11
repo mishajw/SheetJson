@@ -75,6 +75,14 @@
           "type": "tone",
           "note": "c"
         }
+      }],
+      [48, {
+        "type": "repeater",
+        "length": 0.5,
+        "child": {
+          "type": "rawfile",
+          "path": "/home/misha/Downloads/cartoon175.wav"
+        }
       }]
     ]
   }

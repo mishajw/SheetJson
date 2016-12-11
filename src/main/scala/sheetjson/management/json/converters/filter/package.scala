@@ -131,5 +131,14 @@ package object filter {
                                      getSpec(json))
     }
   }
+
+  /**
+    * Toggle to `Repeater`
+    */
+  implicit object RepeaterConverter extends FilterConverter[Repeater] {
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[Repeater] = for {
+      length <- (json \ "length").extractOpt[Double]
+    } yield new Repeater(Bars(length), child, getSpec(json))
+  }
 }
 

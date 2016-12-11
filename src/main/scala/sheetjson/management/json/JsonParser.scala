@@ -125,6 +125,7 @@ object JsonParser {
       case "rawfile" => convert[RawFile](json)
       case "volume_function" => convert[VolumeFunction](json)
       case "smooth_key_activated" => convert[SmoothKeyActivated](json)
+      case "repeater" => convert[Repeater](json)
       case other => for {
         preset <- Config.getPreset(other)
         filledIn = fillInPreset(preset, json)
