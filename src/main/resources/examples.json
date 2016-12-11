@@ -69,8 +69,8 @@
       [48, {
         "type": "smooth-key-activated",
         "key": 32,
-        "inFunction": "sine",
-        "outFunction": "sine",
+        "fadeInTime": 0.1,
+        "fadeOutTime": 0.5,
         "child": {
           "type": "tone",
           "note": "c"
