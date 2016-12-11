@@ -27,12 +27,10 @@ class KeyActivated( _key: KeyCode,
   }
 
   override def keyPressed(kc: KeyCode): Unit = {
-    log.debug(s"Key pressed: $kc")
     _pressed set true
   }
 
   override def keyReleased(kc: KeyCode): Unit = {
-    log.debug(s"Key released: $kc")
     _pressed set false
   }
 }
