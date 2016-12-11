@@ -1,51 +1,53 @@
 {
   "config": {
     "bpm": 120,
-    "sample_rate": 28000,
+    "sample_rate": 14000,
     "beats_per_bar": 4
   },
   "players": {
-    "type": "switcher",
+    "type": "scroller",
+    "next_key": 50,
+    "previous_key": 49,
     "components": [
-      [49, {
+      {
         "type": "tone",
         "note": "c"
-      }],
-      [50, {
+      },
+      {
         "type": "randomizer",
         "randomness": 0.2,
         "child": { "type": "tone", "note": "c" }
-      }],
-      [51, {
+      },
+      {
         "type": "smoother",
         "smoothness": 0.2,
         "child": { "type": "tone", "note": "c" }
-      }],
-      [52, {
+      },
+      {
         "type": "combiner",
         "components": [
           { "type": "tone", "note": "c" },
           { "type": "tone", "note": "e" },
           { "type": "tone", "note": "g" }
         ]
-      }],
-      [53, {
+      },
+      {
         "type": "riff",
         "components": [
           [{ "type": "tone", "note": "g" }, 0.5],
           [{ "type": "tone", "note": "gs" }, 0.5]
         ]
-      }],
-      [54, {
+      },
+      {
         "type": "keyboard_scale",
         "scale": "blues_ext",
         "key": "c"
-      }],
-      [55, {
+      },
+      {
         "type": "rawfile",
         "path": "/home/misha/Downloads/cartoon175.wav"
-      }],
-      [56, {
+      },
+      {
         "type": "riff",
         "components": [
           [{ "type": "tone", "note": "c", "wave_function": "sine" }, 0.5],
@@ -56,8 +58,8 @@
           [{ "type": "tone", "note": "c", "wave_function": "fade_in" }, 0.5],
           [{ "type": "tone", "note": "c", "wave_function": "fade_out" }, 0.5]
         ]
-      }],
-      [57, {
+      },
+      {
         "type": "volume_function",
         "wave_function": "sine",
         "frequency": 1.0,
@@ -65,8 +67,8 @@
           "type": "tone",
           "note": "c"
         }
-      }],
-      [48, {
+      },
+      {
         "type": "smooth_key_activated",
         "key": 32,
         "fade_in_time": 0.1,
@@ -75,15 +77,15 @@
           "type": "tone",
           "note": "c"
         }
-      }],
-      [48, {
+      },
+      {
         "type": "repeater",
         "length": 0.5,
         "child": {
           "type": "rawfile",
           "path": "/home/misha/Downloads/cartoon175.wav"
         }
-      }]
+      }
     ]
   }
 }

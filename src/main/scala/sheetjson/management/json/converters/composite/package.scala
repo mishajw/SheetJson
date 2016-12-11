@@ -36,7 +36,12 @@ package object composite {
 
     protected def convertWrapped(json: JValue): Try[V]
 
-    protected def applyWithComponents(cs: Seq[V], json: JObject): Try[T]
+    protected def applyWithComponents(cs: Seq[V], json: JObject): Try[T] = applyWithComponentsOpt(cs, json) match {
+      case Some(t) => Success(t)
+      case None => jsonFailure(s"Couldn't parse JSON for Composite player $getClass", json)
+    }
+
+    protected def applyWithComponentsOpt(cs: Seq[V], json: JObject): Option[T] = None
   }
 
   /**
@@ -97,6 +102,21 @@ package object composite {
 
     override protected def applyWithComponents(cs: Seq[(KeyCode, Player)], json: JObject): Try[Switcher] = {
       Success(new Switcher(cs, getSpec(json)))
+    }
+  }
+
+  /**
+    * Convert to `Scroller`
+    */
+  implicit object ScrollerConverter extends CompositeConverter[Scroller, Player] {
+    override protected def convertWrapped(json: JValue): Try[Player] =
+      JsonParser parsePlayerJson json
+
+    override protected def applyWithComponentsOpt(cs: Seq[Player], json: JObject): Option[Scroller] = {
+      for {
+        nextKey <- (json \ "next_key").extractOpt[Int]
+        previousKey <- (json \ "previous_key").extractOpt[Int]
+      } yield new Scroller(nextKey, previousKey, cs, getSpec(json))
     }
   }
 }
