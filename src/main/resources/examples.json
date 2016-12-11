@@ -9,7 +9,7 @@
     "components": [
       [49, {
         "type": "tone",
-        "note": "C"
+        "note": "c"
       }],
       [50, {
         "type": "randomizer",
@@ -24,37 +24,37 @@
       [52, {
         "type": "combiner",
         "components": [
-          { "type": "tone", "note": "C" },
-          { "type": "tone", "note": "E" },
-          { "type": "tone", "note": "G" }
+          { "type": "tone", "note": "c" },
+          { "type": "tone", "note": "e" },
+          { "type": "tone", "note": "g" }
         ]
       }],
       [53, {
         "type": "riff",
         "components": [
-          [{ "type": "tone", "note": "G" }, 0.5],
-          [{ "type": "tone", "note": "Gs" }, 0.5]
+          [{ "type": "tone", "note": "g" }, 0.5],
+          [{ "type": "tone", "note": "gs" }, 0.5]
         ]
       }],
       [54, {
         "type": "keyboard_scale",
         "scale": "blues_ext",
-        "key": "C"
+        "key": "c"
       }],
       [55, {
         "type": "rawfile",
-        "path": "/home/misha/Downloads/lb.wav"
+        "path": "/home/misha/Downloads/cartoon175.wav"
       }],
       [56, {
         "type": "riff",
         "components": [
-          [{ "type": "tone", "note": "C", "wave_function": "sine" }, 0.5],
-          [{ "type": "tone", "note": "C", "wave_function": "cosine" }, 0.5],
-          [{ "type": "tone", "note": "C", "wave_function": "zigzag" }, 0.5],
-          [{ "type": "tone", "note": "C", "wave_function": "id" }, 0.5],
-          [{ "type": "tone", "note": "C", "wave_function": "binary" }, 0.5],
-          [{ "type": "tone", "note": "C", "wave_function": "fade_in" }, 0.5],
-          [{ "type": "tone", "note": "C", "wave_function": "fade_out" }, 0.5]
+          [{ "type": "tone", "note": "c", "wave_function": "sine" }, 0.5],
+          [{ "type": "tone", "note": "c", "wave_function": "cosine" }, 0.5],
+          [{ "type": "tone", "note": "c", "wave_function": "zigzag" }, 0.5],
+          [{ "type": "tone", "note": "c", "wave_function": "id" }, 0.5],
+          [{ "type": "tone", "note": "c", "wave_function": "binary" }, 0.5],
+          [{ "type": "tone", "note": "c", "wave_function": "fade_in" }, 0.5],
+          [{ "type": "tone", "note": "c", "wave_function": "fade_out" }, 0.5]
         ]
       }],
       [57, {
@@ -63,14 +63,14 @@
         "frequency": 1.0,
         "child": {
           "type": "tone",
-          "note": "C"
+          "note": "c"
         }
       }],
       [48, {
         "type": "smooth_key_activated",
         "key": 32,
         "fade_in_time": 0.1,
-        "fade_out_Time": 0.5,
+        "fade_out_time": 0.5,
         "child": {
           "type": "tone",
           "note": "c"
