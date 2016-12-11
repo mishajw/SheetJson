@@ -13,7 +13,7 @@ object Scales {
   val scales = Map(
     "major"     -> Seq(C, D, E, Fs, A, B),
     "blues"     -> Seq(C, Ds, F, G, As),
-    "blues-ext" -> Seq(C, Ds, F, Fs, G, As)
+    "blues_ext" -> Seq(C, Ds, F, Fs, G, As)
   )
 
   def get(n: RelativeNote, s: String): Option[Seq[RelativeNote]] =

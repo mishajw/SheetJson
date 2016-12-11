@@ -30,7 +30,7 @@ package object origin {
 
       for {
         note <- (transformed \ "note").extractOpt[Double]
-        waveFunction = (transformed \ "waveFunction").extractOrElse("sine": String)
+        waveFunction = (transformed \ "wave_function").extractOrElse("sine": String)
         wave <- WaveFunction getOpt waveFunction
       } yield new Tone(note, wave, getSpec(json))
     }

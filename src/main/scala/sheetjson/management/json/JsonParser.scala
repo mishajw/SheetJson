@@ -68,7 +68,8 @@ object JsonParser {
     * @return an option of a player from the JSON object
     */
   def parseAllJson(json: JObject): Try[Player] = {
-    Option(json \ "config") match {
+    println(json.camelizeKeys)
+    Option(json.camelizeKeys \ "config") match {
       case Some(configJson: JObject) =>
         Config.update(configJson.extract[Config])
       case _ =>
@@ -110,20 +111,20 @@ object JsonParser {
 
     id match {
       case "tone" => convert[Tone](json)
-      case "fading-noise" => convert[FadingNoise](json)
-      case "key-activated" => convert[KeyActivated](json)
+      case "fading_noise" => convert[FadingNoise](json)
+      case "key_activated" => convert[KeyActivated](json)
       case "looper" => convert[Looper](json)
       case "randomizer" => convert[Randomizer](json)
       case "smoother" => convert[Smoother](json)
       case "toggle" => convert[Toggle](json)
       case "combiner" => convert[Combiner](json)
       case "keyboard" => convert[Keyboard](json)
-      case "keyboard-scale" => convert[KeyboardScale](json)
+      case "keyboard_scale" => convert[KeyboardScale](json)
       case "riff" => convert[Riff](json)
       case "switcher" => convert[Switcher](json)
       case "rawfile" => convert[RawFile](json)
-      case "volume-function" => convert[VolumeFunction](json)
-      case "smooth-key-activated" => convert[SmoothKeyActivated](json)
+      case "volume_function" => convert[VolumeFunction](json)
+      case "smooth_key_activated" => convert[SmoothKeyActivated](json)
       case other => for {
         preset <- Config.getPreset(other)
         filledIn = fillInPreset(preset, json)

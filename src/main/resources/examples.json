@@ -1,8 +1,8 @@
 {
   "config": {
     "bpm": 120,
-    "sampleRate": 24000,
-    "beatsPerBar": 4
+    "sample_rate": 28000,
+    "beats_per_bar": 4
   },
   "players": {
     "type": "switcher",
@@ -37,8 +37,8 @@
         ]
       }],
       [54, {
-        "type": "keyboard-scale",
-        "scale": "blues-ext",
+        "type": "keyboard_scale",
+        "scale": "blues_ext",
         "key": "C"
       }],
       [55, {
@@ -48,18 +48,18 @@
       [56, {
         "type": "riff",
         "components": [
-          [{ "type": "tone", "note": "C", "waveFunction": "sine" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "cosine" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "zigzag" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "id" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "binary" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "fade-in" }, 0.5],
-          [{ "type": "tone", "note": "C", "waveFunction": "fade-out" }, 0.5]
+          [{ "type": "tone", "note": "C", "wave_function": "sine" }, 0.5],
+          [{ "type": "tone", "note": "C", "wave_function": "cosine" }, 0.5],
+          [{ "type": "tone", "note": "C", "wave_function": "zigzag" }, 0.5],
+          [{ "type": "tone", "note": "C", "wave_function": "id" }, 0.5],
+          [{ "type": "tone", "note": "C", "wave_function": "binary" }, 0.5],
+          [{ "type": "tone", "note": "C", "wave_function": "fade_in" }, 0.5],
+          [{ "type": "tone", "note": "C", "wave_function": "fade_out" }, 0.5]
         ]
       }],
       [57, {
-        "type": "volume-function",
-        "waveFunction": "sine",
+        "type": "volume_function",
+        "wave_function": "sine",
         "frequency": 1.0,
         "child": {
           "type": "tone",
@@ -67,10 +67,10 @@
         }
       }],
       [48, {
-        "type": "smooth-key-activated",
+        "type": "smooth_key_activated",
         "key": 32,
-        "fadeInTime": 0.1,
-        "fadeOutTime": 0.5,
+        "fade_in_time": 0.1,
+        "fade_out_Time": 0.5,
         "child": {
           "type": "tone",
           "note": "c"

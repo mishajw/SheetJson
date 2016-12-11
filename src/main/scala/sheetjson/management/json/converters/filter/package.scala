@@ -103,7 +103,7 @@ package object filter {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[VolumeFunction] = {
       for {
         frequency <- (json \ "frequency").extractOpt[Double]
-        waveFunction <- (json \ "waveFunction").extractOpt[String]
+        waveFunction <- (json \ "wave_function").extractOpt[String]
         wave <- WaveFunction getOpt waveFunction
       } yield new VolumeFunction(wave, Bars(frequency), child, getSpec(json))
     }
@@ -116,12 +116,12 @@ package object filter {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[SmoothKeyActivated] = {
       for {
         key <- (json \ "key").extractOpt[Int]
-        inFunctionName = (json \ "inFunction").extractOrElse("fade-in")
-        outFunctionName = (json \ "outFunction").extractOrElse("fade-out")
+        inFunctionName = (json \ "in_function").extractOrElse("fade_in")
+        outFunctionName = (json \ "out_function").extractOrElse("fade_out")
         inFunction <- WaveFunction getOpt inFunctionName
         outFunction <- WaveFunction getOpt outFunctionName
-        fadeInTime = (json \ "fadeInTime").extractOrElse(0.25)
-        fadeOutTime = (json \ "fadeOutTime").extractOrElse(0.25)
+        fadeInTime = (json \ "fade_in_time").extractOrElse(0.25)
+        fadeOutTime = (json \ "fade_out_time").extractOrElse(0.25)
       } yield new SmoothKeyActivated(key,
                                      inFunction,
                                      outFunction,
