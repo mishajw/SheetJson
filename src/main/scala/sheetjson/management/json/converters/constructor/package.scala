@@ -1,13 +1,14 @@
 package sheetjson.management.json.converters
 
-import org.json4s.JsonAST.{JInt, JString}
-import org.json4s.{JObject, JValue}
-import sheetjson.player.composite.{CompositePlayer, Keyboard}
+import org.json4s.JObject
+import org.json4s.JsonAST.JString
 import sheetjson.jsonFailure
 import sheetjson.management.KeyListener.KeyCode
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
-import sheetjson.util.Notes
+import sheetjson.player.composite.{CompositePlayer, Keyboard}
+import sheetjson.util.Notes.RelativeNote
+import sheetjson.util.{Notes, Scales}
 
 import scala.util.{Failure, Success, Try}
 
@@ -83,8 +84,26 @@ package object constructor {
 
     override def componentParams(json: JObject): Try[Seq[JObject]] = {
       // TODO: Use better declaration of JSON
-      for (notes <- extractTry[Seq[String]](json, "notes")) yield
-        notes.map(note => JObject(List("$note" -> JString(note))))
+
+      val notesOpt = (json \ "notes").extractOpt[Seq[String]]
+      val scaleOpt = (json \ "scale").extractOpt[String]
+      val keyOpt = (json \ "key").extractOpt[String]
+
+      val notesTry: Try[Seq[String]] = (notesOpt, scaleOpt, keyOpt) match {
+        case (Some(notes), None, None) =>
+          Success(notes)
+        case (Some(Seq()), Some(scale), Some(key)) => Notes.relativeNoteFor(key) flatMap (Scales.get(_, scale)) match {
+          case Some(notes: Seq[RelativeNote]) => Success(notes.map(_.str))
+          case None => jsonFailure(s"Scale $scale for key $key can't be found", json)
+        }
+        case _ => jsonFailure("Can't create keyboard without notes, or scale and key", json)
+      }
+
+      notesTry match {
+        case Success(notes) =>
+          Success(notes.map(n => JObject(List("$note" -> JString(n)))))
+        case Failure(e) => Failure(e)
+      }
     }
   }
 }
