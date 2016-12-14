@@ -1,4 +1,5 @@
 import org.json4s.JValue
+import org.json4s.jackson.JsonMethods
 
 import scala.util.Failure
 
@@ -14,6 +15,6 @@ package object sheetjson {
   def jsonFailure(str: String, json: JValue) = Failure(new JsonParsingException(str, json))
 
   class JsonParsingException(str: String) extends Throwable(str) {
-    def this(str: String, json: JValue) { this(s"$str: $json") }
+    def this(str: String, json: JValue) { this(s"$str:\n${JsonMethods.pretty(json)}") }
   }
 }

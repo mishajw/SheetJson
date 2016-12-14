@@ -4,7 +4,7 @@ import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.{Player, PlayerSpec}
 import org.json4s.JsonAST.JArray
-import org.json4s.{DefaultFormats, JObject}
+import org.json4s.{DefaultFormats, Formats, JObject}
 
 import scala.util.{Failure, Success, Try}
 
@@ -48,6 +48,16 @@ trait JsonConverter[T <: Player] {
     parseAttempts collect { case Failure(e) => e } match {
       case e :: _ => Failure(e)
       case _ => Success(parseAttempts collect { case Success(p) => p})
+    }
+  }
+
+  protected def extractTry[ExtractType]
+                          (json: JObject, name: String)
+                          (implicit formats: Formats, mf: scala.reflect.Manifest[ExtractType]): Try[ExtractType] = {
+
+    (json \ name).extractOpt[ExtractType] match {
+      case Some(et) => Success(et)
+      case None => jsonFailure(s"Couldn't extract $name from JSON", json)
     }
   }
 }

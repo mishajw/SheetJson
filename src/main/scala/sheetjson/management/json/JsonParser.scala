@@ -8,6 +8,7 @@ import org.json4s.jackson.JsonMethods
 import sheetjson.JsonParsingException
 import sheetjson.management.json.converters.JsonConverter
 import sheetjson.management.json.converters.composite._
+import sheetjson.management.json.converters.constructor._
 import sheetjson.management.json.converters.filter._
 import sheetjson.management.json.converters.origin._
 import sheetjson.player.Player

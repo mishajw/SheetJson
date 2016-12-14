@@ -78,19 +78,6 @@ package object composite {
   }
 
   /**
-    * Convert to `Keyboard`
-    */
-  implicit object KeyboardConverter extends CompositeConverter[Keyboard, (Player, KeyCode)] {
-    override protected def convertWrapped(json: JValue): Try[(Player, KeyCode)] = json match {
-      case JArray(List(child: JObject, JInt(keyCode))) =>
-        (JsonParser parsePlayerJson child) map ((_, keyCode.toInt))
-    }
-
-    override protected def applyWithComponents(cs: Seq[(Player, KeyCode)], json: JObject): Try[Keyboard] =
-      Success(new Keyboard(cs, getSpec(json)))
-  }
-
-  /**
     * Convert to `Switcher`
     */
   implicit object SwitcherConverter extends CompositeConverter[Switcher, (KeyCode, Player)] {
