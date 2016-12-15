@@ -3,7 +3,6 @@ package sheetjson.management.json.converters
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JString}
 import sheetjson.player.WaveFunction
-import sheetjson.player.composite.KeyboardScale
 import sheetjson.player.origin.{FadingNoise, RawFile, Tone}
 import sheetjson.util.Frequencies.FrequencyOf
 import sheetjson.util.Time.Bars
@@ -43,24 +42,6 @@ package object origin {
     override def applyOpt(json: JObject): Option[FadingNoise] = json \ "length" match {
       case JDouble(length) => Some(new FadingNoise(Bars(length), getSpec(json)))
       case _ => None
-    }
-  }
-
-  /**
-    * Convert to `Keyboard`
-    */
-  implicit object KeyboardScaleConverter extends JsonConverter[KeyboardScale] {
-    /**
-      * @param json the JSON object to convert
-      * @return the converted `Player` object
-      */
-    override def applyOpt(json: JObject): Option[KeyboardScale] = {
-      for {
-        JString(scale) <- Option(json \ "scale")
-        JString(key) <- Option(json \ "key")
-        note <- Notes relativeNoteFor key
-        scale <- Scales get(note, scale)
-      } yield new KeyboardScale(scale, getSpec(json))
     }
   }
 

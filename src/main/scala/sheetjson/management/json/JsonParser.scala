@@ -120,7 +120,6 @@ object JsonParser {
       case "toggle" => convert[Toggle](json)
       case "combiner" => convert[Combiner](json)
       case "keyboard" => convert[Keyboard](json)
-      case "keyboard_scale" => convert[KeyboardScale](json)
       case "riff" => convert[Riff](json)
       case "switcher" => convert[Switcher](json)
       case "rawfile" => convert[RawFile](json)
