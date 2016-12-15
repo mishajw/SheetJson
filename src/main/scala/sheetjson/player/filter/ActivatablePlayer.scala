@@ -21,3 +21,24 @@ trait ActivatablePlayer extends ListenerPlayer {
 
   def deactivate()
 }
+
+/**
+  *
+  * Plan for ActivatablePlayers
+  *  - ActivatableSpec
+  *    - Can have key, keys, or nothing
+  *    - Possibly future things like mouse and everything?
+  *  - Different types of ActivatablePlayer
+  *    - Normal
+  *      - activate(), deactivate()
+  *    - Single key
+  *      - As above, but has to have a key associated with it
+  *    - Indexed
+  *      - activate(i), deactivate(i), where i is the index of the key pressed
+  *    - Full (needs better name)
+  *      - activate(kc), deactivate(kc), where kc is the KeyCode of the key pressed
+  *  - ActivatableSpec can have nothing, with defaults:
+  *    - No key: use space
+  *    - No keys: use home row
+  *
+  */

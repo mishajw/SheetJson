@@ -114,14 +114,15 @@ package object filter {
     */
   implicit object SmoothKeyActivatedConverter extends FilterConverter[SmoothKeyActivated] {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[SmoothKeyActivated] = {
+      val inFunctionName = (json \ "in_function").extractOrElse("fade_in")
+      val outFunctionName = (json \ "out_function").extractOrElse("fade_out")
+      val fadeInTime = (json \ "fade_in_time").extractOrElse(0.25)
+      val fadeOutTime = (json \ "fade_out_time").extractOrElse(0.25)
+
       for {
         key <- (json \ "key").extractOpt[Int]
-        inFunctionName = (json \ "in_function").extractOrElse("fade_in")
-        outFunctionName = (json \ "out_function").extractOrElse("fade_out")
         inFunction <- WaveFunction getOpt inFunctionName
         outFunction <- WaveFunction getOpt outFunctionName
-        fadeInTime = (json \ "fade_in_time").extractOrElse(0.25)
-        fadeOutTime = (json \ "fade_out_time").extractOrElse(0.25)
       } yield new SmoothKeyActivated(key,
                                      inFunction,
                                      outFunction,

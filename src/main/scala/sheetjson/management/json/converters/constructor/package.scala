@@ -5,7 +5,7 @@ import org.json4s.JsonAST.JString
 import sheetjson.jsonFailure
 import sheetjson.management.KeyListener.KeyCode
 import sheetjson.management.json.JsonParser
-import sheetjson.player.Player
+import sheetjson.player.{ActivatablePlayer, Player}
 import sheetjson.player.composite.{CompositePlayer, Keyboard}
 import sheetjson.util.Notes.RelativeNote
 import sheetjson.util.{Notes, Scales}
@@ -78,7 +78,8 @@ package object constructor {
       for {
         keys <- extractTry[Seq[Int]](json, "keys")
         if keys.size == components.size
-        keyedComponents = components zip keys
+        activatableComponents = components collect { case p: ActivatablePlayer => p }
+        keyedComponents = (keys zip activatableComponents).toMap
       } yield new Keyboard(keyedComponents, getSpec(json))
     }
 

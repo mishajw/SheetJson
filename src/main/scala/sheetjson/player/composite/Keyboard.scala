@@ -2,24 +2,24 @@ package sheetjson.player.composite
 
 import sheetjson.management.KeyListener.KeyCode
 import sheetjson.player.filter.KeyActivated
-import sheetjson.player.{Playable, Player, PlayerSpec}
+import sheetjson.player._
 
-class Keyboard(playerKeys: Seq[(Player, KeyCode)],
-               _spec: PlayerSpec) extends CompositePlayer[Player](_spec) {
+class Keyboard(playerKeys: Map[KeyCode, ActivatablePlayer],
+               _spec: PlayerSpec) extends CompositePlayer[Player](_spec) with ListenerPlayer {
 
-  override protected val wrapped: Seq[Player] = {
-    playerKeys map { case (p, k) => new KeyActivated(k, p, PlayerSpec(visible = false)) }
-  }
+  override val keys: Seq[KeyCode] = playerKeys.toSeq map { case (k, _) => k }
+
+  override protected val wrapped: Seq[Player] =
+    playerKeys.toSeq collect { case (_, p) => p.asInstanceOf[Player] }
 
   override protected def extract(t: Player): Player = t
 
   override protected def _play: Playable = {
-    val (pr, npr) = components
-      .map(_.asInstanceOf[KeyActivated])
-      .partition(_.pressed)
-
-    npr.foreach(_.play)
-
-    pr.map(_.play) combine
+    wrapped.map(_.play).combine
   }
+
+  override def keyPressed(kc: KeyCode): Unit = playerKeys(kc).activate()
+
+  override def keyReleased(kc: KeyCode): Unit = playerKeys(kc).deactivate()
+
 }
