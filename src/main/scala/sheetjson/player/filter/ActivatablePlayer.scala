@@ -40,5 +40,9 @@ trait ActivatablePlayer extends ListenerPlayer {
   *  - ActivatableSpec can have nothing, with defaults:
   *    - No key: use space
   *    - No keys: use home row
+  *  - Recording
+  *    - Record activation types for each of ActivatablePlayer types
+  *      - E.G. Activate, ActivateWithKey, ActivateWithIndex, ActivateWithKeyCode
+  *    - Record time of press in Bars
   *
   */
