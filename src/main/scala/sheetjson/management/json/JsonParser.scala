@@ -5,7 +5,6 @@ import java.io.FileNotFoundException
 import com.typesafe.scalalogging.Logger
 import org.json4s._
 import org.json4s.jackson.JsonMethods
-import sheetjson.{JsonParsingException, jsonFailure}
 import sheetjson.management.json.converters.JsonConverter
 import sheetjson.management.json.converters.composite._
 import sheetjson.management.json.converters.constructor._
@@ -15,7 +14,8 @@ import sheetjson.player.Player
 import sheetjson.player.composite._
 import sheetjson.player.filter._
 import sheetjson.player.origin.{FadingNoise, RawFile, Tone}
-import sheetjson.util.Config
+import sheetjson.util.{Config, Preset}
+import sheetjson.{JsonParsingException, jsonFailure}
 
 import scala.io.Source
 import scala.util.{Failure, Success, Try}
@@ -69,14 +69,16 @@ object JsonParser {
     * @return an option of a player from the JSON object
     */
   def parseAllJson(json: JObject): Try[Player] = {
-    println(json.camelizeKeys)
-    Option(json.camelizeKeys \ "config") match {
-      case Some(configJson: JObject) =>
-        Config.update(configJson.extract[Config])
-      case _ =>
-    }
+    val configOpt = for {
+      config <- (json \ "config").extractOpt[JObject]
+      sampleRate <- (config \ "sample_rate").extractOpt[Int]
+      bpm <- (config \ "bpm").extractOpt[Int]
+      beatsPerBar <- (config \ "beats_per_bar").extractOpt[Int]
+      presets <- (config \ "presets").extractOpt[Seq[Preset]]
+    } yield Config(sampleRate, bpm, beatsPerBar, presets)
 
-    // TODO: Use `Try` here
+    configOpt.foreach(Config.update)
+
     json \ "players" match {
       case playerJson @ JObject(_) =>
         parsePlayerJson(playerJson)
