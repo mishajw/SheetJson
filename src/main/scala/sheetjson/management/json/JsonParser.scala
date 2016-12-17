@@ -5,7 +5,7 @@ import java.io.FileNotFoundException
 import com.typesafe.scalalogging.Logger
 import org.json4s._
 import org.json4s.jackson.JsonMethods
-import sheetjson.JsonParsingException
+import sheetjson.{JsonParsingException, jsonFailure}
 import sheetjson.management.json.converters.JsonConverter
 import sheetjson.management.json.converters.composite._
 import sheetjson.management.json.converters.constructor._
@@ -58,7 +58,7 @@ object JsonParser {
     JsonMethods.parseOpt(jsonStr) match {
       case Some(json: JObject) => parseAllJson(json)
       case _ =>
-        Failure(new JsonParsingException("Provided JSON is not valid", JString(""))) // TODO: dutty hack
+        jsonFailure(s"Provided JSON is not valid: $jsonStr")
     }
   }
 
