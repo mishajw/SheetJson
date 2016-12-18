@@ -1,24 +1,30 @@
 package sheetjson.player.composite
 
 import sheetjson.management.KeyListener.KeyCode
-import sheetjson.player.{ListenerPlayer, Playable, Player, PlayerSpec}
+import sheetjson.player.activatable.MultiKeyInteractivePlayer
+import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec
+import sheetjson.player.{Playable, Player, PlayerSpec}
 
-class Switcher(_wrapped: Seq[(KeyCode, Player)],
-               _spec: PlayerSpec) extends CompositePlayer[(KeyCode, Player)](_spec) with ListenerPlayer {
-  override protected val wrapped: Seq[(KeyCode, Player)] = _wrapped
+class Switcher(_wrapped: Seq[Player],
+               _spec: PlayerSpec,
+               override val interactiveSpec: MultiKeyInteractiveSpec)
+    extends CompositePlayer[Player](_spec) with MultiKeyInteractivePlayer {
 
-  private var current: Option[KeyCode] = None
+  override protected val wrapped: Seq[Player] = _wrapped
 
-  override protected def extract(t: (KeyCode, Player)): Player = t._2
+  override protected def extract(t: Player): Player = t
+
+  private var currentIndex: Option[Int] = None
 
   override protected def _play: Playable = {
     (for {
-      c <- current
-      player <- wrapped.toMap get c
+      c <- currentIndex
+      if wrapped.size > c
+      player = wrapped(c)
     } yield player.play).getOrElse(Playable.default)
   }
 
-  override val keys: Seq[KeyCode] = wrapped.map(_._1)
+  override def activate(i: KeyCode): Unit = {}
 
-  override def keyReleased(kc: KeyCode): Unit = current = Some(kc)
+  override def deactivate(i: KeyCode): Unit = currentIndex = Some(i)
 }

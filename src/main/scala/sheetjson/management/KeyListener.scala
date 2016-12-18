@@ -6,7 +6,8 @@ import java.util.concurrent.ConcurrentHashMap
 import com.typesafe.scalalogging.Logger
 import sheetjson.management.KeyListener._
 import sheetjson.management.gui.GUI
-import sheetjson.player.{ListenerPlayer, Player}
+import sheetjson.player.Player
+import sheetjson.player.activatable.InteractivePlayer
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -17,12 +18,12 @@ class KeyListener(_rootPlayer: Player) {
   /**
     * Map of key codes to what `Player`s are listening to that key
     */
-  private val listeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[ListenerPlayer]]()
+  private val listeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[InteractivePlayer[_]]]()
 
   {
     // Get all players and register them if they're a listener
     Player.flatten(_rootPlayer)
-      .collect { case p: ListenerPlayer =>
+      .collect { case p: InteractivePlayer[_] =>
         listen(p, p.keys)
       }
   }
@@ -43,7 +44,7 @@ class KeyListener(_rootPlayer: Player) {
     * @param lp the listener
     * @param kc the key to listen to
     */
-  private def listen(lp: ListenerPlayer, kc: KeyCode): Unit = {
+  private def listen(lp: InteractivePlayer[_], kc: KeyCode): Unit = {
     log.debug(s"Register $lp to listen for $kc")
 
     if (listeners contains kc)
@@ -58,7 +59,7 @@ class KeyListener(_rootPlayer: Player) {
     * @param lp the listener
     * @param kcs the keys
     */
-  private def listen(lp: ListenerPlayer, kcs: Traversable[KeyCode]): Unit =
+  private def listen(lp: InteractivePlayer[_], kcs: Traversable[KeyCode]): Unit =
     kcs foreach { listen(lp, _) }
 
   /**

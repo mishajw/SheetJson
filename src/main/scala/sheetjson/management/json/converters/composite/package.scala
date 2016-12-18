@@ -6,6 +6,8 @@ import sheetjson.jsonFailure
 import sheetjson.management.KeyListener.KeyCode
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
+import sheetjson.player.activatable.IncrementalInteractivePlayer.IncrementalInteractiveSpec
+import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec
 import sheetjson.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import sheetjson.player.composite._
 import sheetjson.util.Time.Bars
@@ -80,15 +82,14 @@ package object composite {
   /**
     * Convert to `Switcher`
     */
-  implicit object SwitcherConverter extends CompositeConverter[Switcher, (KeyCode, Player)] {
-    override protected def convertWrapped(json: JValue): Try[(KeyCode, Player)] = json match {
-      case JArray(List(JInt(keyCode), child: JValue)) =>
-        (JsonParser parsePlayerJson child) map ((keyCode.toInt, _))
-      case _ => jsonFailure("Couldn't parse to Switcher child", json)
-    }
+  implicit object SwitcherConverter extends CompositeConverter[Switcher, Player] {
+    override protected def convertWrapped(json: JValue): Try[Player] =
+      JsonParser parsePlayerJson json
 
-    override protected def applyWithComponents(cs: Seq[(KeyCode, Player)], json: JObject): Try[Switcher] = {
-      Success(new Switcher(cs, getSpec(json)))
+    override protected def applyWithComponentsOpt(cs: Seq[Player], json: JObject): Option[Switcher] = {
+      for {
+        interactiveSpec <- json.extractOpt[MultiKeyInteractiveSpec]
+      } yield new Switcher(cs, getSpec(json), interactiveSpec)
     }
   }
 
@@ -101,9 +102,8 @@ package object composite {
 
     override protected def applyWithComponentsOpt(cs: Seq[Player], json: JObject): Option[Scroller] = {
       for {
-        nextKey <- (json \ "next_key").extractOpt[Int]
-        previousKey <- (json \ "previous_key").extractOpt[Int]
-      } yield new Scroller(nextKey, previousKey, cs, getSpec(json))
+        incrementalSpec <- json.extractOpt[IncrementalInteractiveSpec]
+      } yield new Scroller(cs, getSpec(json), incrementalSpec)
     }
   }
 }

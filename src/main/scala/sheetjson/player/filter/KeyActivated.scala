@@ -2,20 +2,18 @@ package sheetjson.player.filter
 
 import java.util.concurrent.atomic.AtomicBoolean
 
-import com.typesafe.scalalogging.Logger
-import sheetjson.management.KeyListener.KeyCode
-import sheetjson.player.{ListenerPlayer, Playable, Player, PlayerSpec}
+import sheetjson.player.activatable.SingleKeyInteractivePlayer
+import sheetjson.player.activatable.SingleKeyInteractivePlayer.SingleKeyInteractiveSpec
+import sheetjson.player.{Playable, Player, PlayerSpec}
 
-class KeyActivated(_key: KeyCode,
-                   _child: Player,
-                   _spec: PlayerSpec)
-                   extends FilterPlayer(_child, _spec) with ListenerPlayer {
+class KeyActivated(_child: Player,
+                   _spec: PlayerSpec,
+                   override val interactiveSpec: SingleKeyInteractiveSpec)
+    extends FilterPlayer(_child, _spec) with SingleKeyInteractivePlayer {
 
   private val _pressed = new AtomicBoolean(false)
 
   def pressed = _pressed.get()
-
-  override val keys: Seq[KeyCode] = Seq(_key)
 
   override protected def _play: Playable = {
     val played = child.play
@@ -24,11 +22,11 @@ class KeyActivated(_key: KeyCode,
     else Playable.default
   }
 
-  override def keyPressed(kc: KeyCode): Unit = {
+  override def activate(): Unit = {
     _pressed set true
   }
 
-  override def keyReleased(kc: KeyCode): Unit = {
+  override def deactivate(): Unit = {
     _pressed set false
   }
 }

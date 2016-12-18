@@ -5,7 +5,9 @@ import org.json4s.JsonAST.JString
 import sheetjson.jsonFailure
 import sheetjson.management.KeyListener.KeyCode
 import sheetjson.management.json.JsonParser
-import sheetjson.player.{ActivatablePlayer, Player}
+import sheetjson.player.Player
+import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec
+import sheetjson.player.activatable.SingleKeyInteractivePlayer
 import sheetjson.player.composite.{CompositePlayer, Keyboard}
 import sheetjson.util.Notes.RelativeNote
 import sheetjson.util.{Notes, Scales}
@@ -56,7 +58,13 @@ package object constructor {
       }
     }
 
-    def applyWithComponents(components: Seq[Player], json: JObject): Try[T]
+    def applyWithComponents(components: Seq[Player], json: JObject): Try[T] =
+      applyWithComponentsOpt(components, json) match {
+        case Some(t) => Success(t)
+        case None => jsonFailure(s"Couldn't parse JSON for Constructor player $getClass", json)
+      }
+
+    def applyWithComponentsOpt(components: Seq[Player], json: JObject): Option[T] = None
 
     def componentParams(json: JObject): Try[Seq[JObject]]
 
@@ -74,13 +82,13 @@ package object constructor {
     * Convert to `Keyboard`
     */
   implicit object KeyboardConverter extends ConstructorConverter[Keyboard, (Player, KeyCode)] {
-    override def applyWithComponents(components: Seq[Player], json: JObject): Try[Keyboard] = {
+    override def applyWithComponentsOpt(components: Seq[Player], json: JObject): Option[Keyboard] = {
+      val interactiveSpec = MultiKeyInteractiveSpec(49 to 54) // json.extract[MultiKeyInteractiveSpec]
       for {
-        keys <- extractTry[Seq[Int]](json, "keys")
-        if keys.size == components.size
-        activatableComponents = components collect { case p: ActivatablePlayer => p }
-        keyedComponents = (keys zip activatableComponents).toMap
-      } yield new Keyboard(keyedComponents, getSpec(json))
+        x <- Some(1)
+        if interactiveSpec.keys.size == components.size
+        activatableComponents = components collect { case p: SingleKeyInteractivePlayer => p }
+      } yield new Keyboard(activatableComponents, getSpec(json), interactiveSpec)
     }
 
     override def componentParams(json: JObject): Try[Seq[JObject]] = {

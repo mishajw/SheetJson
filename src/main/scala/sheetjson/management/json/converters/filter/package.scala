@@ -8,6 +8,7 @@ import sheetjson.util.Time.Bars
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JInt}
 import sheetjson.JsonParsingException
+import sheetjson.player.activatable.SingleKeyInteractivePlayer.SingleKeyInteractiveSpec
 
 import scala.util.{Failure, Success, Try}
 
@@ -66,11 +67,10 @@ package object filter {
     * Convert to `KeyActivated`
     */
   implicit object KeyActivatedConverter extends FilterConverter[KeyActivated] {
-    override protected def applyWithChild(child: Player, json: JObject): Try[KeyActivated] = {
-      json \ "key" match {
-        case JInt(key) => Success(new KeyActivated(key.toInt, child, getSpec(json)))
-        case _ => Failure(new JsonParsingException("Couldn't parse key activated", json))
-      }
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[KeyActivated] = {
+      for {
+        interactiveSpec <- json.extractOpt[SingleKeyInteractiveSpec]
+      } yield new KeyActivated(child, getSpec(json), interactiveSpec)
     }
   }
 
@@ -91,8 +91,8 @@ package object filter {
   implicit object ToggleConverter extends FilterConverter[Toggle] {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[Toggle] = {
       for {
-        key <- (json \ "key").extractOpt[Int]
-      } yield new Toggle(key.toInt, child, getSpec(json))
+        interactiveSpec <- json.extractOpt[SingleKeyInteractiveSpec]
+      } yield new Toggle(child, getSpec(json), interactiveSpec)
     }
   }
 
@@ -123,13 +123,16 @@ package object filter {
         key <- (json \ "key").extractOpt[Int]
         inFunction <- WaveFunction getOpt inFunctionName
         outFunction <- WaveFunction getOpt outFunctionName
-      } yield new SmoothKeyActivated(key,
-                                     inFunction,
-                                     outFunction,
-                                     Bars(fadeInTime),
-                                     Bars(fadeOutTime),
-                                     child,
-                                     getSpec(json))
+        interactiveSpec <- json.extractOpt[SingleKeyInteractiveSpec]
+      } yield {
+        new SmoothKeyActivated(inFunction,
+          outFunction,
+          Bars(fadeInTime),
+          Bars(fadeOutTime),
+          child,
+          getSpec(json),
+          interactiveSpec)
+      }
     }
   }
 

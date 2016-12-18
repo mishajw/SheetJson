@@ -1,18 +1,17 @@
 package sheetjson.player.composite
 
-import sheetjson.management.KeyListener.KeyCode
-import sheetjson.player.{ListenerPlayer, Playable, Player, PlayerSpec}
+import sheetjson.player.activatable.IncrementalInteractivePlayer
+import sheetjson.player.activatable.IncrementalInteractivePlayer.IncrementalInteractiveSpec
+import sheetjson.player.{Playable, Player, PlayerSpec}
 
-class Scroller(nextKey: Int,
-               previousKey: Int,
-               components: Seq[Player],
-               _spec: PlayerSpec) extends CompositePlayer[Player](_spec) with ListenerPlayer {
+class Scroller(components: Seq[Player],
+               _spec: PlayerSpec,
+               override val interactiveSpec: IncrementalInteractiveSpec)
+    extends CompositePlayer[Player](_spec) with IncrementalInteractivePlayer {
 
   override protected val wrapped: Seq[Player] = components
 
   override protected def extract(t: Player): Player = t
-
-  override val keys: Seq[KeyCode] = Seq(nextKey, previousKey)
 
   private var componentIndex = 0
 
@@ -20,10 +19,17 @@ class Scroller(nextKey: Int,
     components(componentIndex).play
   }
 
-  override def keyPressed(kc: KeyCode): Unit = {
-    if (kc == nextKey) componentIndex += 1
-    if (kc == previousKey) componentIndex -= 1
+  override def next(): Unit = {
+    componentIndex += 1
+    maskComponentIndex()
+  }
 
+  override def previous(): Unit = {
+    componentIndex -= 1
+    maskComponentIndex()
+  }
+
+  private def maskComponentIndex(): Unit = {
     if (components.length <= componentIndex)
       componentIndex = 0
     else if (componentIndex < 0)
