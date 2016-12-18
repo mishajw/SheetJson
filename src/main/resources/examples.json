@@ -39,11 +39,6 @@
         ]
       },
       {
-        "type": "keyboard_scale",
-        "scale": "blues_ext",
-        "key": "c"
-      },
-      {
         "type": "rawfile",
         "path": "/home/misha/Downloads/cartoon175.wav"
       },
