@@ -19,7 +19,7 @@ package object constructor {
   type ConstructParams = JObject
   type ConstructFunction[ChildType] = (ConstructParams => ChildType)
 
-  trait ConstructorConverter[T <: CompositePlayer[_], V] extends JsonConverter[T] {
+  trait ConstructorConverter[T <: CompositePlayer[_]] extends JsonConverter[T] {
 
     // TODO: Must be a better way to do this...
     def applyParams(presetName: String, params: Seq[JObject]): Try[Seq[Player]] = {
@@ -81,7 +81,7 @@ package object constructor {
   /**
     * Convert to `Keyboard`
     */
-  implicit object KeyboardConverter extends ConstructorConverter[Keyboard, (Player, KeyCode)] {
+  implicit object KeyboardConverter extends ConstructorConverter[Keyboard] {
     override def applyWithComponentsOpt(components: Seq[Player], json: JObject): Option[Keyboard] = {
       val interactiveSpec = MultiKeyInteractiveSpec(49 to 54) // json.extract[MultiKeyInteractiveSpec]
       for {
