@@ -10,19 +10,23 @@ trait SingleKeyInteractivePlayer extends InteractivePlayer[SingleKeyInteractiveS
 
   def isActive = _isActive
 
-  override def keyPressed(kc: KeyCode): Unit = {
+  override def keyPressed(kc: KeyCode): Unit = activate()
+
+  override def keyReleased(kc: KeyCode): Unit = deactivate()
+
+  final def activate() = {
     _isActive = true
-    activate()
+    _activate()
   }
 
-  override def keyReleased(kc: KeyCode): Unit = {
+  final def deactivate() = {
     _isActive = false
-    deactivate()
+    _deactivate()
   }
 
-  def activate()
+  protected def _activate()
 
-  def deactivate()
+  protected def _deactivate()
 }
 
 object SingleKeyInteractivePlayer {

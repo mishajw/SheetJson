@@ -55,12 +55,12 @@ class SmoothKeyActivated(val inFunction: WaveFunction,
 
   }
 
-  override def activate(): Unit = {
+  override def _activate(): Unit = {
     if (lastPressed.isEmpty)
       lastPressed = Some(absoluteStep)
   }
 
-  override def deactivate(): Unit = {
+  override def _deactivate(): Unit = {
     lastReleased = Some(absoluteStep)
   }
 

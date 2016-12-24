@@ -22,11 +22,11 @@ class KeyActivated(_child: Player,
     else Playable.default
   }
 
-  override def activate(): Unit = {
+  override def _activate(): Unit = {
     _pressed set true
   }
 
-  override def deactivate(): Unit = {
+  override def _deactivate(): Unit = {
     _pressed set false
   }
 }

@@ -22,7 +22,7 @@ class Toggle(_child: Player,
       Playable.default
   }
 
-  override def activate(): Unit = {}
+  override def _activate(): Unit = {}
 
-  override def deactivate(): Unit = pressed.set(!pressed.get())
+  override def _deactivate(): Unit = pressed.set(!pressed.get())
 }
