@@ -8,12 +8,12 @@ section.
 
 The layout of a composition is:
 
-```json
+```javascript
 {
     "config": {
-        "bpm": ... # int
-        "sample_rate": ..., # int
-        "beats_per_bar": ..., # int
+        "bpm": ... // int
+        "sample_rate": ..., // int
+        "beats_per_bar": ..., // int
         "presets": [...]
     },
     "players" {...}
@@ -27,18 +27,18 @@ The origin of a sound wave.
 #### Tone
 Given a wave function and a note, creates a sound wave.
 
-```json
+```javascript
 {
     "type": "tone",
     "note": "...",
-    "wave_function": "..." # defaults to "sine"
+    "wave_function": "..." // defaults to "sine"
 }
 ```
 
 #### Raw File
 Plays a sound wave from an audio file.
 
-```json
+```javascript
 {
     "type": "raw_file",
     "path": "..."
@@ -51,7 +51,7 @@ way
 #### Key Activated
 Plays the child `Player` when a key is pressed.
 
-```json
+```javascript
 {
     "type": "key_activated",
     "key": ..., # key code
@@ -66,14 +66,14 @@ out.
 Takes fade in/out function, which says how the child is faded in/out.
 Also takes fade in/out time, which is taken in bars.
 
-```json
+```javascript
 {
     "type": "smooth_key_activated",
-    "key": ..., # key code
-    "in_function": "...", # defaults to "fade_in"
-    "out_function": "...", # defaults to "fade_out"
-    "fade_in_time": ..., # double, defaults to 0.25
-    "fade_out_time": ..., # double, defaults to 0.25
+    "key": ..., // key code
+    "in_function": "...", // defaults to "fade_in"
+    "out_function": "...", // defaults to "fade_out"
+    "fade_in_time": ..., // double, defaults to 0.25
+    "fade_out_time": ..., // double, defaults to 0.25
     "child": {...}
 }
 ```
