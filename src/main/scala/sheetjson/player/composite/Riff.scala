@@ -38,14 +38,32 @@ class Riff(_notes: Seq[PlayerDescription],
   override protected def _play: Playable = {
     val progress = Bars(step) % riffDuration
 
+    /**
+      * get activatables / nonactivatables
+      */
+
     val (activated, deactivated) = wrapped
-      .collect { case p: SingleKeyInteractivePlayer => p }
       .partition(n => n.start <= progress && progress <= n.end)
 
-    activated.filter(!_.isActive).foreach(_.activate())
-    deactivated.filter(_.isActive).foreach(_.deactivate())
+    val activatedPlays = activated.map(_.player).map {
+      case p: SingleKeyInteractivePlayer =>
+        if (!p.isActive) p.activate()
+        p
+      case p =>
+        p
+    }
 
-    wrapped.map(_.player).map(_.play) combine
+    val deactivatedPlays = deactivated.map(_.player).flatMap {
+      case p: SingleKeyInteractivePlayer =>
+        if (p.isActive) p.deactivate()
+        Some(p)
+      case p =>
+        None
+    }
+
+    (activatedPlays ++ deactivatedPlays)
+      .map(_.play)
+      .combine
   }
 
   override protected def extract(p: PlayerSpan): Player = p.player
