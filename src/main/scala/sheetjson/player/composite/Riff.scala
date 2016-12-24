@@ -1,5 +1,7 @@
 package sheetjson.player.composite
 
+import sheetjson.player.activatable.SingleKeyInteractivePlayer
+import sheetjson.player.activatable.SingleKeyInteractivePlayer.SingleKeyInteractiveSpec
 import sheetjson.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import sheetjson.player.{Playable, Player, PlayerSpec}
 import sheetjson.util.Time.Bars
@@ -9,8 +11,8 @@ import sheetjson.util.Time.Bars
  *
   * @param _notes the notes and their spanning times
   */
-class Riff( _notes: Seq[PlayerDescription],
-            _spec: PlayerSpec) extends CompositePlayer[PlayerSpan](_spec) {
+class Riff(_notes: Seq[PlayerDescription],
+           _spec: PlayerSpec) extends CompositePlayer[PlayerSpan](_spec) {
 
   /**
     * Cast all notes to `PlayerSpan`
@@ -36,11 +38,14 @@ class Riff( _notes: Seq[PlayerDescription],
   override protected def _play: Playable = {
     val progress = Bars(step) % riffDuration
 
-    val playingNotes = wrapped
-      .filter(n => n.start <= progress && progress <= n.end)
-      .map(_.player)
+    val (activated, deactivated) = wrapped
+      .collect { case p: SingleKeyInteractivePlayer => p }
+      .partition(n => n.start <= progress && progress <= n.end)
 
-    playingNotes.map(_.play) combine
+    activated.filter(!_.isActive).foreach(_.activate())
+    deactivated.filter(_.isActive).foreach(_.deactivate())
+
+    wrapped.map(_.player).map(_.play) combine
   }
 
   override protected def extract(p: PlayerSpan): Player = p.player
