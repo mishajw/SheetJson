@@ -30,6 +30,12 @@ trait SingleKeyInteractivePlayer extends InteractivePlayer[SingleKeyInteractiveS
 }
 
 object SingleKeyInteractivePlayer {
-  case class SingleKeyInteractiveSpec(key: KeyCode)
-    extends InteractiveSpec { override def keys = Seq(key) }
+  case class SingleKeyInteractiveSpec(keyOpt: Option[Int])
+      extends InteractiveSpec {
+
+    override def keys = keyOpt match {
+      case Some(key) => Seq(key)
+      case None => Seq()
+    }
+  }
 }

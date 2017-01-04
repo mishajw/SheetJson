@@ -120,7 +120,6 @@ package object filter {
       val fadeOutTime = (json \ "fade_out_time").extractOrElse(0.25)
 
       for {
-        key <- (json \ "key").extractOpt[Int]
         inFunction <- WaveFunction getOpt inFunctionName
         outFunction <- WaveFunction getOpt outFunctionName
         interactiveSpec <- json.extractOpt[SingleKeyInteractiveSpec]
