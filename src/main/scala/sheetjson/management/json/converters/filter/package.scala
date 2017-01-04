@@ -35,7 +35,7 @@ package object filter {
 
     protected def applyWithChild(child: Player, json: JObject): Try[T] = applyWithChildOpt(child, json) match {
       case Some(t) => Success(t)
-      case None => jsonFailure(s"Couldn't parse JSON for Filter player ${getClass}", json)
+      case None => jsonFailure(s"Couldn't parse JSON for Filter player $getClass", json)
     }
 
     protected def applyWithChildOpt(child: Player, json: JObject): Option[T] = None
