@@ -50,8 +50,7 @@
           [{ "type": "tone", "note": "c", "wave_function": "zigzag" }, 0.5],
           [{ "type": "tone", "note": "c", "wave_function": "id" }, 0.5],
           [{ "type": "tone", "note": "c", "wave_function": "binary" }, 0.5],
-          [{ "type": "tone", "note": "c", "wave_function": "fade_in" }, 0.5],
-          [{ "type": "tone", "note": "c", "wave_function": "fade_out" }, 0.5]
+          [{ "type": "tone", "note": "c", "wave_function": "fade" }, 0.5]
         ]
       },
       {

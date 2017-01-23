@@ -7,8 +7,7 @@ import sheetjson.util.Time.{Absolute, Bars}
 
 import scala.collection.mutable.ArrayBuffer
 
-class SmoothKeyActivated(val inFunction: WaveFunction,
-                         val outFunction: WaveFunction,
+class SmoothKeyActivated(val fadeFunction: WaveFunction,
                          val fadeInTime: Bars,
                          val fadeOutTime: Bars,
                          _child: Player,
@@ -35,24 +34,30 @@ class SmoothKeyActivated(val inFunction: WaveFunction,
 
     val played = childPlays(sincePressedAbsolute.toInt)
 
-    lastReleased match {
-      case None =>
-        if (sincePressed < fadeInTime) {
-          played * inFunction((sincePressed / fadeInTime).toDouble)
-        } else {
-          played
-        }
-      case Some(releasedAbsolute) =>
-        val sinceRelease = Bars(absoluteStep - releasedAbsolute)
-        if (sinceRelease < fadeOutTime) {
-          played * outFunction((sinceRelease / fadeOutTime).toDouble)
-        } else {
-          lastPressed = None
-          lastReleased = None
-          Playable.default
-        }
+    def scale(value: Option[Absolute], max: Bars): Option[Double] = {
+      value
+        .map(absoluteStep - _)
+        .map(Bars.apply)
+        .map(_ / fadeInTime)
+        .map(_.toDouble)
     }
 
+    val fadeInScaledOpt = scale(lastPressed, fadeInTime)
+    val fadeOutScaledOpt = scale(lastReleased, fadeOutTime)
+
+    val totalProgress =
+      fadeInScaledOpt.map(Math.min(1, _)).getOrElse(0.0) -
+      fadeOutScaledOpt.getOrElse(0.0)
+
+    println(s"$fadeInScaledOpt, $fadeOutScaledOpt -> $totalProgress")
+
+    if (totalProgress >= 0) {
+      played * fadeFunction(totalProgress)
+    } else {
+      lastPressed = None
+      lastReleased = None
+      Playable.default
+    }
   }
 
   override def _activate(): Unit = {
