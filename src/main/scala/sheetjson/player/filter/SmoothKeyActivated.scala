@@ -26,37 +26,48 @@ class SmoothKeyActivated(val fadeFunction: WaveFunction,
   }
 
   def getChildPlayed(pressedAbsolute: Absolute): Playable = {
-    val sincePressed = Bars(absoluteStep - pressedAbsolute)
-    val sincePressedAbsolute = Absolute(sincePressed)
+//    val sincePressed = Bars(absoluteStep - pressedAbsolute)
+//    val sincePressedAbsolute = Absolute(sincePressed)
 
-    while (sincePressedAbsolute.toInt >= childPlays.length)
-      childPlays += child.play
+//    while (sincePressedAbsolute.toInt >= childPlays.length)
+//      childPlays += child.play
 
-    val played = childPlays(sincePressedAbsolute.toInt)
+//    val played = childPlays(sincePressedAbsolute.toInt)
 
-    def scale(value: Option[Absolute], max: Bars): Option[Double] = {
-      value
-        .map(absoluteStep - _)
-        .map(Bars.apply)
-        .map(_ / fadeInTime)
-        .map(_.toDouble)
-    }
+    val fadeInScaledOpt = lastPressed
+      .map(lastReleased.getOrElse(absoluteStep) - _)
+      .map(Bars.apply)
+      .map(_ / fadeInTime)
+      .map(_.toDouble)
 
-    val fadeInScaledOpt = scale(lastPressed, fadeInTime)
-    val fadeOutScaledOpt = scale(lastReleased, fadeOutTime)
+    val fadeOutScaledOpt = lastReleased
+      .map(absoluteStep - _)
+      .map(Bars.apply)
+      .map(_ / fadeOutTime)
+      .map(_.toDouble)
 
     val totalProgress =
       fadeInScaledOpt.map(Math.min(1, _)).getOrElse(0.0) -
       fadeOutScaledOpt.getOrElse(0.0)
 
-    println(s"$fadeInScaledOpt, $fadeOutScaledOpt -> $totalProgress")
+    val playedOpt = lastPressed
+      .map(absoluteStep - _)
+      .map(_.toInt)
+      .map(sincePressed => {
+        while (sincePressed >= childPlays.length)
+          childPlays += child.play
 
-    if (totalProgress >= 0) {
-      played * fadeFunction(totalProgress)
-    } else {
-      lastPressed = None
-      lastReleased = None
-      Playable.default
+        childPlays(sincePressed)
+      })
+      .map(_ * fadeFunction(totalProgress))
+
+    playedOpt match {
+      case Some(played) if totalProgress >= 0 =>
+        played
+      case _ =>
+        lastPressed = None
+        lastReleased = None
+        Playable.default
     }
   }
 
