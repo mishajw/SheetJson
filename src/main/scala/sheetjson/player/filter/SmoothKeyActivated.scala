@@ -17,67 +17,37 @@ class SmoothKeyActivated(val fadeFunction: WaveFunction,
 
   val childPlays: ArrayBuffer[Playable] = ArrayBuffer()
 
-  var lastPressed: Option[Absolute] = None
-  var lastReleased: Option[Absolute] = None
+  var activationAmount: Double = 0
 
-  override protected def _play: Playable = lastPressed match {
-    case Some(absolute) => getChildPlayed(absolute)
-    case None => Playable.default
-  }
+  var lastActiveOpt: Option[Absolute] = None
 
-  def getChildPlayed(pressedAbsolute: Absolute): Playable = {
-//    val sincePressed = Bars(absoluteStep - pressedAbsolute)
-//    val sincePressedAbsolute = Absolute(sincePressed)
+  override protected def _play: Playable = {
+    if (isActive) {
+      activationAmount += 1 / Absolute(fadeInTime).toDouble
+    } else {
+      activationAmount -= 1 / Absolute(fadeOutTime).toDouble
+    }
 
-//    while (sincePressedAbsolute.toInt >= childPlays.length)
-//      childPlays += child.play
+    activationAmount = Math.max(0, Math.min(1, activationAmount))
 
-//    val played = childPlays(sincePressedAbsolute.toInt)
+    lastActiveOpt match {
+      case Some(lastActive) if activationAmount > 0 =>
+        val indexSinceStart = (absoluteStep - lastActive).toInt
 
-    val fadeInScaledOpt = lastPressed
-      .map(lastReleased.getOrElse(absoluteStep) - _)
-      .map(Bars.apply)
-      .map(_ / fadeInTime)
-      .map(_.toDouble)
-
-    val fadeOutScaledOpt = lastReleased
-      .map(absoluteStep - _)
-      .map(Bars.apply)
-      .map(_ / fadeOutTime)
-      .map(_.toDouble)
-
-    val totalProgress =
-      fadeInScaledOpt.map(Math.min(1, _)).getOrElse(0.0) -
-      fadeOutScaledOpt.getOrElse(0.0)
-
-    val playedOpt = lastPressed
-      .map(absoluteStep - _)
-      .map(_.toInt)
-      .map(sincePressed => {
-        while (sincePressed >= childPlays.length)
+        while (indexSinceStart >= childPlays.length)
           childPlays += child.play
 
-        childPlays(sincePressed)
-      })
-      .map(_ * fadeFunction(totalProgress))
-
-    playedOpt match {
-      case Some(played) if totalProgress >= 0 =>
-        played
-      case _ =>
-        lastPressed = None
-        lastReleased = None
+        childPlays(indexSinceStart) * fadeFunction(activationAmount)
+      case Some(_) =>
+        lastActiveOpt = None
         Playable.default
+      case None =>
+        lastActiveOpt = Some(absoluteStep)
+        _play
     }
   }
 
-  override def _activate(): Unit = {
-    if (lastPressed.isEmpty)
-      lastPressed = Some(absoluteStep)
-  }
+  override protected def _activate(): Unit = {}
 
-  override def _deactivate(): Unit = {
-    lastReleased = Some(absoluteStep)
-  }
-
+  override protected def _deactivate(): Unit = {}
 }
