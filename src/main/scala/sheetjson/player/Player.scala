@@ -61,6 +61,14 @@ abstract class Player(val spec: PlayerSpec) {
   }
 
   def childrenAlive: Boolean = false
+
+  override def toString: String = {
+    (spec.name, spec.`type`) match {
+      case (Some(n), _) => n
+      case (None, Some(t)) => t
+      case _ => super.toString
+    }
+  }
 }
 
 object Player {
