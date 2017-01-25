@@ -4,10 +4,11 @@ import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.{Player, WaveFunction}
 import sheetjson.player.filter._
-import sheetjson.util.Time.Bars
+import sheetjson.util.Time.{Bars, Seconds}
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JInt}
 import sheetjson.JsonParsingException
+import sheetjson.player.activatable.IncrementalInteractivePlayer.IncrementalInteractiveSpec
 import sheetjson.player.activatable.SingleKeyInteractivePlayer.SingleKeyInteractiveSpec
 
 import scala.util.{Failure, Success, Try}
@@ -140,6 +141,16 @@ package object filter {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[Repeater] = for {
       length <- (json \ "length").extractOpt[Double]
     } yield new Repeater(Bars(length), child, getSpec(json))
+  }
+
+  /**
+    * Convert to `Explorer`
+    */
+  implicit object ExplorerConverter extends FilterConverter[Explorer] {
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[Explorer] = for {
+      increment <- (json \ "increment").extractOpt[Double]
+      interactiveSpec <- json.extractOpt[IncrementalInteractiveSpec]
+    } yield new Explorer(Seconds(increment), child, getSpec(json), interactiveSpec)
   }
 }
 
