@@ -38,8 +38,11 @@ object Model extends Observable {
   }
 
   def allReadings: Traversable[(Player, Traversable[Playable])] = {
-    readings map { case (p, (a, i)) => (p, {
-      a.drop(i) ++ a.take(i)
-    }) }
+    readings
+      .toSeq
+      .sortBy { case (p, (a, i)) => p.identifier }
+      .map { case (p, (a, i)) => (p, {
+        a.drop(i) ++ a.take(i)
+      }) }
   }
 }
