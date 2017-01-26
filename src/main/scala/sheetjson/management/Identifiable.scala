@@ -1,5 +1,9 @@
 package sheetjson.management
 
+import sheetjson.player.composite.CompositePlayer
+import sheetjson.player.filter.FilterPlayer
+import sheetjson.player.listener.ListenerPlayer
+
 trait Identifiable {
   var parentOpt: Option[Identifiable] = None
 
@@ -9,6 +13,31 @@ trait Identifiable {
   }
 
   def identifier = (path :+ toString).mkString("/")
+}
 
-  def propagateParents(): Unit
+object Identifiable {
+  def propagateParents(identifiable: Identifiable): Unit = {
+    val children: Seq[Identifiable] =
+    {
+      {
+        identifiable match {
+          case filter: FilterPlayer =>
+            Seq(filter.child)
+          case composite: CompositePlayer[_] =>
+            composite.components
+          case _ => Seq()
+        }
+      } ++
+      {
+        identifiable match {
+          case listener: ListenerPlayer =>
+            listener.listeners
+          case _ => Seq()
+        }
+      }
+    }.filter(_ != identifiable)
+
+    children foreach (_.parentOpt = Some(identifiable))
+    children foreach propagateParents
+  }
 }

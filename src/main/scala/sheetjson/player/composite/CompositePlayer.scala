@@ -25,9 +25,4 @@ abstract class CompositePlayer[T](_spec: PlayerSpec) extends Player(_spec) {
   def components: Seq[Player] = wrapped map extract
 
   override def childrenAlive: Boolean = components.forall(_.alive)
-
-  override def propagateParents(): Unit = {
-    components.foreach(_.parentOpt = Some(this))
-    components.foreach(_.propagateParents())
-  }
 }

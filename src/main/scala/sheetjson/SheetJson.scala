@@ -1,7 +1,7 @@
 package sheetjson
 
 import com.typesafe.scalalogging.Logger
-import sheetjson.management.Composer
+import sheetjson.management.{Composer, Identifiable}
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 
@@ -25,7 +25,7 @@ object SheetJson {
     playerOpt match {
       case Success(player) =>
         log.debug(s"Create players: ${Player.flatten(player)}")
-        player.propagateParents()
+        Identifiable.propagateParents(player)
         Composer play player
       case Failure(e) =>
         log.error("Got error from parsing JSON", e)
