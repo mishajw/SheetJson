@@ -20,5 +20,5 @@ class Tone( val frequency: Frequency,
     Playable(waveFunction.signed(progress.toDouble))
   }
 
-  override def toString: String = s"Tone($frequency)"
+  override def toString: String = s"tone($frequency)"
 }
