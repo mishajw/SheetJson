@@ -69,6 +69,17 @@ abstract class Player(val spec: PlayerSpec) {
       case _ => super.toString
     }
   }
+
+  var parentOpt: Option[Player] = None
+
+  def path: Seq[String] = parentOpt match {
+    case Some(parent) => parent.path :+ parent.toString
+    case None => Seq()
+  }
+
+  def identifier = (path :+ toString).mkString("/")
+
+  def propagateParents(): Unit
 }
 
 object Player {

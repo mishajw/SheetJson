@@ -25,6 +25,7 @@ object SheetJson {
     playerOpt match {
       case Success(player) =>
         log.debug(s"Create players: ${Player.flatten(player)}")
+        player.propagateParents()
         Composer play player
       case Failure(e) =>
         log.error("Got error from parsing JSON", e)

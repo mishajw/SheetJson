@@ -10,7 +10,7 @@ import sheetjson.util.Config
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Breaks._
 
-class RawFile(path: String, _spec: PlayerSpec) extends Player(_spec) {
+class RawFile(path: String, _spec: PlayerSpec) extends OriginPlayer(_spec) {
 
   /**
     * Playables taken from the input file
