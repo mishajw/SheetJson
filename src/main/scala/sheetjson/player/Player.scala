@@ -1,5 +1,6 @@
 package sheetjson.player
 
+import sheetjson.management.Identifiable
 import sheetjson.management.gui.Model
 import sheetjson.player.composite.CompositePlayer
 import sheetjson.player.filter.FilterPlayer
@@ -8,7 +9,7 @@ import sheetjson.util.Time.{Absolute, Bars, Seconds}
 /**
   * Represents something that "plays" music
   */
-abstract class Player(val spec: PlayerSpec) {
+abstract class Player(val spec: PlayerSpec) extends Identifiable {
 
   /**
     * How many times play has been called on this `Player`
@@ -69,17 +70,6 @@ abstract class Player(val spec: PlayerSpec) {
       case _ => super.toString
     }
   }
-
-  var parentOpt: Option[Player] = None
-
-  def path: Seq[String] = parentOpt match {
-    case Some(parent) => parent.path :+ parent.toString
-    case None => Seq()
-  }
-
-  def identifier = (path :+ toString).mkString("/")
-
-  def propagateParents(): Unit
 }
 
 object Player {
