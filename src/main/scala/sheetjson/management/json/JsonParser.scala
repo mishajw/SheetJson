@@ -9,10 +9,12 @@ import sheetjson.management.json.converters.JsonConverter
 import sheetjson.management.json.converters.composite._
 import sheetjson.management.json.converters.constructor._
 import sheetjson.management.json.converters.filter._
+import sheetjson.management.json.converters.listener._
 import sheetjson.management.json.converters.origin._
 import sheetjson.player.Player
 import sheetjson.player.composite._
 import sheetjson.player.filter._
+import sheetjson.player.listener.{ActivatableListener, Listener, ListenerPlayer}
 import sheetjson.player.origin.{FadingNoise, RawFile, Tone}
 import sheetjson.util.{Config, Preset}
 import sheetjson.{JsonParsingException, jsonFailure}
@@ -112,7 +114,7 @@ object JsonParser {
 
     log.info(s"Getting player with ID $id")
 
-    id match {
+    val player = id match {
       case "tone" => convert[Tone](json)
       case "fading_noise" => convert[FadingNoise](json)
       case "key_activated" => convert[KeyActivated](json)
@@ -135,6 +137,29 @@ object JsonParser {
         filledIn = fillInPreset(preset, json)
         player <- parsePlayerJson(filledIn)
       } yield player
+    }
+
+    player match {
+      case Success(p: ListenerPlayer) => parsePlayerListeners(p, json)
+      case _ =>
+    }
+
+    player
+  }
+
+  def parsePlayerListeners(player: ListenerPlayer, json: JObject): Unit = {
+    def convert[T <: Listener]
+        (listener: T)
+        (implicit ls: ListenerSetup[T]): Unit = Config.keyListener match {
+
+      case Some(keyListener) => ls.setup(listener, json, keyListener)
+      case _ =>
+    }
+
+    for (listener <- player.listeners) {
+      listener match {
+        case l: ActivatableListener => convert(l)
+      }
     }
   }
 

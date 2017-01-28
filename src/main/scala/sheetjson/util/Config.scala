@@ -3,6 +3,7 @@ package sheetjson.util
 import javax.sound.sampled.AudioFormat
 
 import org.json4s.JObject
+import sheetjson.input.KeyListener
 import sheetjson.{BPM, JsonParsingException, SampleRate}
 
 import scala.util.{Failure, Success, Try}
@@ -73,4 +74,6 @@ object Config {
     */
   def format =
     new AudioFormat(sampleRate, 16, 1, true, false)
+
+  var keyListener: Option[KeyListener] = None
 }

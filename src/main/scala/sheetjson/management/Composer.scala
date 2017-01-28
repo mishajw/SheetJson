@@ -1,29 +1,38 @@
 package sheetjson.management
 
 import com.typesafe.scalalogging.Logger
+import sheetjson.input.KeyListener
 import sheetjson.output.{Out, SoundAndFileOut}
+import sheetjson.player.listener.{Listener, ListenerPlayer}
 import sheetjson.player.{EndPlayable, Player}
 
 /**
   * Responsible for playing music from a Player object
   */
-object Composer {
+class Composer(rootPlayer: Player, keyListener: KeyListener) {
+
+  keyListener registerMessageSender sendMessage
 
   private val log = Logger(getClass)
 
+  val listenerMap: Map[String, Listener] =
+    Player.flatten(rootPlayer)
+      .flatMap {
+        case p: ListenerPlayer =>
+          p.listeners.map(l => (l.identifier, l))
+        case _ => Seq()
+      }
+      .toMap
+
   /**
     * Play from a Player
- *
-    * @param player the Player to play from
     * @param out the output
     */
-  def play[T](player: Player, out: Out): Unit = {
-    new KeyListener(player)
+  def play(out: Out): Unit = {
+    log.debug(s"Start taking from $rootPlayer and putting into $out")
 
-    log.debug(s"Start taking from $player and putting into $out")
-
-    while (player.alive) {
-      out.play(player.play)
+    while (rootPlayer.alive) {
+      out.play(rootPlayer.play)
     }
 
     log.debug("Stop playing")
@@ -31,17 +40,11 @@ object Composer {
     out.play(new EndPlayable())
   }
 
-  /**
-    * Play from a player, and create the output
- *
-    * @param player the Player to play from
-    */
-  def play[T](player: Player): Unit = {
-    val out = new SoundAndFileOut("out.pcm")
-    log.debug(s"Make new out: $out")
-
-    out.start()
-    play(player, out)
-    out.stop()
+  def sendMessage(identifier: String, message: String): Unit = {
+    listenerMap(identifier).receive(message)
   }
+}
+
+object Composer {
+  type MessageSender = (String, String) => Unit
 }

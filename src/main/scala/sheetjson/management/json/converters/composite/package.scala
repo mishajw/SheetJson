@@ -1,6 +1,6 @@
 package sheetjson.management.json.converters
 
-import org.json4s.JsonAST.{JArray, JDouble, JInt}
+import org.json4s.JsonAST.{JArray, JDouble}
 import org.json4s.{JObject, JValue}
 import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
