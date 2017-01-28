@@ -2,7 +2,6 @@ package sheetjson.player.composite
 
 import sheetjson.input.KeyListener.KeyCode
 import sheetjson.player._
-import sheetjson.player.activatable.InteractivePlayer.InteractiveSpec
 import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec
 import sheetjson.player.activatable.{MultiKeyInteractivePlayer, SingleKeyInteractivePlayer}
 

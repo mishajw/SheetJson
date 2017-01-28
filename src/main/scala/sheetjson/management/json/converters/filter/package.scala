@@ -69,9 +69,7 @@ package object filter {
     */
   implicit object KeyActivatedConverter extends FilterConverter[KeyActivated] {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[KeyActivated] = {
-      for {
-        interactiveSpec <- json.extractOpt[SingleKeyInteractiveSpec]
-      } yield new KeyActivated(child, getSpec(json), interactiveSpec)
+      Some(new KeyActivated(child, getSpec(json)))
     }
   }
 
