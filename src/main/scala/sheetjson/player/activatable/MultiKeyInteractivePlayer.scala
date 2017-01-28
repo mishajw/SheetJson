@@ -1,5 +1,5 @@
 package sheetjson.player.activatable
-import sheetjson.management.KeyListener.KeyCode
+import sheetjson.input.KeyListener.KeyCode
 import sheetjson.player.activatable.InteractivePlayer.InteractiveSpec
 import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec
 

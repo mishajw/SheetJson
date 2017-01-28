@@ -1,6 +1,6 @@
 package sheetjson.player.activatable
 
-import sheetjson.management.KeyListener.KeyCode
+import sheetjson.input.KeyListener.KeyCode
 import sheetjson.player.activatable.IncrementalInteractivePlayer.IncrementalInteractiveSpec
 import sheetjson.player.activatable.InteractivePlayer.InteractiveSpec
 

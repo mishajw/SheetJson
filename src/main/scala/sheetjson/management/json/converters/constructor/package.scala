@@ -3,7 +3,6 @@ package sheetjson.management.json.converters
 import org.json4s.JObject
 import org.json4s.JsonAST.JString
 import sheetjson.jsonFailure
-import sheetjson.management.KeyListener.KeyCode
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec

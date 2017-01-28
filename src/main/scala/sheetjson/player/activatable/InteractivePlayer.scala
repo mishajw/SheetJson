@@ -1,6 +1,6 @@
 package sheetjson.player.activatable
 
-import sheetjson.management.KeyListener._
+import sheetjson.input.KeyListener.KeyCode
 import sheetjson.player.activatable.InteractivePlayer.InteractiveSpec
 
 trait InteractivePlayer[SpecType <: InteractiveSpec] {
