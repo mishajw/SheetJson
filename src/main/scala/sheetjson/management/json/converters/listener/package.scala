@@ -2,7 +2,7 @@ package sheetjson.management.json.converters
 
 import org.json4s.{DefaultFormats, JObject}
 import sheetjson.input.KeyListener
-import sheetjson.player.listener.{ActivatableListener, Listener, ListenerPlayer}
+import sheetjson.player.listener.{ActivatableListener, IncrementableListener, Listener, MultiActivatableListener}
 
 package object listener {
 
@@ -18,6 +18,26 @@ package object listener {
     } {
       keyListener.listenForPress(key, listener, "activate")
       keyListener.listenForRelease(key, listener, "deactivate")
+    }
+  }
+
+  implicit object MultiActivatableListenerSetup extends ListenerSetup[MultiActivatableListener] {
+    override def setup(listener: Listener, json: JObject, keyListener: KeyListener): Unit = for {
+      keys <- (json \ "keys").extractOpt[List[Int]]
+      (key, index) <- keys.zipWithIndex
+    } {
+      keyListener.listenForPress(key, listener, s"activate($index)")
+      keyListener.listenForRelease(key, listener, s"deactivate($index)")
+    }
+  }
+
+  implicit object IncrementableListenerSetup extends ListenerSetup[IncrementableListener] {
+    override def setup(listener: Listener, json: JObject, keyListener: KeyListener): Unit = for {
+      nextKey <- (json \ "next_key").extractOpt[Int]
+      previousKey <- (json \ "previous_key").extractOpt[Int]
+    } {
+      keyListener.listenForPress(nextKey, listener, "next")
+      keyListener.listenForPress(previousKey, listener, "previous")
     }
   }
 }

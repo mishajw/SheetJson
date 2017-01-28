@@ -14,7 +14,7 @@ import sheetjson.management.json.converters.origin._
 import sheetjson.player.Player
 import sheetjson.player.composite._
 import sheetjson.player.filter._
-import sheetjson.player.listener.{ActivatableListener, Listener, ListenerPlayer}
+import sheetjson.player.listener._
 import sheetjson.player.origin.{FadingNoise, RawFile, Tone}
 import sheetjson.util.{Config, Preset}
 import sheetjson.{JsonParsingException, jsonFailure}
@@ -159,6 +159,8 @@ object JsonParser {
     for (listener <- player.listeners) {
       listener match {
         case l: ActivatableListener => convert(l)
+        case l: MultiActivatableListener => convert(l)
+        case l: IncrementableListener => convert(l)
       }
     }
   }
