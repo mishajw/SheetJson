@@ -14,7 +14,7 @@ trait MultiActivatableListener extends Listener {
 
   val size: Int
 
-  private val _isActive: ArrayBuffer[Boolean] = ArrayBuffer.fill(size)(false)
+  private lazy val _isActive: ArrayBuffer[Boolean] = ArrayBuffer.fill(size){false}
 
   def isActive(i: Int) = _isActive(i)
 

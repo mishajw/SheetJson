@@ -6,7 +6,7 @@ import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 import sheetjson.player.composite.{CompositePlayer, Keyboard}
-import sheetjson.player.listener.ListenerPlayer
+import sheetjson.player.listener.{ActivatableListener, ListenerPlayer}
 import sheetjson.util.Notes.RelativeNote
 import sheetjson.util.{Notes, Scales}
 
@@ -81,7 +81,7 @@ package object constructor {
     */
   implicit object KeyboardConverter extends ConstructorConverter[Keyboard] {
     override def applyWithComponentsOpt(components: Seq[Player], json: JObject): Option[Keyboard] = {
-      val listenerComponents = components collect { case p: ListenerPlayer => p }
+      val listenerComponents = components collect { case p: ActivatableListener => p }
       Some(new Keyboard(listenerComponents, getSpec(json)))
     }
 

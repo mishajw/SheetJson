@@ -2,7 +2,19 @@
   "config": {
     "bpm": 120,
     "sample_rate": 14000,
-    "beats_per_bar": 4
+    "beats_per_bar": 4,
+    "presets": [
+      {
+        "name": "preset1",
+        "constructor": {
+          "type": "smooth_key_activated",
+          "child": {
+            "type": "tone",
+            "note": "$note"
+          }
+        }
+      }
+    ]
   },
   "players": {
     "type": "scroller",
@@ -79,6 +91,13 @@
           "type": "rawfile",
           "path": "/home/misha/Downloads/cartoon175.wav"
         }
+      },
+      {
+        "type": "keyboard",
+        "keys": [65, 83, 68, 70, 71, 72],
+        "key": "c",
+        "scale": "major",
+        "preset": "preset1"
       }
     ]
   }
