@@ -7,7 +7,7 @@ import sheetjson.player.{Playable, Player, PlayerSpec}
 
 class Toggle(_child: Player,
              _spec: PlayerSpec)
-    extends FilterPlayer(_child, _spec) with ListenerPlayer {
+    extends FilterPlayer(_child, _spec) with ListenerPlayer with ActivatableListener {
 
   private val pressed = new AtomicBoolean(false)
 
@@ -20,11 +20,10 @@ class Toggle(_child: Player,
       Playable.default
   }
 
+  override val listeners: Seq[Listener] = Seq(this)
 
   // TODO: Make a new listener for this case
-  override val listeners: Seq[Listener] = Seq(new ActivatableListener {
-    override def _activate(): Unit = {}
+  override def _activate(): Unit = {}
 
-    override def _deactivate(): Unit = pressed.set(!pressed.get())
-  })
+  override def _deactivate(): Unit = pressed.set(!pressed.get())
 }

@@ -9,7 +9,7 @@ import scala.collection.mutable.ArrayBuffer
 class Explorer(val increment: Seconds,
                _child: Player,
                _spec: PlayerSpec)
-    extends FilterPlayer(_child, _spec) with ListenerPlayer {
+    extends FilterPlayer(_child, _spec) with ListenerPlayer with IncrementableListener {
 
   var index: Absolute = Absolute(0)
 
@@ -29,13 +29,13 @@ class Explorer(val increment: Seconds,
     played
   }
 
-  override val listeners: Seq[Listener] = Seq(new IncrementableListener {
-    override def next(): Unit = {
-      index = index + Absolute(increment)
-    }
+  override val listeners: Seq[Listener] = Seq(this)
 
-    override def previous(): Unit = {
-      index = index - Absolute(increment)
-    }
-  })
+  override def next(): Unit = {
+    index = index + Absolute(increment)
+  }
+
+  override def previous(): Unit = {
+    index = index - Absolute(increment)
+  }
 }

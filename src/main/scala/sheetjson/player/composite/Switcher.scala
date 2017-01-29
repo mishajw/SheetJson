@@ -6,7 +6,7 @@ import sheetjson.player.{Playable, Player, PlayerSpec}
 
 class Switcher(_wrapped: Seq[Player],
                _spec: PlayerSpec)
-    extends CompositePlayer[Player](_spec) with ListenerPlayer {
+    extends CompositePlayer[Player](_spec) with ListenerPlayer with MultiActivatableListener {
 
   override protected val wrapped: Seq[Player] = _wrapped
 
@@ -22,11 +22,11 @@ class Switcher(_wrapped: Seq[Player],
     } yield player.play).getOrElse(Playable.default)
   }
 
-  override val listeners: Seq[Listener] = Seq(new MultiActivatableListener {
-    override def _activate(i: KeyCode): Unit = {}
+  override val listeners: Seq[Listener] = Seq(this)
 
-    override def _deactivate(i: KeyCode): Unit = currentIndex = Some(i)
+  override def _activate(i: KeyCode): Unit = {}
 
-    override val size: KeyCode = wrapped.size
-  })
+  override def _deactivate(i: KeyCode): Unit = currentIndex = Some(i)
+
+  override val size: KeyCode = wrapped.size
 }

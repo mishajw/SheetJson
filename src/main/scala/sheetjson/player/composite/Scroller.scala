@@ -5,7 +5,7 @@ import sheetjson.player.{Playable, Player, PlayerSpec}
 
 class Scroller(components: Seq[Player],
                _spec: PlayerSpec)
-    extends CompositePlayer[Player](_spec) with ListenerPlayer {
+    extends CompositePlayer[Player](_spec) with ListenerPlayer with IncrementableListener {
 
   override protected val wrapped: Seq[Player] = components
 
@@ -24,15 +24,15 @@ class Scroller(components: Seq[Player],
       componentIndex = components.length - 1
   }
 
-  override val listeners: Seq[Listener] = Seq(new IncrementableListener {
-    override def next(): Unit = {
-      componentIndex += 1
-      maskComponentIndex()
-    }
+  override val listeners: Seq[Listener] = Seq(this)
 
-    override def previous(): Unit = {
-      componentIndex -= 1
-      maskComponentIndex()
-    }
-  })
+  override def next(): Unit = {
+    componentIndex += 1
+    maskComponentIndex()
+  }
+
+  override def previous(): Unit = {
+    componentIndex -= 1
+    maskComponentIndex()
+  }
 }

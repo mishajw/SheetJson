@@ -13,8 +13,6 @@ class SmoothKeyActivated(val fadeFunction: WaveFunction,
                          _spec: PlayerSpec)
     extends FilterPlayer(_child, _spec) with ListenerPlayer with ActivatableListener {
 
-  override val listeners: Seq[Listener] = Seq(this)
-
   val childPlays: ArrayBuffer[Playable] = ArrayBuffer()
 
   var activationAmount: Double = 0
@@ -46,6 +44,8 @@ class SmoothKeyActivated(val fadeFunction: WaveFunction,
         _play
     }
   }
+
+  override val listeners: Seq[Listener] = Seq(this)
 
   override protected def _activate(): Unit = {}
 

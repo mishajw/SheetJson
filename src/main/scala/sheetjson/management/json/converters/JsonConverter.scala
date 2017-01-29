@@ -1,11 +1,10 @@
 package sheetjson.management.json.converters
 
+import org.json4s.JsonAST.JArray
+import org.json4s.{DefaultFormats, Formats, JObject}
 import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.{Player, PlayerSpec}
-import org.json4s.JsonAST.JArray
-import org.json4s.{DefaultFormats, Formats, JObject}
-import sheetjson.player.activatable.InteractivePlayer.InteractiveSpec
 
 import scala.util.{Failure, Success, Try}
 

@@ -7,7 +7,7 @@ import sheetjson.player.{Playable, Player, PlayerSpec}
 
 class KeyActivated(_child: Player,
                    _spec: PlayerSpec)
-    extends FilterPlayer(_child, _spec) with ListenerPlayer {
+    extends FilterPlayer(_child, _spec) with ListenerPlayer with ActivatableListener {
 
   private val _pressed = new AtomicBoolean(false)
 
@@ -20,14 +20,13 @@ class KeyActivated(_child: Player,
     else Playable.default
   }
 
-  // TODO: Find way to put these functions in KeyActivated
-  override val listeners: Seq[Listener] = Seq(new ActivatableListener {
-    override def _activate(): Unit = {
-      _pressed set true
-    }
+  override val listeners: Seq[Listener] = Seq(this)
 
-    override def _deactivate(): Unit = {
-      _pressed set false
-    }
-  })
+  override def _activate(): Unit = {
+    _pressed set true
+  }
+
+  override def _deactivate(): Unit = {
+    _pressed set false
+  }
 }
