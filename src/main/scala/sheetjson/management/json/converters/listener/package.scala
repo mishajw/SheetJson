@@ -33,12 +33,19 @@ package object listener {
   }
 
   implicit object IncrementableListenerSetup extends ListenerSetup[IncrementableListener] {
-    override def setup(listener: IncrementableListener, json: JObject, keyListener: KeyListener): Unit = for {
-      nextKey <- (json \ "next_key").extractOpt[Int]
-      previousKey <- (json \ "previous_key").extractOpt[Int]
-    } {
-      keyListener.listenForPress(nextKey, listener, "next")
-      keyListener.listenForPress(previousKey, listener, "previous")
+    override def setup(listener: IncrementableListener, json: JObject, keyListener: KeyListener): Unit = {
+      val (nextKeyName, previousKeyName) = listener.name match {
+        case Some(name) => (s"${name}_next_key", s"${name}_previous_key")
+        case None => ("next_key", "previous_key")
+      }
+
+      for {
+        nextKey <- (json \ nextKeyName).extractOpt[Int]
+        previousKey <- (json \ previousKeyName).extractOpt[Int]
+      } {
+        keyListener.listenForPress(nextKey, listener, "next")
+        keyListener.listenForPress(previousKey, listener, "previous")
+      }
     }
   }
 }

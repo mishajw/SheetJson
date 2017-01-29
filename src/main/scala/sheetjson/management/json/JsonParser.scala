@@ -132,6 +132,7 @@ object JsonParser {
       case "repeater" => convert[Repeater](json)
       case "scroller" => convert[Scroller](json)
       case "explorer" => convert[Explorer](json)
+      case "clipper" => convert[Clipper](json)
       case other => for {
         preset <- Config.getPreset(other)
         filledIn = fillInPreset(preset, json)

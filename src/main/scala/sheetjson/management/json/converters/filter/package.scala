@@ -141,5 +141,18 @@ package object filter {
       increment <- (json \ "increment").extractOpt[Double]
     } yield new Explorer(Seconds(increment), child, getSpec(json))
   }
+
+  /**
+   * Convert to `Clipper`
+   */
+  implicit object ClipperConverter extends FilterConverter[Clipper] {
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[Clipper] = {
+      val initialEnd = (json \ "initial_end").extractOrElse[Double](10)
+      val initialIncrement = (json \ "initial_increment").extractOrElse[Double](2)
+      val incrementMultiplier = (json \ "increment_multiplier").extractOrElse[Double](2)
+
+      Some(new Clipper(Seconds(initialEnd), Seconds(initialIncrement), incrementMultiplier, child, getSpec(json)))
+    }
+  }
 }
 
