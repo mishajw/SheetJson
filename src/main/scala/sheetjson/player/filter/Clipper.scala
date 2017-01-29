@@ -38,6 +38,8 @@ class Clipper(initialEnd: Seconds,
     played
   }
 
+  override def displayParameters: Seq[Object] = Seq(start, end, increment).map(Seconds(_))
+
   override val listeners: Seq[Listener] = Seq(
     new IncrementableListener {
       override val name: Option[String] = Some("start")

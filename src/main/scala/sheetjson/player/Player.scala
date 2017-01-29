@@ -63,6 +63,8 @@ abstract class Player(val spec: PlayerSpec) extends Identifiable {
 
   def childrenAlive: Boolean = false
 
+  def displayParameters: Seq[Object] = Seq()
+
   override def toString: String = {
     (spec.name, spec.`type`) match {
       case (Some(n), _) => n
