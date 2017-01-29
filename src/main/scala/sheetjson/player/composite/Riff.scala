@@ -1,8 +1,8 @@
 package sheetjson.player.composite
 
-import sheetjson.player.activatable.SingleKeyInteractivePlayer
-import sheetjson.player.activatable.SingleKeyInteractivePlayer.SingleKeyInteractiveSpec
 import sheetjson.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
+import sheetjson.player.filter.KeyActivated
+import sheetjson.player.listener.ActivatableListener
 import sheetjson.player.{Playable, Player, PlayerSpec}
 import sheetjson.util.Time.Bars
 
@@ -46,7 +46,7 @@ class Riff(_notes: Seq[PlayerDescription],
       .partition(n => n.start <= progress && progress <= n.end)
 
     val activatedPlays = activated.map(_.player).map {
-      case p: SingleKeyInteractivePlayer =>
+      case p: ActivatableListener =>
         if (!p.isActive) p.activate()
         p
       case p =>
@@ -54,7 +54,7 @@ class Riff(_notes: Seq[PlayerDescription],
     }
 
     val deactivatedPlays = deactivated.map(_.player).flatMap {
-      case p: SingleKeyInteractivePlayer =>
+      case p: ActivatableListener =>
         if (p.isActive) p.deactivate()
         Some(p)
       case p =>

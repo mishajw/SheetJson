@@ -1,13 +1,11 @@
 package sheetjson.player.composite
 
-import sheetjson.player.activatable.IncrementalInteractivePlayer
-import sheetjson.player.activatable.IncrementalInteractivePlayer.IncrementalInteractiveSpec
+import sheetjson.player.listener.{IncrementableListener, Listener, ListenerPlayer}
 import sheetjson.player.{Playable, Player, PlayerSpec}
 
 class Scroller(components: Seq[Player],
-               _spec: PlayerSpec,
-               override val interactiveSpec: IncrementalInteractiveSpec)
-    extends CompositePlayer[Player](_spec) with IncrementalInteractivePlayer {
+               _spec: PlayerSpec)
+    extends CompositePlayer[Player](_spec) with ListenerPlayer {
 
   override protected val wrapped: Seq[Player] = components
 
@@ -19,20 +17,22 @@ class Scroller(components: Seq[Player],
     components(componentIndex).play
   }
 
-  override def next(): Unit = {
-    componentIndex += 1
-    maskComponentIndex()
-  }
-
-  override def previous(): Unit = {
-    componentIndex -= 1
-    maskComponentIndex()
-  }
-
   private def maskComponentIndex(): Unit = {
     if (components.length <= componentIndex)
       componentIndex = 0
     else if (componentIndex < 0)
       componentIndex = components.length - 1
   }
+
+  override val listeners: Seq[Listener] = Seq(new IncrementableListener {
+    override def next(): Unit = {
+      componentIndex += 1
+      maskComponentIndex()
+    }
+
+    override def previous(): Unit = {
+      componentIndex -= 1
+      maskComponentIndex()
+    }
+  })
 }

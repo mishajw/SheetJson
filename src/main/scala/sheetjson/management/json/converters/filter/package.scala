@@ -1,17 +1,13 @@
 package sheetjson.management.json.converters
 
+import org.json4s.JObject
 import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
-import sheetjson.player.{Player, WaveFunction}
 import sheetjson.player.filter._
+import sheetjson.player.{Player, WaveFunction}
 import sheetjson.util.Time.{Bars, Seconds}
-import org.json4s.JObject
-import org.json4s.JsonAST.{JDouble, JInt}
-import sheetjson.JsonParsingException
-import sheetjson.player.activatable.IncrementalInteractivePlayer.IncrementalInteractiveSpec
-import sheetjson.player.activatable.SingleKeyInteractivePlayer.SingleKeyInteractiveSpec
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Success, Try}
 
 package object filter {
 
@@ -89,9 +85,7 @@ package object filter {
     */
   implicit object ToggleConverter extends FilterConverter[Toggle] {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[Toggle] = {
-      for {
-        interactiveSpec <- json.extractOpt[SingleKeyInteractiveSpec]
-      } yield new Toggle(child, getSpec(json), interactiveSpec)
+      Some(new Toggle(child, getSpec(json)))
     }
   }
 
@@ -119,15 +113,13 @@ package object filter {
 
       for {
         fadeFunction <- WaveFunction getOpt fadeFunctionName
-        interactiveSpec <- json.extractOpt[SingleKeyInteractiveSpec]
       } yield {
         new SmoothKeyActivated(
           fadeFunction,
           Bars(fadeInTime),
           Bars(fadeOutTime),
           child,
-          getSpec(json),
-          interactiveSpec)
+          getSpec(json))
       }
     }
   }
@@ -147,8 +139,7 @@ package object filter {
   implicit object ExplorerConverter extends FilterConverter[Explorer] {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[Explorer] = for {
       increment <- (json \ "increment").extractOpt[Double]
-      interactiveSpec <- json.extractOpt[IncrementalInteractiveSpec]
-    } yield new Explorer(Seconds(increment), child, getSpec(json), interactiveSpec)
+    } yield new Explorer(Seconds(increment), child, getSpec(json))
   }
 }
 

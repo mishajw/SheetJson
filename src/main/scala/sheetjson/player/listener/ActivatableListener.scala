@@ -1,6 +1,6 @@
 package sheetjson.player.listener
 
-abstract class ActivatableListener extends Listener {
+trait ActivatableListener extends Listener {
 
   protected var _isActive = false
 

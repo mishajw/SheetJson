@@ -5,9 +5,8 @@ import org.json4s.JsonAST.JString
 import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
-import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec
-import sheetjson.player.activatable.SingleKeyInteractivePlayer
 import sheetjson.player.composite.{CompositePlayer, Keyboard}
+import sheetjson.player.listener.ListenerPlayer
 import sheetjson.util.Notes.RelativeNote
 import sheetjson.util.{Notes, Scales}
 
@@ -82,12 +81,8 @@ package object constructor {
     */
   implicit object KeyboardConverter extends ConstructorConverter[Keyboard] {
     override def applyWithComponentsOpt(components: Seq[Player], json: JObject): Option[Keyboard] = {
-      val interactiveSpec = MultiKeyInteractiveSpec(49 to 54) // json.extract[MultiKeyInteractiveSpec]
-      for {
-        x <- Some(1)
-        if interactiveSpec.keys.size == components.size
-        activatableComponents = components collect { case p: SingleKeyInteractivePlayer => p }
-      } yield new Keyboard(activatableComponents, getSpec(json), interactiveSpec)
+      val listenerComponents = components collect { case p: ListenerPlayer => p }
+      Some(new Keyboard(listenerComponents, getSpec(json)))
     }
 
     override def componentParams(json: JObject): Try[Seq[JObject]] = {

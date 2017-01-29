@@ -8,12 +8,12 @@ package object listener {
 
   implicit val formats = DefaultFormats
 
-  trait ListenerSetup[ListenerType] {
-    def setup(listener: Listener, json: JObject, keyListener: KeyListener): Unit
+  trait ListenerSetup[ListenerType <: Listener] {
+    def setup(listener: ListenerType, json: JObject, keyListener: KeyListener): Unit
   }
 
   implicit object ActivatableListenerSetup extends ListenerSetup[ActivatableListener] {
-    override def setup(listener: Listener, json: JObject, keyListener: KeyListener): Unit = for {
+    override def setup(listener: ActivatableListener, json: JObject, keyListener: KeyListener): Unit = for {
       key <- (json \ "key").extractOpt[Int]
     } {
       keyListener.listenForPress(key, listener, "activate")
@@ -22,8 +22,9 @@ package object listener {
   }
 
   implicit object MultiActivatableListenerSetup extends ListenerSetup[MultiActivatableListener] {
-    override def setup(listener: Listener, json: JObject, keyListener: KeyListener): Unit = for {
+    override def setup(listener: MultiActivatableListener, json: JObject, keyListener: KeyListener): Unit = for {
       keys <- (json \ "keys").extractOpt[List[Int]]
+      if keys.size == listener.size
       (key, index) <- keys.zipWithIndex
     } {
       keyListener.listenForPress(key, listener, s"activate($index)")
@@ -32,7 +33,7 @@ package object listener {
   }
 
   implicit object IncrementableListenerSetup extends ListenerSetup[IncrementableListener] {
-    override def setup(listener: Listener, json: JObject, keyListener: KeyListener): Unit = for {
+    override def setup(listener: IncrementableListener, json: JObject, keyListener: KeyListener): Unit = for {
       nextKey <- (json \ "next_key").extractOpt[Int]
       previousKey <- (json \ "previous_key").extractOpt[Int]
     } {

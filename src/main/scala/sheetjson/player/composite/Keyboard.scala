@@ -2,13 +2,11 @@ package sheetjson.player.composite
 
 import sheetjson.input.KeyListener.KeyCode
 import sheetjson.player._
-import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec
-import sheetjson.player.activatable.{MultiKeyInteractivePlayer, SingleKeyInteractivePlayer}
+import sheetjson.player.listener.{Listener, ListenerPlayer, MultiActivatableListener}
 
-class Keyboard(components: Seq[SingleKeyInteractivePlayer],
-               _spec: PlayerSpec,
-               override val interactiveSpec: MultiKeyInteractiveSpec)
-    extends CompositePlayer[Player](_spec) with MultiKeyInteractivePlayer {
+class Keyboard(components: Seq[ListenerPlayer],
+               _spec: PlayerSpec)
+    extends CompositePlayer[Player](_spec) with ListenerPlayer {
 
   override protected val wrapped: Seq[Player] =
     components collect { case p: Player => p }
@@ -19,8 +17,13 @@ class Keyboard(components: Seq[SingleKeyInteractivePlayer],
     wrapped.map(_.play).combine
   }
 
-  override def activate(i: KeyCode): Unit = components(i).activate()
+  override val listeners: Seq[Listener] = Seq(new MultiActivatableListener {
+    override def _activate(i: KeyCode): Unit =
+      components(i).listeners.foreach(_.receive("activate"))
 
-  override def deactivate(i: KeyCode): Unit = components(i).deactivate()
+    override def _deactivate(i: KeyCode): Unit =
+      components(i).listeners.foreach(_.receive("deactivate"))
 
+    override val size: KeyCode = components.size
+  })
 }

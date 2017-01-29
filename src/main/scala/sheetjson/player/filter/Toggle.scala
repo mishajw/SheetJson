@@ -2,14 +2,12 @@ package sheetjson.player.filter
 
 import java.util.concurrent.atomic.AtomicBoolean
 
-import sheetjson.player.activatable.SingleKeyInteractivePlayer
-import sheetjson.player.activatable.SingleKeyInteractivePlayer.SingleKeyInteractiveSpec
+import sheetjson.player.listener.{ActivatableListener, Listener, ListenerPlayer}
 import sheetjson.player.{Playable, Player, PlayerSpec}
 
 class Toggle(_child: Player,
-             _spec: PlayerSpec,
-             override val interactiveSpec: SingleKeyInteractiveSpec)
-    extends FilterPlayer(_child, _spec) with SingleKeyInteractivePlayer {
+             _spec: PlayerSpec)
+    extends FilterPlayer(_child, _spec) with ListenerPlayer {
 
   private val pressed = new AtomicBoolean(false)
 
@@ -22,7 +20,11 @@ class Toggle(_child: Player,
       Playable.default
   }
 
-  override def _activate(): Unit = {}
 
-  override def _deactivate(): Unit = pressed.set(!pressed.get())
+  // TODO: Make a new listener for this case
+  override val listeners: Seq[Listener] = Seq(new ActivatableListener {
+    override def _activate(): Unit = {}
+
+    override def _deactivate(): Unit = pressed.set(!pressed.get())
+  })
 }

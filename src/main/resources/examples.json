@@ -6,8 +6,8 @@
   },
   "players": {
     "type": "scroller",
-    "next": 50,
-    "previous": 49,
+    "next_key": 50,
+    "previous_key": 49,
     "components": [
       {
         "type": "tone",

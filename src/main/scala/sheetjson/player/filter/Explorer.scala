@@ -1,7 +1,6 @@
 package sheetjson.player.filter
 
-import sheetjson.player.activatable.IncrementalInteractivePlayer
-import sheetjson.player.activatable.IncrementalInteractivePlayer.IncrementalInteractiveSpec
+import sheetjson.player.listener.{IncrementableListener, Listener, ListenerPlayer}
 import sheetjson.player.{Playable, Player, PlayerSpec}
 import sheetjson.util.Time.{Absolute, Seconds}
 
@@ -9,13 +8,8 @@ import scala.collection.mutable.ArrayBuffer
 
 class Explorer(val increment: Seconds,
                _child: Player,
-               _spec: PlayerSpec,
-               override val interactiveSpec: IncrementalInteractiveSpec)
-    extends FilterPlayer(_child, _spec) with IncrementalInteractivePlayer {
-
-  // Must have an even amount of keys, so if there's `n` keys for going forwards,
-  // there's `n` keys for going backwards
-  assert(interactiveSpec.keys.size % 2 == 0)
+               _spec: PlayerSpec)
+    extends FilterPlayer(_child, _spec) with ListenerPlayer {
 
   var index: Absolute = Absolute(0)
 
@@ -35,11 +29,13 @@ class Explorer(val increment: Seconds,
     played
   }
 
-  override def next(): Unit = {
-    index = index + Absolute(increment)
-  }
+  override val listeners: Seq[Listener] = Seq(new IncrementableListener {
+    override def next(): Unit = {
+      index = index + Absolute(increment)
+    }
 
-  override def previous(): Unit = {
-    index = index - Absolute(increment)
-  }
+    override def previous(): Unit = {
+      index = index - Absolute(increment)
+    }
+  })
 }

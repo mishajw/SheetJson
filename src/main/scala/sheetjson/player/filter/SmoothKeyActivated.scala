@@ -1,8 +1,7 @@
 package sheetjson.player.filter
 
 import sheetjson.player._
-import sheetjson.player.activatable.SingleKeyInteractivePlayer
-import sheetjson.player.activatable.SingleKeyInteractivePlayer.SingleKeyInteractiveSpec
+import sheetjson.player.listener.{ActivatableListener, Listener, ListenerPlayer}
 import sheetjson.util.Time.{Absolute, Bars}
 
 import scala.collection.mutable.ArrayBuffer
@@ -11,9 +10,10 @@ class SmoothKeyActivated(val fadeFunction: WaveFunction,
                          val fadeInTime: Bars,
                          val fadeOutTime: Bars,
                          _child: Player,
-                         _spec: PlayerSpec,
-                         override val interactiveSpec: SingleKeyInteractiveSpec)
-    extends FilterPlayer(_child, _spec) with SingleKeyInteractivePlayer {
+                         _spec: PlayerSpec)
+    extends FilterPlayer(_child, _spec) with ListenerPlayer with ActivatableListener {
+
+  override val listeners: Seq[Listener] = Seq(this)
 
   val childPlays: ArrayBuffer[Playable] = ArrayBuffer()
 

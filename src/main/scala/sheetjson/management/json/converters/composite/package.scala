@@ -5,8 +5,6 @@ import org.json4s.{JObject, JValue}
 import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
-import sheetjson.player.activatable.IncrementalInteractivePlayer.IncrementalInteractiveSpec
-import sheetjson.player.activatable.MultiKeyInteractivePlayer.MultiKeyInteractiveSpec
 import sheetjson.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import sheetjson.player.composite._
 import sheetjson.util.Time.Bars
@@ -86,9 +84,7 @@ package object composite {
       JsonParser parsePlayerJson json
 
     override protected def applyWithComponentsOpt(cs: Seq[Player], json: JObject): Option[Switcher] = {
-      for {
-        interactiveSpec <- json.extractOpt[MultiKeyInteractiveSpec]
-      } yield new Switcher(cs, getSpec(json), interactiveSpec)
+      Some(new Switcher(cs, getSpec(json)))
     }
   }
 
@@ -100,9 +96,7 @@ package object composite {
       JsonParser parsePlayerJson json
 
     override protected def applyWithComponentsOpt(cs: Seq[Player], json: JObject): Option[Scroller] = {
-      for {
-        incrementalSpec <- json.extractOpt[IncrementalInteractiveSpec]
-      } yield new Scroller(cs, getSpec(json), incrementalSpec)
+      Some(new Scroller(cs, getSpec(json)))
     }
   }
 }
