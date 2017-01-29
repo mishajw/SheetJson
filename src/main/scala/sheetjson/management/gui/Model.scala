@@ -1,11 +1,10 @@
 package sheetjson.management.gui
 
 import java.util.Observable
-import java.util.concurrent.{ConcurrentHashMap, ConcurrentLinkedQueue}
+import java.util.concurrent.ConcurrentLinkedQueue
 
 import sheetjson.player.{Playable, Player}
 
-import scala.collection.convert.decorateAsScala._
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 

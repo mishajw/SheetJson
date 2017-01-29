@@ -6,7 +6,7 @@ import sheetjson.jsonFailure
 import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 import sheetjson.player.composite.{CompositePlayer, Keyboard}
-import sheetjson.player.listener.{ActivatableListener, ListenerPlayer}
+import sheetjson.player.listener.ActivatableListener
 import sheetjson.util.Notes.RelativeNote
 import sheetjson.util.{Notes, Scales}
 

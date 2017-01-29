@@ -1,7 +1,6 @@
 package sheetjson.player.composite
 
 import sheetjson.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
-import sheetjson.player.filter.KeyActivated
 import sheetjson.player.listener.ActivatableListener
 import sheetjson.player.{Playable, Player, PlayerSpec}
 import sheetjson.util.Time.Bars

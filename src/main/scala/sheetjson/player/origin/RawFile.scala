@@ -3,8 +3,7 @@ package sheetjson.player.origin
 import java.io.File
 import javax.sound.sampled.{AudioInputStream, AudioSystem}
 
-import sheetjson.output.SoundOut
-import sheetjson.player.{Playable, Player, PlayerSpec}
+import sheetjson.player.{Playable, PlayerSpec}
 import sheetjson.util.Config
 
 import scala.collection.mutable.ArrayBuffer

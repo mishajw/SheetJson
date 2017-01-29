@@ -5,8 +5,8 @@ import org.json4s.JsonAST.{JDouble, JString}
 import sheetjson.player.WaveFunction
 import sheetjson.player.origin.{FadingNoise, RawFile, Tone}
 import sheetjson.util.Frequencies.FrequencyOf
+import sheetjson.util.Notes
 import sheetjson.util.Time.Bars
-import sheetjson.util.{Notes, Scales}
 
 package object origin {
 

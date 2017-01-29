@@ -2,8 +2,8 @@ package sheetjson
 
 import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener
-import sheetjson.management.{Composer, Identifiable}
 import sheetjson.management.json.JsonParser
+import sheetjson.management.{Composer, Identifiable}
 import sheetjson.output.SoundAndFileOut
 import sheetjson.player.Player
 import sheetjson.util.Config
