@@ -44,12 +44,12 @@ class Clipper(initialEnd: Seconds,
     new IncrementableListener {
       override val name: Option[String] = Some("start")
 
-      override def next(): Unit ={
+      override def next(): Unit = {
         start = start + increment
         childStep = start
       }
 
-      override def previous(): Unit ={
+      override def previous(): Unit = {
         start = start - increment
         childStep = start
       }
