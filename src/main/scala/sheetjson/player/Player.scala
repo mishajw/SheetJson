@@ -27,9 +27,14 @@ abstract class Player(val spec: PlayerSpec) extends Identifiable {
   val lifeTime: Option[Bars] = spec.lifeTime
 
   /**
+    * The default volume level
+    */
+  protected val defaultVolume: Double = 1
+
+  /**
     * How loud a `Player` is
     */
-  val volume: Double = spec.volume getOrElse 0.5
+  def volume: Double = spec.volume getOrElse defaultVolume
 
   /**
     * @return the next value played, and handle other transformations
