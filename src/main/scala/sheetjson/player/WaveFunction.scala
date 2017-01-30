@@ -10,16 +10,15 @@ class WaveFunction(coreFunction: CoreWaveFunction,
 
   def apply(x: Double): Double = {
     val scaledInput: Double = scale(x, minInput, maxInput)
-    val output: Double = coreFunction(scaledInput)
-    scale(output, minOutput, maxOutput)
+    coreFunction(scaledInput)
   }
 
   lazy val signed =
     new WaveFunction(
-      x => this(x) * 2 - 1,
+      x => scale(this(x), minOutput, maxOutput),
       minInput = minInput,
       maxInput = maxInput,
-      minOutput = -1,
+      minOutput = 0,
       maxOutput = 1)
 
   private def scale(x: Double, max: Double, min: Double): Double =

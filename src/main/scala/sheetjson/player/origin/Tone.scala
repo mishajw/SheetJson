@@ -17,7 +17,7 @@ class Tone( val frequency: Frequency,
 
   protected def _play: Playable = {
     val progress = (step % Seconds(waveLength)) / Seconds(waveLength)
-    Playable(waveFunction.signed(progress.toDouble))
+    Playable(waveFunction(progress.toDouble))
   }
 
   override def toString: String = s"tone($frequency)"
