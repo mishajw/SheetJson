@@ -81,7 +81,7 @@ class View extends JPanel with Observer {
     }
 
     def scaleY(p: Playable): Int = {
-      (((p.toDouble + 1) / 2) * height.toDouble).toInt
+      height - (((p.toDouble + 1) / 2) * height.toDouble).toInt
     }
 
     // Scale the readings
