@@ -147,11 +147,7 @@ package object filter {
    */
   implicit object ClipperConverter extends FilterConverter[Clipper] {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[Clipper] = {
-      val initialEnd = (json \ "initial_end").extractOrElse[Double](10)
-      val initialIncrement = (json \ "initial_increment").extractOrElse[Double](2)
-      val incrementMultiplier = (json \ "increment_multiplier").extractOrElse[Double](2)
-
-      Some(new Clipper(Seconds(initialEnd), Seconds(initialIncrement), incrementMultiplier, child, getSpec(json)))
+      Some(new Clipper(child, getSpec(json)))
     }
   }
 }
