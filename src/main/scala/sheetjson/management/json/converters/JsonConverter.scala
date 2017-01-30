@@ -18,7 +18,7 @@ trait JsonConverter[T <: Player] {
   def apply(json: JObject): Try[T] = {
     applyOpt(json) match {
       case Some(t) => Success(t)
-      case None => jsonFailure(s"Couldn't parse JSON for ${getClass}", json)
+      case None => jsonFailure(s"Couldn't parse JSON for $getClass", json)
     }
   }
 
