@@ -19,6 +19,16 @@ object Scales {
   def get(n: RelativeNote, s: String): Option[Seq[RelativeNote]] =
     (scales get s) map (translate(n, _))
 
+  def get(n: RelativeNote, s: String, amount: Int, startOctave: Int = 5): Option[Seq[AbsoluteNote]] =
+    get(n, s) map { rns =>
+      Stream.continually(rns)
+        .zipWithIndex
+        .flatMap {
+          case (rn, i) =>
+            rn.map(AbsoluteNote(_, i + startOctave))
+        }
+    }
+
   /**
     * Translate a scale to start at a note
  *
