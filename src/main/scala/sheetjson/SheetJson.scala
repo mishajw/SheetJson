@@ -2,11 +2,11 @@ package sheetjson
 
 import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener
+import sheetjson.management.Composer
 import sheetjson.management.json.JsonParser
-import sheetjson.management.{Composer, Identifiable}
 import sheetjson.output.SoundAndFileOut
 import sheetjson.player.Player
-import sheetjson.util.Config
+import sheetjson.util.{Config, Identifiable}
 
 import scala.util.{Failure, Success}
 

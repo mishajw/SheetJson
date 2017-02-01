@@ -1,9 +1,9 @@
 package sheetjson.player
 
-import sheetjson.management.Identifiable
 import sheetjson.management.gui.Model
 import sheetjson.player.composite.CompositePlayer
 import sheetjson.player.filter.FilterPlayer
+import sheetjson.util.Identifiable
 import sheetjson.util.Time.{Absolute, Bars, Seconds}
 
 /**

@@ -1,4 +1,4 @@
-package sheetjson.management
+package sheetjson.util
 
 import sheetjson.player.composite.CompositePlayer
 import sheetjson.player.filter.FilterPlayer

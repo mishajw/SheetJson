@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap
 import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener.KeyCode
 import sheetjson.management.Composer.MessageSender
-import sheetjson.management.Identifiable
 import sheetjson.management.gui.GUI
+import sheetjson.util.Identifiable
 
 import scala.collection.mutable.ArrayBuffer
 
