@@ -1,6 +1,7 @@
 package sheetjson.player.composite
 
 import sheetjson.player.{Player, PlayerSpec}
+import sheetjson.util.Identifiable
 
 abstract class CompositePlayer[T](_spec: PlayerSpec) extends Player(_spec) {
 
@@ -25,4 +26,6 @@ abstract class CompositePlayer[T](_spec: PlayerSpec) extends Player(_spec) {
   def components: Seq[Player] = wrapped map extract
 
   override def childrenAlive: Boolean = components.forall(_.alive)
+
+  override def identifiableChildren: Seq[Identifiable] = super.identifiableChildren ++ components
 }

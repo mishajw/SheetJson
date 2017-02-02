@@ -36,7 +36,7 @@ object SheetJson {
         out.start()
 
         log.debug(s"Create players: ${Player.flatten(player)}")
-        Identifiable.propagateParents(player)
+        player.propagateParents()
         composer play out
 
         out.stop()

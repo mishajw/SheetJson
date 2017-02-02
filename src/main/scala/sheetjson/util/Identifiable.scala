@@ -13,31 +13,12 @@ trait Identifiable {
   }
 
   def identifier = (path :+ toString).mkString("/")
-}
 
-object Identifiable {
-  def propagateParents(identifiable: Identifiable): Unit = {
-    val children: Seq[Identifiable] =
-    {
-      {
-        identifiable match {
-          case filter: FilterPlayer =>
-            Seq(filter.child)
-          case composite: CompositePlayer[_] =>
-            composite.components
-          case _ => Seq()
-        }
-      } ++
-      {
-        identifiable match {
-          case listener: ListenerPlayer =>
-            listener.listeners
-          case _ => Seq()
-        }
-      }
-    }.filter(_ != identifiable)
+  def identifiableChildren: Seq[Identifiable] = Seq()
 
-    children foreach (_.parentOpt = Some(identifiable))
-    children foreach propagateParents
+  def propagateParents(): Unit = {
+    val children = identifiableChildren.filter(_ != this)
+    children foreach (_.parentOpt = Some(this))
+    children foreach (_.propagateParents())
   }
 }

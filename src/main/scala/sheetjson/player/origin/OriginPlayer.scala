@@ -1,6 +1,7 @@
 package sheetjson.player.origin
 
 import sheetjson.player.{Player, PlayerSpec}
+import sheetjson.util.Identifiable
 
 abstract class OriginPlayer(_spec: PlayerSpec) extends Player(_spec) {
   /**
@@ -8,4 +9,6 @@ abstract class OriginPlayer(_spec: PlayerSpec) extends Player(_spec) {
     * 100% volume otherwise distortion will occur
     */
   override val defaultVolume: Double = 0.5
+
+  override def identifiableChildren: Seq[Identifiable] = super.identifiableChildren
 }
