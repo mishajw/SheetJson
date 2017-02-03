@@ -3,6 +3,7 @@ package sheetjson.management
 import com.typesafe.scalalogging.Logger
 import sheetjson.output.Out
 import sheetjson.player.{EndPlayable, Player}
+import sheetjson.util.Config
 import sheetjson.util.Messagable.Message
 
 /**
@@ -21,6 +22,7 @@ class Composer(rootPlayer: Player) {
 
     while (rootPlayer.alive) {
       out.play(rootPlayer.play)
+      Config.globalAbsoluteStep = Config.globalAbsoluteStep.incr
     }
 
     log.debug("Stop playing")
