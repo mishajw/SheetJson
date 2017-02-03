@@ -16,8 +16,6 @@ object SheetJson {
 
   def main(args: Array[String]): Unit = {
 
-    val keyListener = new KeyListener()
-
     val playerOpt = args match {
       case Array("--path", path) =>
         JsonParser parse path
@@ -31,6 +29,7 @@ object SheetJson {
     playerOpt match {
       case Success(player) =>
         player.propagateParents()
+        val keyListener = new KeyListener(player)
         ListenerSetupOrganiser.setup(player, keyListener)
         val composer = new Composer(player, keyListener)
         val out = new SoundAndFileOut("out.pcm")

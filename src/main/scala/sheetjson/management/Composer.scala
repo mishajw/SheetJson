@@ -12,8 +12,6 @@ import sheetjson.util.Messagable.Message
   */
 class Composer(rootPlayer: Player, keyListener: KeyListener) {
 
-  keyListener registerMessageSender sendMessage
-
   private val log = Logger(getClass)
 
   /**
@@ -35,8 +33,4 @@ class Composer(rootPlayer: Player, keyListener: KeyListener) {
   def sendMessage(message: Message): Unit = {
     rootPlayer.receive(message)
   }
-}
-
-object Composer {
-  type MessageSender = (Message) => Unit
 }
