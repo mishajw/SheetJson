@@ -32,6 +32,7 @@ trait JsonConverter[T <: Player] {
     */
   protected def getSpec(json: JObject): PlayerSpec = {
     json.extract[PlayerSpec]
+      .copy(createdWith = Some(json))
   }
 
   /**

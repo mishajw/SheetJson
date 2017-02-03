@@ -114,7 +114,7 @@ object JsonParser {
 
     log.info(s"Getting player with ID $id")
 
-    val player = id match {
+    id match {
       case "tone" => convert[Tone](json)
       case "fading_noise" => convert[FadingNoise](json)
       case "key_activated" => convert[KeyActivated](json)
@@ -139,31 +139,9 @@ object JsonParser {
         player <- parsePlayerJson(filledIn)
       } yield player
     }
-
-    player match {
-      case Success(p: ListenerPlayer) => parsePlayerListeners(p, json)
-      case _ =>
-    }
-
-    player
   }
 
   def parsePlayerListeners(player: ListenerPlayer, json: JObject): Unit = {
-    def convert[T <: Listener]
-        (listener: T)
-        (implicit ls: ListenerSetup[T]): Unit = Config.keyListener match {
-
-      case Some(keyListener) => ls.setup(listener, json, keyListener)
-      case _ =>
-    }
-
-    for (listener <- player.listeners) {
-      listener match {
-        case l: ActivatableListener => convert(l)
-        case l: MultiActivatableListener => convert(l)
-        case l: IncrementableListener => convert(l)
-      }
-    }
   }
 
   def fillInPreset(preset: JObject, json: JObject): JObject = {

@@ -74,6 +74,4 @@ object Config {
     */
   def format =
     new AudioFormat(sampleRate, 16, 1, true, false)
-
-  var keyListener: Option[KeyListener] = None
 }

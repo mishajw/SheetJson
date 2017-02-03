@@ -1,5 +1,6 @@
 package sheetjson
 
+import org.json4s.JObject
 import sheetjson.util.Time.Bars
 
 package object player {
@@ -9,5 +10,6 @@ package object player {
     volume: Option[Double] = None,
     lifeTime: Option[Bars] = None,
     speed: Option[Double] = None,
-    visible: Boolean = true)
+    visible: Boolean = true,
+    createdWith: Option[JObject] = None)
 }
