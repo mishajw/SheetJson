@@ -28,16 +28,16 @@ object SheetJson {
 
     playerOpt match {
       case Success(player) =>
+        log.debug(s"Create players: ${Player.flatten(player)}")
+
         player.propagateParents()
         val keyListener = new KeyListener(player)
         ListenerSetupOrganiser.setup(player, keyListener)
+
         val composer = new Composer(player, keyListener)
         val out = new SoundAndFileOut("out.pcm")
         out.start()
-
-        log.debug(s"Create players: ${Player.flatten(player)}")
         composer play out
-
         out.stop()
       case Failure(e) =>
         log.error("Got error from parsing JSON", e)
