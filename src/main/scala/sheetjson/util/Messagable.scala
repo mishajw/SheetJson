@@ -1,7 +1,7 @@
 package sheetjson.util
 
 import com.typesafe.scalalogging.Logger
-import sheetjson.util.Messagable.{ChildMessage, Message, StringMessage}
+import sheetjson.util.Messagable.{ChildMessage, Message}
 
 trait Messagable extends Identifiable {
 

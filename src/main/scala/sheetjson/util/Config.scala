@@ -3,7 +3,6 @@ package sheetjson.util
 import javax.sound.sampled.AudioFormat
 
 import org.json4s.JObject
-import sheetjson.input.KeyListener
 import sheetjson.{BPM, JsonParsingException, SampleRate}
 
 import scala.util.{Failure, Success, Try}

@@ -1,9 +1,7 @@
 package sheetjson.management
 
 import com.typesafe.scalalogging.Logger
-import sheetjson.input.KeyListener
 import sheetjson.output.Out
-import sheetjson.player.listener.{Listener, ListenerPlayer}
 import sheetjson.player.{EndPlayable, Player}
 import sheetjson.util.Messagable.Message
 

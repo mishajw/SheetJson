@@ -9,7 +9,6 @@ import sheetjson.management.json.converters.JsonConverter
 import sheetjson.management.json.converters.composite._
 import sheetjson.management.json.converters.constructor._
 import sheetjson.management.json.converters.filter._
-import sheetjson.management.json.converters.listener._
 import sheetjson.management.json.converters.origin._
 import sheetjson.player.Player
 import sheetjson.player.composite._

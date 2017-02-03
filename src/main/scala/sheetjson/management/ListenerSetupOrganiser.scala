@@ -2,7 +2,6 @@ package sheetjson.management
 
 import sheetjson.input.KeyListener
 import sheetjson.management.json.converters.listener.ListenerSetup
-import sheetjson.player.Player
 import sheetjson.player.listener._
 import sheetjson.util.Identifiable
 
