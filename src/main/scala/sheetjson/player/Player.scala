@@ -3,13 +3,13 @@ package sheetjson.player
 import sheetjson.management.gui.Model
 import sheetjson.player.composite.CompositePlayer
 import sheetjson.player.filter.FilterPlayer
-import sheetjson.util.Identifiable
+import sheetjson.util.{Identifiable, Messagable}
 import sheetjson.util.Time.{Absolute, Bars, Seconds}
 
 /**
   * Represents something that "plays" music
   */
-abstract class Player(val spec: PlayerSpec) extends Identifiable {
+abstract class Player(val spec: PlayerSpec) extends Messagable {
 
   /**
     * How many times play has been called on this `Player`

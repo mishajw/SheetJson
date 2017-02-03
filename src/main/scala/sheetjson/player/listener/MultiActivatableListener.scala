@@ -1,5 +1,7 @@
 package sheetjson.player.listener
 
+import sheetjson.util.Messagable.{Message, StringMessage}
+
 import scala.collection.mutable.ArrayBuffer
 
 trait MultiActivatableListener extends Listener {
@@ -7,9 +9,10 @@ trait MultiActivatableListener extends Listener {
   val rActivate = """activate\(([0-9]+)\)""".r
   val rDeactivate = """deactivate\(([0-9]+)\)""".r
 
-  override def receive(message: String): Unit = message match {
-    case rActivate(i) => activate(i.toInt)
-    case rDeactivate(i) => deactivate(i.toInt)
+  override def receive(message: Message): Unit = message match {
+    case StringMessage(rActivate(i)) => activate(i.toInt)
+    case StringMessage(rDeactivate(i)) => deactivate(i.toInt)
+    case _ => super.receive(message)
   }
 
   val size: Int

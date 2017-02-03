@@ -1,9 +1,5 @@
 package sheetjson.util
 
-import sheetjson.player.composite.CompositePlayer
-import sheetjson.player.filter.FilterPlayer
-import sheetjson.player.listener.ListenerPlayer
-
 trait Identifiable {
   var parentOpt: Option[Identifiable] = None
 

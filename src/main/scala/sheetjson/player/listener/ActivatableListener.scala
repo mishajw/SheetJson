@@ -1,14 +1,18 @@
 package sheetjson.player.listener
 
+import sheetjson.util.Messagable.{Message, StringMessage}
+
 trait ActivatableListener extends Listener {
 
   protected var _isActive = false
 
   def isActive = _isActive
 
-  override def receive(message: String): Unit = message match {
-    case "activate" => activate()
-    case "deactivate" => deactivate()
+  // TODO: Bring activate in
+  override def receive(message: Message): Unit = message match {
+    case StringMessage("activate") => activate()
+    case StringMessage("deactivate") => deactivate()
+    case _ => super.receive(message)
   }
 
   final def activate() = {

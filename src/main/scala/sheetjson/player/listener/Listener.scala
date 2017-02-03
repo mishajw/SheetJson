@@ -1,9 +1,7 @@
 package sheetjson.player.listener
 
-import sheetjson.util.Identifiable
+import sheetjson.util.Messagable
 
-trait Listener extends Identifiable {
+trait Listener extends Messagable {
   val name: Option[String] = None
-
-  def receive(message: String): Unit
 }

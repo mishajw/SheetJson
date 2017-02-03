@@ -7,7 +7,8 @@ import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener.KeyCode
 import sheetjson.management.Composer.MessageSender
 import sheetjson.management.gui.GUI
-import sheetjson.util.Identifiable
+import sheetjson.util.{Identifiable, Messagable}
+import sheetjson.util.Messagable.{Message, StringMessage}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -18,14 +19,14 @@ class KeyListener {
   /**
     * Map of key codes to what `Player`s are listening to that key
     */
-  private val pressListeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[(String, String)]]()
+  private val pressListeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[Message]]()
 
-  private val releaseListeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[(String, String)]]()
+  private val releaseListeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[Message]]()
 
   private var messageSenderOpt: Option[MessageSender] = None
 
-  private def sendMessage(identifier: String, message: String): Unit = messageSenderOpt match {
-    case Some(messageSender) => messageSender(identifier, message)
+  private def sendMessage(message: Message): Unit = messageSenderOpt match {
+    case Some(messageSender) => messageSender(message)
     case _ =>
   }
 
@@ -39,20 +40,20 @@ class KeyListener {
       notifyKeyReleased(keyEvent.getKeyCode)
   })
 
-  def listenForPress(key: KeyCode, identifiable: Identifiable, message: String): Unit = {
+  def listenForPress(key: KeyCode, messagable: Messagable, message: String): Unit = {
     if (!(pressListeners contains key)) {
       pressListeners.put(key, ArrayBuffer())
     }
 
-    pressListeners.get(key) += ((identifiable.identifier, message))
+    pressListeners.get(key) += messagable.createMessage(StringMessage(message))
   }
 
-  def listenForRelease(key: KeyCode, identifiable: Identifiable, message: String): Unit = {
+  def listenForRelease(key: KeyCode, messagable: Messagable, message: String): Unit = {
     if (!(releaseListeners contains key)) {
       releaseListeners.put(key, ArrayBuffer())
     }
 
-    releaseListeners.get(key) += ((identifiable.identifier, message))
+    releaseListeners.get(key) += messagable.createMessage(StringMessage(message))
   }
 
   /**
@@ -62,9 +63,7 @@ class KeyListener {
     */
   private def notifyKeyPressed(kc: KeyCode): Unit = {
     Option(pressListeners get kc)
-      .foreach(ls => ls foreach { case (identifier, message) =>
-        sendMessage(identifier, message)
-      })
+      .foreach(ls => ls foreach sendMessage)
   }
 
   /**
@@ -74,9 +73,7 @@ class KeyListener {
     */
   private def notifyKeyReleased(kc: KeyCode): Unit = {
     Option(releaseListeners get kc)
-      .foreach(ls => ls foreach { case (identifier, message) =>
-        sendMessage(identifier, message)
-      })
+      .foreach(ls => ls foreach sendMessage)
   }
 
   def registerMessageSender(messageSender: MessageSender): Unit = {
