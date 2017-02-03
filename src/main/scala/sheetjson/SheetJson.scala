@@ -34,7 +34,7 @@ object SheetJson {
         val keyListener = new KeyListener(player)
         ListenerSetupOrganiser.setup(player, keyListener)
 
-        val composer = new Composer(player, keyListener)
+        val composer = new Composer(player)
         val out = new SoundAndFileOut("out.pcm")
         out.start()
         composer play out

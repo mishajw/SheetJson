@@ -10,7 +10,7 @@ import sheetjson.util.Messagable.Message
 /**
   * Responsible for playing music from a Player object
   */
-class Composer(rootPlayer: Player, keyListener: KeyListener) {
+class Composer(rootPlayer: Player) {
 
   private val log = Logger(getClass)
 
