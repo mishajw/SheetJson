@@ -44,4 +44,6 @@ object Model extends Observable {
         a.drop(i) ++ a.take(i)
       }) }
   }
+
+  def clearReadings() = readings.clear()
 }

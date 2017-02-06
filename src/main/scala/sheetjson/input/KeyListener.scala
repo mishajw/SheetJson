@@ -12,7 +12,7 @@ import sheetjson.util.Messagable.{Message, StringMessage}
 
 import scala.collection.mutable.ArrayBuffer
 
-class KeyListener(private val rootPlayer: Player) {
+class KeyListener(var rootPlayer: Player) {
 
   private val log = Logger(getClass)
 
@@ -49,6 +49,11 @@ class KeyListener(private val rootPlayer: Player) {
     }
 
     releaseListeners.get(key) += messagable.createMessage(StringMessage(message))
+  }
+
+  def clearListeners() = {
+    pressListeners.clear()
+    releaseListeners.clear()
   }
 
   /**
