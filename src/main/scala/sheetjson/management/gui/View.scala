@@ -7,7 +7,7 @@ import javax.swing.JPanel
 import sheetjson.management.gui.View._
 import sheetjson.player.{Playable, Player}
 
-class View(model: Model) extends JPanel with Observer {
+class View(controller: Controller) extends JPanel with Observer {
 
   /**
     * The last time of a repaint
@@ -15,7 +15,7 @@ class View(model: Model) extends JPanel with Observer {
   private var lastUpdated: Option[Long] = None
 
   // Observe model
-  model addObserver this
+  controller addObserver this
 
   private val readingsToShow = 1000
 
@@ -37,7 +37,7 @@ class View(model: Model) extends JPanel with Observer {
     * Draw the players to the screen
     */
   private def drawPlayers()(implicit g: Graphics): Unit = {
-    val readings = model.allReadings
+    val readings = controller.allReadings
       .map { case (p, ps) => (p, ps.drop(ps.size - readingsToShow)) }
 
     if (readings.isEmpty) return

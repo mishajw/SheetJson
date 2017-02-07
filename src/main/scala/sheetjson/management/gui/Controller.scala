@@ -1,18 +1,11 @@
 package sheetjson.management.gui
 
 import java.util.Observable
-import java.util.concurrent.ConcurrentLinkedQueue
 
 import sheetjson.player.{Playable, Player}
 import sheetjson.util.RootPlayerAssignable
 
-import scala.collection.mutable
-
-class Model extends Observable with RootPlayerAssignable {
-
-  private type Map[T, V] = mutable.LinkedHashMap[T, V]
-  private type Queue[T] = ConcurrentLinkedQueue[T]
-
+class Controller extends Observable with RootPlayerAssignable {
   def changed() = {
     setChanged()
     notifyObservers()
