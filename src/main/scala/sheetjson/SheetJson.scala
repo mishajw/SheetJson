@@ -32,7 +32,8 @@ object SheetJson {
       case Some(originPath) =>
         val controller = new Controller()
         val gui = new GUI(controller)
-        val keyListener = new KeyListener(gui)
+        val keyListener = new KeyListener()
+        gui.addKeyListener(keyListener)
         val composer = new Composer(controller)
 
         val playerLoader = new PlayerLoader(Seq(controller, keyListener, composer), originPath, keyListener)
