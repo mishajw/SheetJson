@@ -3,13 +3,12 @@ package sheetjson.management
 import com.typesafe.scalalogging.Logger
 import sheetjson.output.Out
 import sheetjson.player.{EndPlayable, Player}
-import sheetjson.util.Config
-import sheetjson.util.Messagable.Message
+import sheetjson.util.{Config, RootPlayerAssignable}
 
 /**
   * Responsible for playing music from a Player object
   */
-class Composer(var rootPlayer: Player) {
+class Composer extends RootPlayerAssignable {
 
   private val log = Logger(getClass)
 
@@ -18,19 +17,20 @@ class Composer(var rootPlayer: Player) {
     * @param out the output
     */
   def play(out: Out): Unit = {
-    log.debug(s"Start taking from $rootPlayer and putting into $out")
+    log.debug(s"Start taking from $rootPlayerOpt and putting into $out")
 
-    while (rootPlayer.alive) {
-      out.play(rootPlayer.play)
+    while (rootPlayerOpt.forall(_.alive)) {
+      rootPlayerOpt match {
+        case Some(rootPlayer) =>
+          out.play(rootPlayer.play)
+        case None =>
+      }
+
       Config.globalAbsoluteStep = Config.globalAbsoluteStep.incr
     }
 
     log.debug("Stop playing")
 
     out.play(new EndPlayable())
-  }
-
-  def sendMessage(message: Message): Unit = {
-    rootPlayer.receive(message)
   }
 }

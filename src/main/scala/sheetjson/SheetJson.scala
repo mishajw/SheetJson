@@ -6,7 +6,7 @@ import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener
 import sheetjson.management.gui.Model
 import sheetjson.management.json.JsonParser
-import sheetjson.management.{Composer, ListenerSetupOrganiser, PlayerReloader}
+import sheetjson.management.{Composer, ListenerSetupOrganiser, PlayerLoader}
 import sheetjson.output.SoundAndFileOut
 import sheetjson.player.Player
 import sheetjson.util.Config
@@ -20,39 +20,28 @@ object SheetJson {
 
   def main(args: Array[String]): Unit = {
 
-    val (playerOpt, originPathOpt) = args match {
+    val originPathOpt = args match {
       case Array("--path", path) =>
-        (JsonParser parse path, Some(path))
-      case Array("--raw", raw) =>
-        (JsonParser parseRaw raw, None)
+        Some(path)
       case _ =>
-        log.error("Usage: sheet-json [--path | --raw] [<file path> | <JSON string>]")
+        log.error("Usage: sheet-json --path <file path>")
         return
     }
 
+    val keyListener = new KeyListener()
+    val composer = new Composer()
 
-    playerOpt match {
-      case Success(player) =>
-        log.debug(s"Create players: ${Player.flatten(player)}")
-
-        player.propagateParents()
-        val keyListener = new KeyListener(player)
-        ListenerSetupOrganiser.setup(player, keyListener)
-
-        val composer = new Composer(player)
-
-        originPathOpt match {
-          case Some(originPath) =>
-            new PlayerReloader(composer, originPath, Seconds(3), keyListener)
-          case None =>
-        }
+    originPathOpt match {
+      case Some(originPath) =>
+        val playerLoader = new PlayerLoader(composer, originPath, keyListener)
+        playerLoader.run()
+        playerLoader.setupReload(Seconds(5))
 
         val out = new SoundAndFileOut("out.pcm")
         out.start()
         composer play out
         out.stop()
-      case Failure(e) =>
-        log.error("Got error from parsing JSON", e)
+      case _ =>
     }
   }
 }

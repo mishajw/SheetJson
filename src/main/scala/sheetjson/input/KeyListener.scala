@@ -7,12 +7,12 @@ import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener.KeyCode
 import sheetjson.management.gui.GUI
 import sheetjson.player.Player
-import sheetjson.util.Messagable
+import sheetjson.util.{Messagable, RootPlayerAssignable}
 import sheetjson.util.Messagable.{Message, StringMessage}
 
 import scala.collection.mutable.ArrayBuffer
 
-class KeyListener(var rootPlayer: Player) {
+class KeyListener extends RootPlayerAssignable {
 
   private val log = Logger(getClass)
 
@@ -23,7 +23,7 @@ class KeyListener(var rootPlayer: Player) {
 
   private val releaseListeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[Message]]()
 
-  private def sendMessage(message: Message): Unit = rootPlayer receive message
+  private def sendMessage(message: Message): Unit = rootPlayerOpt foreach (_.receive(message))
 
   GUI.addKeyListener(new java.awt.event.KeyListener() {
     override def keyTyped(keyEvent: KeyEvent): Unit = {}
@@ -51,7 +51,7 @@ class KeyListener(var rootPlayer: Player) {
     releaseListeners.get(key) += messagable.createMessage(StringMessage(message))
   }
 
-  def clearListeners() = {
+  override protected def newPlayerAssigned(): Unit = {
     pressListeners.clear()
     releaseListeners.clear()
   }
