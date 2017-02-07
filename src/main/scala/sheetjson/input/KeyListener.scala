@@ -12,7 +12,7 @@ import sheetjson.util.Messagable.{Message, StringMessage}
 
 import scala.collection.mutable.ArrayBuffer
 
-class KeyListener extends RootPlayerAssignable {
+class KeyListener(gui: GUI) extends RootPlayerAssignable {
 
   private val log = Logger(getClass)
 
@@ -25,7 +25,7 @@ class KeyListener extends RootPlayerAssignable {
 
   private def sendMessage(message: Message): Unit = rootPlayerOpt foreach (_.receive(message))
 
-  GUI.addKeyListener(new java.awt.event.KeyListener() {
+  gui.addKeyListener(new java.awt.event.KeyListener() {
     override def keyTyped(keyEvent: KeyEvent): Unit = {}
 
     override def keyPressed(keyEvent: KeyEvent): Unit =

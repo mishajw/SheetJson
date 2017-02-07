@@ -6,11 +6,12 @@ import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener
 import sheetjson.management.gui.Model
 import sheetjson.management.json.JsonParser
+import sheetjson.util.RootPlayerAssignable
 import sheetjson.util.Time.Seconds
 
 import scala.util.{Failure, Success}
 
-class PlayerLoader(composer: Composer,
+class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
                    originPath: String,
                    keyListener: KeyListener) extends Runnable {
 
@@ -18,18 +19,14 @@ class PlayerLoader(composer: Composer,
 
   private var reloadFuture: Option[ScheduledFuture[_]] = None
 
-  private val rootPlayerAssignables = Seq(composer, keyListener)
-
   override def run(): Unit = {
     JsonParser parse originPath match {
       case Success(newRootPlayer) =>
-        log.info(s"Loading players in $composer")
         newRootPlayer.propagateParents()
 
         // TODO: Make sure this is thread safe
         rootPlayerAssignables.foreach(_.setNewPlayer(newRootPlayer))
 
-        Model.clearReadings()
         ListenerSetupOrganiser.setup(newRootPlayer, keyListener)
       case Failure(_) =>
     }

@@ -1,6 +1,7 @@
 package sheetjson.management
 
 import com.typesafe.scalalogging.Logger
+import sheetjson.management.gui.Model
 import sheetjson.output.Out
 import sheetjson.player.{EndPlayable, Player}
 import sheetjson.util.{Config, RootPlayerAssignable}
@@ -8,7 +9,7 @@ import sheetjson.util.{Config, RootPlayerAssignable}
 /**
   * Responsible for playing music from a Player object
   */
-class Composer extends RootPlayerAssignable {
+class Composer(model: Model) extends RootPlayerAssignable {
 
   private val log = Logger(getClass)
 
@@ -27,6 +28,8 @@ class Composer extends RootPlayerAssignable {
       }
 
       Config.globalAbsoluteStep = Config.globalAbsoluteStep.incr
+
+      model.changed()
     }
 
     log.debug("Stop playing")

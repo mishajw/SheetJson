@@ -1,10 +1,11 @@
 package sheetjson.player
 
-import sheetjson.management.gui.Model
 import sheetjson.player.composite.CompositePlayer
 import sheetjson.player.filter.FilterPlayer
 import sheetjson.util.Messagable
 import sheetjson.util.Time.{Absolute, Bars, Seconds}
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * Represents something that "plays" music
@@ -37,6 +38,11 @@ abstract class Player(val spec: PlayerSpec) extends Messagable {
   def volume: Double = spec.volume getOrElse defaultVolume
 
   /**
+    * A history of `Playable`s played by this player
+    */
+  val history: ArrayBuffer[Playable] = ArrayBuffer()
+
+  /**
     * @return the next value played, and handle other transformations
     */
   def play: Playable = {
@@ -45,8 +51,7 @@ abstract class Player(val spec: PlayerSpec) extends Messagable {
     val played = _play * volume
     absoluteStep = absoluteStep.incr
 
-    if (spec.visible)
-      Model.addReading(this, played)
+    history += played
 
     played
   }

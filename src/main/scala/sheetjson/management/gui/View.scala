@@ -7,7 +7,7 @@ import javax.swing.JPanel
 import sheetjson.management.gui.View._
 import sheetjson.player.{Playable, Player}
 
-class View extends JPanel with Observer {
+class View(model: Model) extends JPanel with Observer {
 
   /**
     * The last time of a repaint
@@ -15,7 +15,9 @@ class View extends JPanel with Observer {
   private var lastUpdated: Option[Long] = None
 
   // Observe model
-  Model addObserver this
+  model addObserver this
+
+  private val readingsToShow = 1000
 
   override def paint(g: Graphics): Unit = {
     // Return if not enough time has passed since last paint
@@ -35,7 +37,8 @@ class View extends JPanel with Observer {
     * Draw the players to the screen
     */
   private def drawPlayers()(implicit g: Graphics): Unit = {
-    val readings = Model.allReadings
+    val readings = model.allReadings
+      .map { case (p, ps) => (p, ps.drop(ps.size - readingsToShow)) }
 
     if (readings.isEmpty) return
 
@@ -76,6 +79,10 @@ class View extends JPanel with Observer {
                             readings: Seq[Playable],
                             height: Int)(implicit g: Graphics): Unit = {
 
+    g.drawString(s"${player.identifier}(${player.displayParameters.mkString(", ")})", 0, 20)
+
+    if (readings.isEmpty) return
+
     def scaleX(i: Int): Int = {
       ((i.toDouble / readings.size.toDouble) * getWidth.toDouble).toInt
     }
@@ -101,8 +108,6 @@ class View extends JPanel with Observer {
       case ((y1, x1), (y2, x2)) =>
         g.drawLine(x1, y1, x2, y2)
     }
-
-    g.drawString(s"${player.identifier}(${player.displayParameters.mkString(", ")})", 0, 20)
   }
 
   override def update(observable: Observable, o: scala.Any): Unit = repaint()

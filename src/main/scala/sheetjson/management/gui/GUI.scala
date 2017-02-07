@@ -3,12 +3,12 @@ package sheetjson.management.gui
 import java.awt.event.KeyListener
 import javax.swing.JFrame
 
-object GUI {
+class GUI(model: Model) {
   private val frame = {
     val f = new JFrame("sheetjson")
     f.setSize(800, 600)
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    f.setContentPane(new View())
+    f.setContentPane(new View(model))
     f.setVisible(true)
     f
   }
