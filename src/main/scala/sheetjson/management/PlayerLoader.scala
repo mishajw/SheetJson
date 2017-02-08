@@ -7,7 +7,7 @@ import sheetjson.input.KeyListener
 import sheetjson.management.gui.Controller
 import sheetjson.management.json.JsonParser
 import sheetjson.util.RootPlayerAssignable
-import sheetjson.util.Time.Seconds
+import sheetjson.util.Time.{Bars, Seconds}
 
 import scala.util.{Failure, Success}
 
@@ -32,12 +32,12 @@ class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
     }
   }
 
-  def setupReload(reloadWaitTime: Seconds) = {
+  def setupReload(reloadWaitTime: Bars) = {
     val executor = new ScheduledThreadPoolExecutor(1)
     reloadFuture = Some(executor.scheduleAtFixedRate(
       this,
-      (reloadWaitTime.toDouble * 1000).toLong,
-      (reloadWaitTime.toDouble * 1000).toLong,
+      (Seconds(reloadWaitTime).toDouble * 1000).toLong,
+      (Seconds(reloadWaitTime).toDouble * 1000).toLong,
       TimeUnit.MILLISECONDS))
   }
 
