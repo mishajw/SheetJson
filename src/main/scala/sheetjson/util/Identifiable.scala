@@ -12,8 +12,15 @@ trait Identifiable {
 
   def identifiableChildren: Seq[Identifiable] = Seq()
 
+  def uniqueIdentifiableChildren = identifiableChildren.filter(_ != this)
+
+  def flatten: Seq[Identifiable] = {
+    val children = uniqueIdentifiableChildren
+    identifiableChildren ++ children.flatMap(_.flatten)
+  }
+
   def propagateParents(): Unit = {
-    val children = identifiableChildren.filter(_ != this)
+    val children = uniqueIdentifiableChildren
     children foreach (_.parentOpt = Some(this))
     children foreach (_.propagateParents())
   }

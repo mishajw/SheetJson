@@ -13,7 +13,7 @@ class Controller extends Observable with RootPlayerAssignable {
 
   def allReadings: Traversable[(Player, Traversable[Playable])] = rootPlayerOpt match {
     case Some(rootPlayer) =>
-      Player.flatten(rootPlayer) map (p => (p, p.history))
+      rootPlayer.flattenPlayers map (p => (p, p.history))
     case None => Seq()
   }
 }

@@ -75,22 +75,15 @@ abstract class Player(val spec: PlayerSpec) extends Messagable {
 
   def displayParameters: Seq[Object] = Seq()
 
+  def flattenPlayers = flatten collect {
+    case p: Player => p
+  }
+
   override def toString: String = {
     (spec.name, spec.`type`) match {
       case (Some(n), _) => n
       case (None, Some(t)) => t
       case _ => super.toString
     }
-  }
-}
-
-object Player {
-  def flatten(p: Player): Seq[Player] = p match {
-    case p: CompositePlayer[_] =>
-      p +: p.components.flatMap(flatten)
-    case p: FilterPlayer =>
-      p +: flatten(p.child)
-    case p: Player =>
-      Seq(p)
   }
 }
