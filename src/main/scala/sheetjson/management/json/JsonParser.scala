@@ -31,25 +31,6 @@ object JsonParser {
   implicit val formats = DefaultFormats
 
   /**
-    * Parse JSON from a file
- *
-    * @param path path of the file
-    * @return an option of a player from the JSON file
-    */
-  def parse(path: String): Try[Player] = {
-    try {
-      val f = Source.fromFile(path)
-      val raw = f.mkString
-      f.close()
-
-      parseRaw(raw)
-    } catch {
-      case e: FileNotFoundException =>
-        Failure(e)
-    }
-  }
-
-  /**
     * Parse a JSON string
  *
     * @param jsonStr the JSON string

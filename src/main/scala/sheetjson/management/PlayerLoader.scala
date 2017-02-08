@@ -1,5 +1,6 @@
 package sheetjson.management
 
+import java.io.FileNotFoundException
 import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor, TimeUnit}
 
 import com.typesafe.scalalogging.Logger
@@ -9,7 +10,8 @@ import sheetjson.management.json.JsonParser
 import sheetjson.util.RootPlayerAssignable
 import sheetjson.util.Time.{Bars, Seconds}
 
-import scala.util.{Failure, Success}
+import scala.io.Source
+import scala.util.{Failure, Success, Try}
 
 class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
                    originPath: String,
@@ -20,15 +22,34 @@ class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
   private var reloadFuture: Option[ScheduledFuture[_]] = None
 
   override def run(): Unit = {
-    JsonParser parse originPath match {
-      case Success(newRootPlayer) =>
-        newRootPlayer.propagateParents()
+    val result = for {
+      jsonString <- getFile(originPath)
+      newRootPlayer <- JsonParser parseRaw jsonString
+    } yield {
+      newRootPlayer.propagateParents()
 
-        // TODO: Make sure this is thread safe
-        rootPlayerAssignables.foreach(_.setNewPlayer(newRootPlayer))
+      // TODO: Make sure this is thread safe
+      rootPlayerAssignables.foreach(_.setNewPlayer(newRootPlayer))
 
-        ListenerSetupOrganiser.setup(newRootPlayer, keyListener)
-      case Failure(_) =>
+      ListenerSetupOrganiser.setup(newRootPlayer, keyListener)
+    }
+
+    result match {
+      case Success(_) => log.info("Successful reload")
+      case Failure(e) => log.warn("Couldn't reload", e)
+    }
+  }
+
+  def getFile(path: String): Try[String] = {
+    try {
+      val f = Source.fromFile(path)
+      val raw = f.mkString
+      f.close()
+
+      Success(raw)
+    } catch {
+      case e: FileNotFoundException =>
+        Failure(e)
     }
   }
 
