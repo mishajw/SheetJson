@@ -20,6 +20,10 @@ class SmoothKeyActivated(val fadeFunction: WaveFunction,
   var lastActiveOpt: Option[Absolute] = None
 
   override protected def _play: Playable = {
+    if (isActive && lastActiveOpt.isEmpty) {
+      lastActiveOpt = Some(absoluteStep)
+    }
+
     if (isActive) {
       activationAmount += 1 / Absolute(fadeInTime).toDouble
     } else {
@@ -35,13 +39,10 @@ class SmoothKeyActivated(val fadeFunction: WaveFunction,
         while (indexSinceStart >= childPlays.length)
           childPlays += child.play
 
-        childPlays(indexSinceStart) * fadeFunction(activationAmount)
-      case Some(_) =>
+        childPlays(indexSinceStart) * fadeFunction.signed(activationAmount)
+      case _ =>
         lastActiveOpt = None
         Playable.default
-      case None =>
-        lastActiveOpt = Some(absoluteStep)
-        _play
     }
   }
 
