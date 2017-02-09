@@ -1,18 +1,11 @@
 package sheetjson
 
-import java.util.concurrent.ScheduledThreadPoolExecutor
-
 import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener
-import sheetjson.management.gui.{GUI, Controller}
-import sheetjson.management.json.JsonParser
-import sheetjson.management.{Composer, ListenerSetupOrganiser, PlayerLoader}
+import sheetjson.management.gui.{Controller, GUI}
+import sheetjson.management.{Composer, PlayerLoader}
 import sheetjson.output.SoundAndFileOut
-import sheetjson.player.Player
-import sheetjson.util.Config
-import sheetjson.util.Time.{Absolute, Bars, Seconds}
-
-import scala.util.{Failure, Success}
+import sheetjson.util.Time.Bars
 
 object SheetJson {
 

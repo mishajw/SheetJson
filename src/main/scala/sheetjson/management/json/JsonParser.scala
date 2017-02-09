@@ -1,7 +1,5 @@
 package sheetjson.management.json
 
-import java.io.FileNotFoundException
-
 import com.typesafe.scalalogging.Logger
 import org.json4s._
 import org.json4s.jackson.JsonMethods
@@ -18,7 +16,6 @@ import sheetjson.player.origin.{FadingNoise, RawFile, Tone}
 import sheetjson.util.{Config, Preset}
 import sheetjson.{JsonParsingException, jsonFailure}
 
-import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 /**

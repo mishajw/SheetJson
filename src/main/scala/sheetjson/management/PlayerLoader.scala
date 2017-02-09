@@ -5,7 +5,6 @@ import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor, TimeU
 
 import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener
-import sheetjson.management.gui.Controller
 import sheetjson.management.json.JsonParser
 import sheetjson.util.RootPlayerAssignable
 import sheetjson.util.Time.{Bars, Seconds}

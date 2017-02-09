@@ -1,7 +1,5 @@
 package sheetjson.player
 
-import sheetjson.player.composite.CompositePlayer
-import sheetjson.player.filter.FilterPlayer
 import sheetjson.util.Messagable
 import sheetjson.util.Time.{Absolute, Bars, Seconds}
 

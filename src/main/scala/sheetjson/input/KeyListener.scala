@@ -5,10 +5,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 import com.typesafe.scalalogging.Logger
 import sheetjson.input.KeyListener.KeyCode
-import sheetjson.management.gui.GUI
-import sheetjson.player.Player
-import sheetjson.util.{Messagable, RootPlayerAssignable}
 import sheetjson.util.Messagable.{Message, StringMessage}
+import sheetjson.util.{Messagable, RootPlayerAssignable}
 
 import scala.collection.mutable.ArrayBuffer
 
