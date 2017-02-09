@@ -13,13 +13,13 @@ case class Preset(name: String, constructor: JObject)
 /**
   * For documentation on parameters, see Config object accessors
   */
-case class Config(sampleRate: SampleRate, bpm: BPM, beatsPerBar: Int, presets: Seq[Preset])
+case class Config(sampleRate: SampleRate, bpm: BPM, beatsPerBar: Int, presets: Seq[Preset], displayAmount: Int)
 
 object Config {
   /**
     * The default configuration. If no configuration is given, this is used
     */
-  private val defaultConfig = Config(24000, 120, 4, Seq())
+  private val defaultConfig = Config(24000, 120, 4, Seq(), 1000)
 
   /**
     * The current active configuration

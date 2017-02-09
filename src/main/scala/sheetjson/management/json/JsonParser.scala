@@ -53,8 +53,9 @@ object JsonParser {
       sampleRate <- (config \ "sample_rate").extractOpt[Int]
       bpm <- (config \ "bpm").extractOpt[Int]
       beatsPerBar <- (config \ "beats_per_bar").extractOpt[Int]
+      displayAmount <- (config \ "display_amount").extractOpt[Int]
       presets <- (config \ "presets").extractOpt[Seq[Preset]]
-    } yield Config(sampleRate, bpm, beatsPerBar, presets)
+    } yield Config(sampleRate, bpm, beatsPerBar, presets, displayAmount)
 
     configOpt.foreach(Config.update)
 
