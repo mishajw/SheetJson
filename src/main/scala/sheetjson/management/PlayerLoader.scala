@@ -20,11 +20,16 @@ class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
 
   private var reloadFuture: Option[ScheduledFuture[_]] = None
 
+  private var lastFileHash: Int = 0
+
   override def run(): Unit = {
     val result = for {
       jsonString <- getFile(originPath)
+      if jsonString.hashCode != lastFileHash
       newRootPlayer <- JsonParser parseRaw jsonString
     } yield {
+      lastFileHash = jsonString.hashCode
+
       newRootPlayer.propagateParents()
 
       // TODO: Make sure this is thread safe
