@@ -19,7 +19,7 @@ class SoundOut extends Out {
   /**
     * Input audio is read in these size chunks
     */
-  private val bufferAmount = 64
+  private val bufferAmount = 8
 
   /**
     * Bytes are read from this queue
@@ -31,7 +31,7 @@ class SoundOut extends Out {
     * How long to wait before playing
     * (in milliseconds)
     */
-  private val waitBuffer: Double = 10
+  private val waitBuffer: Double = 1
 
   /**
     * The thread that plays bytes
