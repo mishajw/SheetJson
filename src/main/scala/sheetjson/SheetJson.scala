@@ -30,7 +30,7 @@ object SheetJson {
         val composer = new Composer(controller)
 
         val playerLoader = new PlayerLoader(Seq(controller, keyListener, composer), originPath, keyListener)
-        playerLoader.run()
+        playerLoader.load()
         playerLoader.setupReload(Bars(2))
 
         val out = new SoundAndFileOut("out.pcm")

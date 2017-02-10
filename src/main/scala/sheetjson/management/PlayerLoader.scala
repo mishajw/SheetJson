@@ -14,7 +14,7 @@ import scala.util.{Failure, Success, Try}
 
 class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
                    originPath: String,
-                   keyListener: KeyListener) extends Runnable {
+                   keyListener: KeyListener) {
 
   private val log = Logger(getClass)
 
@@ -22,7 +22,7 @@ class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
 
   private var lastFileHash: Int = 0
 
-  override def run(): Unit = {
+  def load(printError: Boolean = true): Unit = {
     val result = for {
       jsonString <- getFile(originPath)
       if jsonString.hashCode != lastFileHash
@@ -40,7 +40,8 @@ class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
 
     result match {
       case Success(_) => log.info("Successful reload")
-      case Failure(e) => log.warn("Couldn't reload", e)
+      case Failure(e) if printError => log.warn("Couldn't reload", e)
+      case _ =>
     }
   }
 
@@ -60,7 +61,7 @@ class PlayerLoader(rootPlayerAssignables: Seq[RootPlayerAssignable],
   def setupReload(reloadWaitTime: Bars) = {
     val executor = new ScheduledThreadPoolExecutor(1)
     reloadFuture = Some(executor.scheduleAtFixedRate(
-      this,
+      new Runnable() { override def run(): Unit = load(false) },
       (Seconds(reloadWaitTime).toDouble * 1000).toLong,
       (Seconds(reloadWaitTime).toDouble * 1000).toLong,
       TimeUnit.MILLISECONDS))
