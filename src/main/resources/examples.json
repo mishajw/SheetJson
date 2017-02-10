@@ -3,6 +3,7 @@
     "bpm": 120,
     "sample_rate": 14000,
     "beats_per_bar": 4,
+    "display_amount": 1000,
     "presets": [
       {
         "name": "preset1",
