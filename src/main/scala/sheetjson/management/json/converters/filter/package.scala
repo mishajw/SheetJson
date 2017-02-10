@@ -16,18 +16,11 @@ package object filter {
     */
   trait FilterConverter[T <: FilterPlayer] extends JsonConverter[T] {
     override final def apply(json: JObject): Try[T] = {
-      val children: Seq[JObject] = for {
-        JObject(obj) <- json
-        ("child", child: JObject) <- obj
-      } yield child
-
-      children match {
-        case Seq(child) => for {
-          player <- JsonParser.parsePlayerJson(child)
-          filter <- applyWithChild(player, json)
-        } yield filter
-        case Seq() => jsonFailure("")
-      }
+      for {
+        childJson <- extractTry[JObject](json, "child")
+        child <- JsonParser.parsePlayerJson(childJson)
+        player <- applyWithChild(child, json)
+      } yield player
     }
 
     protected def applyWithChild(child: Player, json: JObject): Try[T] = applyWithChildOpt(child, json) match {
