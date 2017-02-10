@@ -8,6 +8,8 @@ import sheetjson.management.gui.View._
 import sheetjson.player.{Playable, Player}
 import sheetjson.util.Config
 
+import scala.util.Random
+
 class View(controller: Controller) extends JPanel with Observer {
 
   /**
@@ -50,8 +52,8 @@ class View(controller: Controller) extends JPanel with Observer {
 
     val heightForPlayer: Int = getHeight / trimmedReadings.size
 
-    trimmedReadings.toSeq.zipWithIndex.foreach { case ((p, rs), i) =>
-      g.setColor(colorForIndex(i))
+    trimmedReadings.toSeq.foreach { case (p, rs) =>
+      g.setColor(colorForPlayer(p))
       drawReadings(p, rs.toSeq, heightForPlayer)
       g.translate(0, heightForPlayer)
     }
@@ -134,9 +136,16 @@ object View {
     new Color(129, 129, 255)
   )
 
-  /**
-    * @param i the index of a player
-    * @return the color to use to draw it
-    */
-  private def colorForIndex(i: Int) = playerColors(i % playerColors.size)
+  private def colorForPlayer(player: Player) = {
+    val defaultColor = playerColors(player.path.size % playerColors.size)
+
+    val random = new Random(player.hashCode())
+
+    def randomize(i: Int): Int = Math.min(255, i + ((random.nextDouble() -0.5) * 75)).toInt
+
+    new Color(
+      randomize(defaultColor.getRed),
+      randomize(defaultColor.getGreen),
+      randomize(defaultColor.getBlue))
+  }
 }
