@@ -6,6 +6,7 @@ import javax.swing.JPanel
 
 import sheetjson.management.gui.View._
 import sheetjson.player.{Playable, Player}
+import sheetjson.util.Config
 
 class View(controller: Controller) extends JPanel with Observer {
 
@@ -38,7 +39,7 @@ class View(controller: Controller) extends JPanel with Observer {
     */
   private def drawPlayers()(implicit g: Graphics): Unit = {
     val readings = controller.allReadings
-      .map { case (p, ps) => (p, ps.drop(ps.size - readingsToShow)) }
+      .map { case (p, ps) => (p, ps.drop(ps.size - Config.displayAmount)) }
 
     if (readings.isEmpty) return
 

@@ -1,6 +1,6 @@
 package sheetjson.player
 
-import sheetjson.util.Messagable
+import sheetjson.util.{Config, Messagable}
 import sheetjson.util.Time.{Absolute, Bars, Seconds}
 
 import scala.collection.mutable.ArrayBuffer
@@ -50,6 +50,8 @@ abstract class Player(val spec: PlayerSpec) extends Messagable {
     absoluteStep = absoluteStep.incr
 
     history += played
+    if (history.length > Config.displayAmount)
+      history.remove(0, history.length - Config.displayAmount)
 
     played
   }

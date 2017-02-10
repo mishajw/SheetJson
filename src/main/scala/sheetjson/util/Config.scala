@@ -46,6 +46,11 @@ object Config {
   def beatsPerBar: Int = config.beatsPerBar
 
   /**
+    * How many samples to display on the screen
+    */
+  def displayAmount: Int = config.displayAmount
+
+  /**
     * Get a preset from the configuration
     * A preset is a template for creating Players
  *
