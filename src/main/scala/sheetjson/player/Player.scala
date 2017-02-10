@@ -49,9 +49,11 @@ abstract class Player(val spec: PlayerSpec) extends Messagable {
     val played = _play * volume
     absoluteStep = absoluteStep.incr
 
-    history += played
-    if (history.length > Config.displayAmount)
-      history.remove(0, history.length - Config.displayAmount)
+    history synchronized {
+      history += played
+      if (history.length > Config.displayAmount)
+        history.remove(0, history.length - Config.displayAmount)
+    }
 
     played
   }

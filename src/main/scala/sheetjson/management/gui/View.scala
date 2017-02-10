@@ -39,13 +39,17 @@ class View(controller: Controller) extends JPanel with Observer {
     */
   private def drawPlayers()(implicit g: Graphics): Unit = {
     val readings = controller.allReadings
-      .map { case (p, ps) => (p, ps.drop(ps.size - Config.displayAmount)) }
 
     if (readings.isEmpty) return
 
-    val heightForPlayer: Int = getHeight / readings.size
+    val trimmedReadings = readings
+      .map { case (p, ps) => ps synchronized {
+        (p, ps.drop(ps.size - Config.displayAmount))
+      }}
 
-    readings.toSeq.zipWithIndex.foreach { case ((p, rs), i) =>
+    val heightForPlayer: Int = getHeight / trimmedReadings.size
+
+    trimmedReadings.toSeq.zipWithIndex.foreach { case ((p, rs), i) =>
       g.setColor(colorForIndex(i))
       drawReadings(p, rs.toSeq, heightForPlayer)
       g.translate(0, heightForPlayer)
