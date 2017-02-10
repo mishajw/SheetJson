@@ -40,8 +40,6 @@ class View(controller: Controller) extends JPanel with Observer {
   private def drawPlayers()(implicit g: Graphics): Unit = {
     val readings = controller.allReadings
       .filter { case (p, _) => p.spec.visible }
-      .toSeq
-      .sortBy { case (p, _) => p.identifier }
 
     if (readings.isEmpty) return
 

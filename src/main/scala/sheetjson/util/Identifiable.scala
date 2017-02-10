@@ -14,9 +14,9 @@ trait Identifiable {
 
   def uniqueIdentifiableChildren = identifiableChildren.filter(_ != this)
 
-  def flatten: Set[Identifiable] = {
+  def flatten: Seq[Identifiable] = {
     val children = uniqueIdentifiableChildren
-    (identifiableChildren ++ children.flatMap(_.flatten)).toSet
+    (identifiableChildren ++ children.flatMap(_.flatten)).distinct
   }
 
   def propagateParents(): Unit = {
