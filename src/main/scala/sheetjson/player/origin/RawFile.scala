@@ -11,40 +11,74 @@ import scala.util.control.Breaks._
 
 class RawFile(path: String, _spec: PlayerSpec) extends OriginPlayer(_spec) {
 
+  val rawInput = AudioSystem.getAudioInputStream(new File(path))
+
+  // Change the input so that it's the same format as the rest of the system
+  val formattedInput: AudioInputStream = AudioSystem.getAudioInputStream(Config.format, rawInput)
+
   /**
-    * Playables taken from the input file
+    * Bytes taken from the file, yet to be parsed into playables
     */
-  private val playablesFromFile: Vector[Playable] = {
-    val rawInput = AudioSystem.getAudioInputStream(new File(path))
+  val bytesFromFile: ArrayBuffer[Byte] = ArrayBuffer()
 
-    // Change the input so that it's the same format as the rest of the system
-    val formattedInput: AudioInputStream = AudioSystem.getAudioInputStream(Config.format, rawInput)
+  /**
+    * Playables parsed from the bytes
+    */
+  val playablesFromFile: ArrayBuffer[Playable] = ArrayBuffer()
 
-    // Read in the bytes
-    val bytes: ArrayBuffer[Byte] = new ArrayBuffer()
-    breakable { while (true) {
-      val buffer = Array.fill(32){0.toByte}
+  /**
+    * The size of the playables. Should be incremented whenever a playable is added
+    */
+  var playablesSize: Int = 0
 
-      formattedInput.read(buffer) match {
-        case -1 => break()
-        case n => bytes ++= buffer.take(n)
-      }
-    }}
+  /**
+    * True if there are no more bytes to be read from the file
+    */
+  var doneReading = false
 
-    // Format the bytes to be playables
-    bytes
-      .grouped(2)
-      .map(Playable.fromBytes)
-      .map(_.getOrElse(Playable.default))
-      .toVector
+  override protected def _play: Playable = {
+    while (!doneReading && playablesSize <= absoluteStep.toInt) {
+      copyFileToBytes()
+      copyBytesToPlayable()
+    }
+
+    playablesFromFile(absoluteStep.toInt)
   }
 
   /**
-    * The size of the Playables list. Expensive to compute with large files, so is stored here.
+    * Copy bytes from the file into `bytesFromFile`
     */
-  private lazy val playablesSize = playablesFromFile.size
+  private def copyFileToBytes(): Unit = {
+    val buffer = Array.fill(32){0.toByte}
 
-  override protected def _play: Playable = {
-    playablesFromFile(absoluteStep.toInt % playablesSize)
+    formattedInput.read(buffer) match {
+      case -1 => doneReading = true
+      case n => bytesFromFile ++= buffer.take(n)
+    }
+  }
+
+  /**
+    * Copy from `bytesFromFile` and parse into `Playable`s and put into `playablesFromFile`
+    */
+  private def copyBytesToPlayable(): Unit = {
+    val remainingBytes = ArrayBuffer[Byte]()
+
+    val newPlayables = bytesFromFile
+      .grouped(2)
+      .map {
+        case Seq(a, b) =>
+          Playable.fromBytes(Seq(a, b))
+            .getOrElse(Playable.default)
+        case other =>
+          remainingBytes ++= other
+          Playable.default
+      }
+      .toSeq
+
+    playablesFromFile ++= newPlayables
+    playablesSize += newPlayables.size
+
+    bytesFromFile.clear()
+    bytesFromFile ++= remainingBytes
   }
 }
