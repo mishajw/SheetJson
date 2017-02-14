@@ -1,7 +1,7 @@
-package sheetjson.management
+package sheetjson.initialisation.json
 
+import sheetjson.initialisation.json.converters.listener.ListenerSetup
 import sheetjson.input.KeyListener
-import sheetjson.management.json.converters.listener.ListenerSetup
 import sheetjson.player.listener._
 import sheetjson.util.Identifiable
 

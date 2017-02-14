@@ -1,4 +1,4 @@
-package sheetjson.management.gui
+package sheetjson.gui
 
 import java.util.Observable
 

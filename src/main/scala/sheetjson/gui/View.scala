@@ -1,10 +1,10 @@
-package sheetjson.management.gui
+package sheetjson.gui
 
 import java.awt.{Color, Graphics}
 import java.util.{Observable, Observer}
 import javax.swing.JPanel
 
-import sheetjson.management.gui.View._
+import sheetjson.gui.View._
 import sheetjson.player.{Playable, Player}
 import sheetjson.util.Config
 

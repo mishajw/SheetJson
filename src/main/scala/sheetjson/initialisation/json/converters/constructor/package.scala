@@ -1,9 +1,9 @@
-package sheetjson.management.json.converters
+package sheetjson.initialisation.json.converters
 
 import org.json4s.JObject
 import org.json4s.JsonAST.JString
+import sheetjson.initialisation.json.JsonParser
 import sheetjson.jsonFailure
-import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 import sheetjson.player.composite.{CompositePlayer, Keyboard}
 import sheetjson.player.listener.ActivatableListener

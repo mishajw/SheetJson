@@ -1,8 +1,8 @@
-package sheetjson.management.json.converters
+package sheetjson.initialisation.json.converters
 
 import org.json4s.JObject
+import sheetjson.initialisation.json.JsonParser
 import sheetjson.jsonFailure
-import sheetjson.management.json.JsonParser
 import sheetjson.player.filter._
 import sheetjson.player.{Player, WaveFunction}
 import sheetjson.util.Time.{Bars, Seconds}

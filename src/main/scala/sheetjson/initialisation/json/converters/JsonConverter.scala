@@ -1,9 +1,9 @@
-package sheetjson.management.json.converters
+package sheetjson.initialisation.json.converters
 
 import org.json4s.JsonAST.JArray
 import org.json4s.{DefaultFormats, Formats, JObject}
+import sheetjson.initialisation.json.JsonParser
 import sheetjson.jsonFailure
-import sheetjson.management.json.JsonParser
 import sheetjson.player.{Player, PlayerSpec}
 
 import scala.util.{Failure, Success, Try}

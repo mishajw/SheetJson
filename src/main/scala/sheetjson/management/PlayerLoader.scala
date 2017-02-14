@@ -4,8 +4,8 @@ import java.io.FileNotFoundException
 import java.util.concurrent.{ScheduledFuture, ScheduledThreadPoolExecutor, TimeUnit}
 
 import com.typesafe.scalalogging.Logger
+import sheetjson.initialisation.json.{JsonParser, ListenerSetupOrganiser}
 import sheetjson.input.KeyListener
-import sheetjson.management.json.JsonParser
 import sheetjson.util.RootPlayerAssignable
 import sheetjson.util.Time.{Bars, Seconds}
 

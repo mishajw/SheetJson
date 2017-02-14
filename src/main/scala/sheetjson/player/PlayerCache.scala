@@ -1,6 +1,5 @@
-package sheetjson.util
+package sheetjson.player
 
-import sheetjson.player.{Playable, Player}
 import sheetjson.util.Time.{Absolute, Bars, Seconds}
 
 import scala.collection.mutable.ArrayBuffer

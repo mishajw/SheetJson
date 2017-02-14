@@ -1,7 +1,7 @@
 package sheetjson.player
 
-import sheetjson.util.{Config, Messagable}
 import sheetjson.util.Time.{Absolute, Bars, Seconds}
+import sheetjson.util.{Config, Messagable}
 
 import scala.collection.mutable.ArrayBuffer
 

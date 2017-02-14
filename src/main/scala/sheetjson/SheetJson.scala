@@ -1,8 +1,8 @@
 package sheetjson
 
 import com.typesafe.scalalogging.Logger
+import sheetjson.gui.{Controller, GUI}
 import sheetjson.input.KeyListener
-import sheetjson.management.gui.{Controller, GUI}
 import sheetjson.management.{Composer, PlayerLoader}
 import sheetjson.output.SoundAndFileOut
 import sheetjson.util.Time.Bars

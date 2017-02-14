@@ -1,13 +1,13 @@
-package sheetjson.management.json
+package sheetjson.initialisation.json
 
 import com.typesafe.scalalogging.Logger
 import org.json4s._
 import org.json4s.jackson.JsonMethods
-import sheetjson.management.json.converters.JsonConverter
-import sheetjson.management.json.converters.composite._
-import sheetjson.management.json.converters.constructor._
-import sheetjson.management.json.converters.filter._
-import sheetjson.management.json.converters.origin._
+import sheetjson.initialisation.json.converters.JsonConverter
+import sheetjson.initialisation.json.converters.composite._
+import sheetjson.initialisation.json.converters.constructor._
+import sheetjson.initialisation.json.converters.filter._
+import sheetjson.initialisation.json.converters.origin._
 import sheetjson.player.Player
 import sheetjson.player.composite._
 import sheetjson.player.filter._

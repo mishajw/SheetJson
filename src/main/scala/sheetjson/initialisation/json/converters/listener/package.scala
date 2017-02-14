@@ -1,4 +1,4 @@
-package sheetjson.management.json.converters
+package sheetjson.initialisation.json.converters
 
 import org.json4s.{DefaultFormats, JObject}
 import sheetjson.input.KeyListener

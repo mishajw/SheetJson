@@ -1,8 +1,7 @@
 package sheetjson.player.filter
 
 import sheetjson.player.listener.{IncrementableListener, Listener, ListenerPlayer}
-import sheetjson.player.{Playable, Player, PlayerSpec}
-import sheetjson.util.PlayerCache
+import sheetjson.player.{Playable, Player, PlayerCache, PlayerSpec}
 import sheetjson.util.Time.{Absolute, Bars, Seconds}
 
 /**

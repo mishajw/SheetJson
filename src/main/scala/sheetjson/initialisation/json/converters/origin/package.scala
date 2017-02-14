@@ -1,4 +1,4 @@
-package sheetjson.management.json.converters
+package sheetjson.initialisation.json.converters
 
 import org.json4s.JObject
 import org.json4s.JsonAST.{JDouble, JString}

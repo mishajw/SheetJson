@@ -1,9 +1,9 @@
-package sheetjson.management.json.converters
+package sheetjson.initialisation.json.converters
 
 import org.json4s.JsonAST.{JArray, JDouble}
 import org.json4s.{JObject, JValue}
+import sheetjson.initialisation.json.JsonParser
 import sheetjson.jsonFailure
-import sheetjson.management.json.JsonParser
 import sheetjson.player.Player
 import sheetjson.player.composite.Riff.{PlayerDescription, PlayerDuration, PlayerSpan}
 import sheetjson.player.composite._

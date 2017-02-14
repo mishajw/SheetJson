@@ -1,7 +1,7 @@
 package sheetjson.management
 
 import com.typesafe.scalalogging.Logger
-import sheetjson.management.gui.Controller
+import sheetjson.gui.Controller
 import sheetjson.output.Out
 import sheetjson.player.EndPlayable
 import sheetjson.util.{Config, RootPlayerAssignable}
