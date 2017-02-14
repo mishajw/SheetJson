@@ -119,9 +119,6 @@ object JsonParser {
     }
   }
 
-  def parsePlayerListeners(player: ListenerPlayer, json: JObject): Unit = {
-  }
-
   def fillInPreset(preset: JObject, json: JObject): JObject = {
     val toReplace: Map[String, JValue] = (for {
       JObject(obj) <- json
