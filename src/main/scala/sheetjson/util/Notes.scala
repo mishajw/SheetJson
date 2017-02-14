@@ -17,6 +17,10 @@ object Notes {
     */
   sealed trait Note {
     def ~==(n: Note): Boolean
+
+    def toAbsolute: AbsoluteNote
+
+    val str: String
   }
 
   /**
@@ -24,11 +28,13 @@ object Notes {
  *
     * @param str the string representation of that note
     */
-  sealed case class RelativeNote(str: String) extends Note {
+  sealed case class RelativeNote(override val str: String) extends Note {
     def ~==(n: Note) = n match {
       case rn: RelativeNote => equals(rn)
       case an: AbsoluteNote => equals(an.note)
     }
+
+    override def toAbsolute: AbsoluteNote = AbsoluteNote(this, defaultOctave)
   }
 
   /**
@@ -64,6 +70,10 @@ object Notes {
       case rn: RelativeNote => rn == note
       case an: AbsoluteNote => an.note == note
     }
+
+    override def toAbsolute: AbsoluteNote = this
+
+    override val str: String = s"${note.str}$octave"
   }
 
   /**

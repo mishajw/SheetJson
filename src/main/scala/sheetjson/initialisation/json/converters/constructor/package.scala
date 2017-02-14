@@ -91,14 +91,16 @@ package object constructor {
       val notesOpt = (json \ "notes").extractOpt[Seq[String]]
       val scaleOpt = (json \ "scale").extractOpt[String]
       val keyOpt = (json \ "key").extractOpt[String]
+      val amount = (json \ "amount").extractOrElse[Int](7)
 
       val notesTry: Try[Seq[String]] = (notesOpt, scaleOpt, keyOpt) match {
         case (Some(notes), None, None) =>
           Success(notes)
-        case (Some(Seq()), Some(scale), Some(key)) => Notes.relativeNoteFor(key) flatMap (Scales.get(_, scale)) match {
-          case Some(notes: Seq[RelativeNote]) => Success(notes.map(_.str))
-          case None => jsonFailure(s"Scale $scale for key $key can't be found", json)
-        }
+        case (Some(Seq()), Some(scale), Some(key)) =>
+          Notes.noteFor(key) flatMap (n => Scales.get(n.toAbsolute, scale)) match {
+            case Some(notes) => Success(notes.map(_.str).take(amount))
+            case None => jsonFailure(s"Scale $scale for key $key can't be found", json)
+          }
         case _ => jsonFailure("Can't create keyboard without notes, or scale and key", json)
       }
 

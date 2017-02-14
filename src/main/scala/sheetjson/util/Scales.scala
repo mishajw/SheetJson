@@ -7,26 +7,29 @@ import sheetjson.util.Notes._
   */
 object Scales {
 
+  type RelativeScale = Seq[RelativeNote]
+  type AbsoluteScale = Seq[AbsoluteNote]
+
   /**
     * Scales
     */
-  val scales = Map(
+  val scales: Map[String, RelativeScale] = Map(
     "pentatonic" -> Seq(C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B),
     "major" -> Seq(C, D, E, F, G, A, B),
     "blues" -> Seq(C, Ds, F, G, A),
     "blues_ext" -> Seq(C, Ds, F, Fs, G, A)
   )
 
-  def get(n: RelativeNote, s: String): Option[Seq[RelativeNote]] =
+  def getRelative(n: RelativeNote, s: String): Option[RelativeScale] =
     (scales get s) map (translate(n, _))
 
-  def get(n: RelativeNote, s: String, amount: Int, startOctave: Int = 5): Option[Seq[AbsoluteNote]] =
-    get(n, s) map { rns =>
+  def get(n: AbsoluteNote, s: String): Option[AbsoluteScale] =
+    getRelative(n.note, s) map { rns =>
       Stream.continually(rns)
         .zipWithIndex
         .flatMap {
           case (rn, i) =>
-            rn.map(AbsoluteNote(_, i + startOctave))
+            rn.map(AbsoluteNote(_, i + n.octave))
         }
     }
 

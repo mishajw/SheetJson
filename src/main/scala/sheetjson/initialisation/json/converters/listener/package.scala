@@ -24,8 +24,7 @@ package object listener {
   implicit object MultiActivatableListenerSetup extends ListenerSetup[MultiActivatableListener] {
     override def setup(listener: MultiActivatableListener, json: JObject, keyListener: KeyListener): Unit = for {
       keys <- (json \ "keys").extractOpt[List[Int]]
-      if keys.size == listener.size
-      (key, index) <- keys.zipWithIndex
+      (key, index) <- keys.take(listener.size).zipWithIndex
     } {
       keyListener.listenForPress(key, listener, s"activate($index)")
       keyListener.listenForRelease(key, listener, s"deactivate($index)")
