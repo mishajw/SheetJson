@@ -19,7 +19,7 @@ object Config {
   /**
     * The default configuration. If no configuration is given, this is used
     */
-  private val defaultConfig = Config(24000, 120, 4, Seq(), 1000)
+  val defaultConfig = Config(24000, 120, 4, Seq(), 1000)
 
   /**
     * The current active configuration

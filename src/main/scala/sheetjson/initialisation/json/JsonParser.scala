@@ -7,6 +7,7 @@ import sheetjson.initialisation.json.converters.JsonConverter
 import sheetjson.initialisation.json.converters.composite._
 import sheetjson.initialisation.json.converters.constructor._
 import sheetjson.initialisation.json.converters.filter._
+import sheetjson.initialisation.json.converters.misc.ConfigConverter
 import sheetjson.initialisation.json.converters.origin._
 import sheetjson.player.Player
 import sheetjson.player.composite._
@@ -48,16 +49,10 @@ object JsonParser {
     * @return an option of a player from the JSON object
     */
   def parseAllJson(json: JObject): Try[Player] = {
-    val configOpt = for {
-      config <- (json \ "config").extractOpt[JObject]
-      sampleRate <- (config \ "sample_rate").extractOpt[Int]
-      bpm <- (config \ "bpm").extractOpt[Int]
-      beatsPerBar <- (config \ "beats_per_bar").extractOpt[Int]
-      displayAmount <- (config \ "display_amount").extractOpt[Int]
-      presets <- (config \ "presets").extractOpt[Seq[Preset]]
-    } yield Config(sampleRate, bpm, beatsPerBar, presets, displayAmount)
-
-    configOpt.foreach(Config.update)
+    for {
+      configJson <- (json \ "config").extractOpt[JObject]
+      config = ConfigConverter(configJson)
+    } Config update config
 
     json \ "players" match {
       case playerJson @ JObject(_) =>
