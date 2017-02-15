@@ -92,6 +92,7 @@ package object constructor {
       val scaleOpt = (json \ "scale").extractOpt[String]
       val keyOpt = (json \ "key").extractOpt[String]
       val amount = (json \ "amount").extractOrElse[Int](7)
+      val otherParamsOpt = (json \ "other_params").extractOpt[JObject]
 
       val notesTry: Try[Seq[String]] = (notesOpt, scaleOpt, keyOpt) match {
         case (Some(notes), None, None) =>
@@ -106,7 +107,12 @@ package object constructor {
 
       notesTry match {
         case Success(notes) =>
-          Success(notes.map(n => JObject(List("$note" -> JString(n)))))
+          Success(notes.map(n => otherParamsOpt match {
+            case Some(otherParams) =>
+              JObject(otherParams.obj :+ ("$note" -> JString(n)))
+            case None =>
+              JObject(List("$note" -> JString(n)))
+          }))
         case Failure(e) => Failure(e)
       }
     }
