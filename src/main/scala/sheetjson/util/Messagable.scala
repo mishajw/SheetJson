@@ -9,7 +9,7 @@ trait Messagable extends Identifiable {
 
   def receive(message: Message): Unit = message match {
     case ChildMessage(name, m) =>
-      identifiableChildren
+      uniqueIdentifiableChildren
         .collect { case c: Messagable => c }
         .filter(_.toString == name)
         .foreach(_.receive(m))
