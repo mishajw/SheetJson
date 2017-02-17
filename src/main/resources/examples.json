@@ -11,8 +11,21 @@
           "type": "smooth_key_activated",
           "child": {
             "type": "tone",
-            "note": "$note"
-          }
+            "note": "$note",
+            "visible": false
+          },
+          "visible": false
+        }
+      },
+      {
+        "name": "keyboard_scale",
+        "constructor": {
+          "type": "keyboard",
+          "name": "$scale",
+          "keys": [65, 83, 68, 70, 71, 72],
+          "key": "c",
+          "scale": "$scale",
+          "preset": "preset1"
         }
       }
     ]
@@ -94,11 +107,19 @@
         }
       },
       {
-        "type": "keyboard",
-        "keys": [65, 83, 68, 70, 71, 72],
-        "key": "c",
-        "scale": "major",
-        "preset": "preset1"
+        "type": "scroller",
+        "previous_key": 45,
+        "next_key": 61,
+        "components": [
+          { "type": "keyboard_scale", "$scale": "pentatonic" },
+          { "type": "keyboard_scale", "$scale": "major" },
+          { "type": "keyboard_scale", "$scale": "minor" },
+          { "type": "keyboard_scale", "$scale": "harmonic_minor" },
+          { "type": "keyboard_scale", "$scale": "melodic_minor_asc" },
+          { "type": "keyboard_scale", "$scale": "pentatonic" },
+          { "type": "keyboard_scale", "$scale": "whole_tone" },
+          { "type": "keyboard_scale", "$scale": "blues" }
+        ]
       }
     ]
   }
