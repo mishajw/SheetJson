@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent
 import java.util.concurrent.ConcurrentHashMap
 
 import com.typesafe.scalalogging.Logger
-import sheetjson.input.KeyListener.KeyCode
 import sheetjson.util.Messagable.{Message, StringMessage}
 import sheetjson.util.{Messagable, RootPlayerAssignable}
 
@@ -17,9 +16,9 @@ class KeyListener extends RootPlayerAssignable with java.awt.event.KeyListener {
   /**
     * Map of key codes to what `Player`s are listening to that key
     */
-  private val pressListeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[Message]]()
+  private val pressListeners = new ConcurrentHashMap[Int, ArrayBuffer[Message]]()
 
-  private val releaseListeners = new ConcurrentHashMap[KeyCode, ArrayBuffer[Message]]()
+  private val releaseListeners = new ConcurrentHashMap[Int, ArrayBuffer[Message]]()
 
   private def sendMessage(message: Message): Unit = rootPlayerOpt foreach (_.receive(message))
 
@@ -57,7 +56,7 @@ class KeyListener extends RootPlayerAssignable with java.awt.event.KeyListener {
     *
     * @param kc the key that has been pressed
     */
-  private def notifyKeyPressed(kc: KeyCode): Unit = {
+  private def notifyKeyPressed(kc: Int): Unit = {
     Option(pressListeners get kc)
       .foreach(ls => ls foreach sendMessage)
   }
@@ -67,15 +66,8 @@ class KeyListener extends RootPlayerAssignable with java.awt.event.KeyListener {
     *
     * @param kc the key that has been released
     */
-  private def notifyKeyReleased(kc: KeyCode): Unit = {
+  private def notifyKeyReleased(kc: Int): Unit = {
     Option(releaseListeners get kc)
       .foreach(ls => ls foreach sendMessage)
   }
-}
-
-object KeyListener {
-  /**
-    * The type of key code
-    */
-  type KeyCode = Int
 }
