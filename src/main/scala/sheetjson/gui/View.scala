@@ -91,12 +91,23 @@ class View(controller: Controller) extends JPanel with Observer {
 
     if (readings.isEmpty) return
 
+    val maxReading = readings.map(_.toDouble).max
+    val minReading = readings.map(_.toDouble).min
+
+    def scaleToRange(p: Playable) = {
+      if (maxReading == 0 && minReading == 0) {
+        0.5
+      } else {
+        (p.toDouble - minReading) / (maxReading - minReading)
+      }
+    }
+
     def scaleX(i: Int): Int = {
       ((i.toDouble / readings.size.toDouble) * getWidth.toDouble).toInt
     }
 
     def scaleY(p: Playable): Int = {
-      height - (((p.toDouble + 1) / 2) * height.toDouble).toInt
+      height - (scaleToRange(p) * height.toDouble).toInt
     }
 
     // Scale the readings
