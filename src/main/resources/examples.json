@@ -111,7 +111,7 @@
         "previous_key": 45,
         "next_key": 61,
         "components": [
-          { "type": "keyboard_scale", "$scale": "pentatonic" },
+          { "type": "keyboard_scale", "$scale": "chromatic" },
           { "type": "keyboard_scale", "$scale": "major" },
           { "type": "keyboard_scale", "$scale": "minor" },
           { "type": "keyboard_scale", "$scale": "harmonic_minor" },
