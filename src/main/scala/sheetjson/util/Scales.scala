@@ -14,10 +14,14 @@ object Scales {
     * Scales
     */
   val scales: Map[String, RelativeScale] = Map(
-    "pentatonic" -> Seq(C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B),
+    "chromatic" -> Seq(C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B),
     "major" -> Seq(C, D, E, F, G, A, B),
-    "blues" -> Seq(C, Ds, F, G, A),
-    "blues_ext" -> Seq(C, Ds, F, Fs, G, A)
+    "minor" -> Seq(A, B, C, D, E, F, G),
+    "harmonic_minor" -> Seq(A, B, C, D, E, F, Gs),
+    "melodic_minor_asc" -> Seq(A, B, C, D, E, Fs, Gs),
+    "pentatonic" -> Seq(C, D, E, G, A),
+    "whole_tone" -> Seq(C, D, E, Fs, Gs, As),
+    "blues" -> Seq(C, Ds, F, Fs, G, As)
   )
 
   def getRelative(n: RelativeNote, s: String): Option[RelativeScale] =
@@ -41,7 +45,7 @@ object Scales {
     * @return the translated scale
     */
   private def translate[T](n: RelativeNote, ns: Seq[RelativeNote]): Seq[RelativeNote] = {
-    val incr = findIncrement(C, n)
+    val incr = findIncrement(ns.head, n)
 
     // Call successor `incr` times on `ns`
     (0 until incr).foldRight(ns)((_, xs) => xs.map(successors))
