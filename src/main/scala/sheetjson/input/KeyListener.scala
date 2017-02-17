@@ -30,16 +30,16 @@ class KeyListener extends RootPlayerAssignable with java.awt.event.KeyListener {
   override def keyReleased(keyEvent: KeyEvent): Unit =
     notifyKeyReleased(keyEvent.getKeyCode)
 
-  def listenForPress(key: KeyCode, messagable: Messagable, message: String): Unit = {
-    if (!(pressListeners contains key)) {
+  def listenForPress(key: Int, messagable: Messagable, message: String): Unit = {
+    if (!(pressListeners containsKey key)) {
       pressListeners.put(key, ArrayBuffer())
     }
 
     pressListeners.get(key) += messagable.createMessage(StringMessage(message))
   }
 
-  def listenForRelease(key: KeyCode, messagable: Messagable, message: String): Unit = {
-    if (!(releaseListeners contains key)) {
+  def listenForRelease(key: Int, messagable: Messagable, message: String): Unit = {
+    if (!(releaseListeners containsKey key)) {
       releaseListeners.put(key, ArrayBuffer())
     }
 
