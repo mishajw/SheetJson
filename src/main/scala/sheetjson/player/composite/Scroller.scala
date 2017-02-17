@@ -35,4 +35,6 @@ class Scroller(components: Seq[Player],
     componentIndex -= 1
     maskComponentIndex()
   }
+
+  override def displayParameters: Seq[Object] = Seq(components(componentIndex).toString)
 }
