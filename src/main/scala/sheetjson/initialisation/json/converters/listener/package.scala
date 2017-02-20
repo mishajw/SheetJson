@@ -19,17 +19,20 @@ package object listener {
   implicit object ActivatableListenerSetup extends ListenerSetup[ActivatableListener] {
     override def setup(listener: ActivatableListener, json: JObject, keyListener: KeyListener): Unit = {
       val keyOpt = (json \ "key").extractOpt[Int]
+      val toggleOpt = (json \ "toggle_key").extractOpt[Int]
       val toggleOnOpt = (json \ "on_key").extractOpt[Int]
       val toggleOffOpt = (json \ "off_key").extractOpt[Int]
 
-      (keyOpt, toggleOnOpt, toggleOffOpt) match {
-        case (Some(key), None, None) =>
+      (keyOpt, toggleOpt, toggleOnOpt, toggleOffOpt) match {
+        case (Some(key), None, None, None) =>
           keyListener.listenForPress(key, listener, "activate")
           keyListener.listenForRelease(key, listener, "deactivate")
-        case (None, Some(toggleOn), Some(toggleOff)) =>
+        case (None, Some(toggle), None, None) =>
+          keyListener.listenForRelease(toggle, listener, "toggle")
+        case (None, None, Some(toggleOn), Some(toggleOff)) =>
           keyListener.listenForPress(toggleOn, listener, "activate")
           keyListener.listenForPress(toggleOff, listener, "deactivate")
-        case (None, None, None) =>
+        case (None, None, None, None) =>
           // Accepted because parent might activate
         case _ =>
           log.error(

@@ -12,6 +12,7 @@ trait ActivatableListener extends Listener {
   override def receive(message: Message): Unit = message match {
     case StringMessage("activate") => activate()
     case StringMessage("deactivate") => deactivate()
+    case StringMessage("toggle") => if (isActive) deactivate() else activate()
     case _ => super.receive(message)
   }
 
