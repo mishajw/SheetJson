@@ -109,7 +109,7 @@ package object filter {
   }
 
   /**
-    * Toggle to `Repeater`
+    * Convert to `Repeater`
     */
   implicit object RepeaterConverter extends FilterConverter[Repeater] {
     override protected def applyWithChildOpt(child: Player, json: JObject): Option[Repeater] = for {
