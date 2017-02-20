@@ -94,7 +94,6 @@ object JsonParser {
       case "looper" => convert[Looper](json)
       case "randomizer" => convert[Randomizer](json)
       case "smoother" => convert[Smoother](json)
-      case "toggle" => convert[Toggle](json)
       case "combiner" => convert[Combiner](json)
       case "keyboard" => convert[Keyboard](json)
       case "riff" => convert[Riff](json)

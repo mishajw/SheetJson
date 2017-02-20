@@ -74,15 +74,6 @@ package object filter {
   }
 
   /**
-    * Convert to `Toggle`
-    */
-  implicit object ToggleConverter extends FilterConverter[Toggle] {
-    override protected def applyWithChildOpt(child: Player, json: JObject): Option[Toggle] = {
-      Some(new Toggle(child, getSpec(json)))
-    }
-  }
-
-  /**
     * Convert to `VolumeFunction`
     */
   implicit object VolumeFunctionConverter extends FilterConverter[VolumeFunction] {

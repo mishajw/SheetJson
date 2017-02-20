@@ -1,23 +1,43 @@
 package sheetjson.initialisation.json.converters
 
+import com.typesafe.scalalogging.Logger
 import org.json4s.{DefaultFormats, JObject}
 import sheetjson.input.KeyListener
 import sheetjson.player.listener.{ActivatableListener, IncrementableListener, Listener, MultiActivatableListener}
+import sheetjson.jsonFailure
 
 package object listener {
 
   implicit val formats = DefaultFormats
+
+  private val log = Logger(getClass)
 
   trait ListenerSetup[ListenerType <: Listener] {
     def setup(listener: ListenerType, json: JObject, keyListener: KeyListener): Unit
   }
 
   implicit object ActivatableListenerSetup extends ListenerSetup[ActivatableListener] {
-    override def setup(listener: ActivatableListener, json: JObject, keyListener: KeyListener): Unit = for {
-      key <- (json \ "key").extractOpt[Int]
-    } {
-      keyListener.listenForPress(key, listener, "activate")
-      keyListener.listenForRelease(key, listener, "deactivate")
+    override def setup(listener: ActivatableListener, json: JObject, keyListener: KeyListener): Unit = {
+      val keyOpt = (json \ "key").extractOpt[Int]
+      val toggleOnOpt = (json \ "on_key").extractOpt[Int]
+      val toggleOffOpt = (json \ "off_key").extractOpt[Int]
+
+      (keyOpt, toggleOnOpt, toggleOffOpt) match {
+        case (Some(key), None, None) =>
+          keyListener.listenForPress(key, listener, "activate")
+          keyListener.listenForRelease(key, listener, "deactivate")
+        case (None, Some(toggleOn), Some(toggleOff)) =>
+          keyListener.listenForPress(toggleOn, listener, "activate")
+          keyListener.listenForPress(toggleOff, listener, "deactivate")
+        case (None, None, None) =>
+          // Accepted because parent might activate
+        case _ =>
+          log.error(
+            "JSON error when parsing listener",
+            jsonFailure(
+              "Must specify either `key` or `on_key` and `off_key` for an activatable listener",
+              json))
+      }
     }
   }
 
