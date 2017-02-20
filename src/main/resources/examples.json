@@ -8,7 +8,7 @@
       {
         "name": "preset1",
         "constructor": {
-          "type": "smooth_key_activated",
+          "type": "key_activated",
           "child": {
             "type": "tone",
             "note": "$note",
@@ -89,7 +89,7 @@
         }
       },
       {
-        "type": "smooth_key_activated",
+        "type": "key_activated",
         "key": 32,
         "fade_in_time": 0.1,
         "fade_out_time": 0.5,

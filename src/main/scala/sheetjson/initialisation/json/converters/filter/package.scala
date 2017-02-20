@@ -54,15 +54,6 @@ package object filter {
   }
 
   /**
-    * Convert to `KeyActivated`
-    */
-  implicit object KeyActivatedConverter extends FilterConverter[KeyActivated] {
-    override protected def applyWithChildOpt(child: Player, json: JObject): Option[KeyActivated] = {
-      Some(new KeyActivated(child, getSpec(json)))
-    }
-  }
-
-  /**
     * Convert to `Looper`
     */
   implicit object LooperConverter extends FilterConverter[Looper] {
@@ -87,18 +78,18 @@ package object filter {
   }
 
   /**
-    * Convert to `SmoothKeyActivated`
+    * Convert to `KeyActivated`
     */
-  implicit object SmoothKeyActivatedConverter extends FilterConverter[SmoothKeyActivated] {
-    override protected def applyWithChildOpt(child: Player, json: JObject): Option[SmoothKeyActivated] = {
+  implicit object KeyActivatedConverter extends FilterConverter[KeyActivated] {
+    override protected def applyWithChildOpt(child: Player, json: JObject): Option[KeyActivated] = {
       val fadeFunctionName = (json \ "fade_function").extractOrElse("fade")
-      val fadeInTime = (json \ "fade_in_time").extractOrElse(0.25)
-      val fadeOutTime = (json \ "fade_out_time").extractOrElse(0.25)
+      val fadeInTime = (json \ "fade_in_time").extractOrElse(0.1)
+      val fadeOutTime = (json \ "fade_out_time").extractOrElse(0.1)
 
       for {
         fadeFunction <- WaveFunction getOpt fadeFunctionName
       } yield {
-        new SmoothKeyActivated(
+        new KeyActivated(
           fadeFunction,
           Bars(fadeInTime),
           Bars(fadeOutTime),

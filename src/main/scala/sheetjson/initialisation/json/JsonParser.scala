@@ -90,7 +90,6 @@ object JsonParser {
     id match {
       case "tone" => convert[Tone](json)
       case "fading_noise" => convert[FadingNoise](json)
-      case "key_activated" => convert[KeyActivated](json)
       case "looper" => convert[Looper](json)
       case "randomizer" => convert[Randomizer](json)
       case "smoother" => convert[Smoother](json)
@@ -100,7 +99,7 @@ object JsonParser {
       case "switcher" => convert[Switcher](json)
       case "rawfile" => convert[RawFile](json)
       case "volume_function" => convert[VolumeFunction](json)
-      case "smooth_key_activated" => convert[SmoothKeyActivated](json)
+      case "key_activated" => convert[KeyActivated](json)
       case "repeater" => convert[Repeater](json)
       case "scroller" => convert[Scroller](json)
       case "explorer" => convert[Explorer](json)

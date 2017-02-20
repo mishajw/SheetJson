@@ -1,32 +1,54 @@
 package sheetjson.player.filter
 
-import java.util.concurrent.atomic.AtomicBoolean
-
+import sheetjson.player._
 import sheetjson.player.listener.{ActivatableListener, Listener, ListenerPlayer}
-import sheetjson.player.{Playable, Player, PlayerSpec}
+import sheetjson.util.Time.{Absolute, Bars}
 
-class KeyActivated(_child: Player,
+import scala.collection.mutable.ArrayBuffer
+
+class KeyActivated(val fadeFunction: WaveFunction,
+                   val fadeInTime: Bars,
+                   val fadeOutTime: Bars,
+                   _child: Player,
                    _spec: PlayerSpec)
     extends FilterPlayer(_child, _spec) with ListenerPlayer with ActivatableListener {
 
-  private val _pressed = new AtomicBoolean(false)
+  val childPlays: ArrayBuffer[Playable] = ArrayBuffer()
 
-  def pressed = _pressed.get()
+  var activationAmount: Double = 0
+
+  var lastActiveOpt: Option[Absolute] = None
 
   override protected def _play: Playable = {
-    val played = child.play
+    if (isActive && lastActiveOpt.isEmpty) {
+      lastActiveOpt = Some(absoluteStep)
+    }
 
-    if (_pressed.get()) played
-    else Playable.default
+    if (isActive) {
+      activationAmount += 1 / Absolute(fadeInTime).toDouble
+    } else {
+      activationAmount -= 1 / Absolute(fadeOutTime).toDouble
+    }
+
+    activationAmount = Math.max(0, Math.min(1, activationAmount))
+
+    lastActiveOpt match {
+      case Some(lastActive) if activationAmount > 0 =>
+        val indexSinceStart = (absoluteStep - lastActive).toInt
+
+        while (indexSinceStart >= childPlays.length)
+          childPlays += child.play
+
+        childPlays(indexSinceStart) * fadeFunction.signed(activationAmount)
+      case _ =>
+        lastActiveOpt = None
+        Playable.default
+    }
   }
 
   override val listeners: Seq[Listener] = Seq(this)
 
-  override def _activate(): Unit = {
-    _pressed set true
-  }
+  override protected def _activate(): Unit = {}
 
-  override def _deactivate(): Unit = {
-    _pressed set false
-  }
+  override protected def _deactivate(): Unit = {}
 }
